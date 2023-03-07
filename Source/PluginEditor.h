@@ -40,11 +40,11 @@ private:
     juce::Slider l2RGainKnob;
     juce::Slider r2LGainKnob;
     
-    juce::TextButton leftOrRightButton;
     juce::ToggleButton tripletButton;
     juce::ToggleButton bypassButton;
     
     juce::ComboBox noteSelector;
+    juce::ComboBox leftOrRightSelection;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Coleman_HW2AudioProcessorEditor)
 };

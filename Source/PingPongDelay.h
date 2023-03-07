@@ -9,3 +9,10 @@
 */
 
 #pragma once
+
+class PingPongDelay
+{
+public:
+    
+private:
+};

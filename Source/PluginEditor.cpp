@@ -39,7 +39,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     
     l2RGainKnob.addListener(this);
     // Specify location in window (xPos,yPos,width,height)
-    l2RGainKnob.setBounds(50,150,100,100);
+    l2RGainKnob.setBounds(75,200,100,100);
     l2RGainKnob.setValue(0.0); // initial value
     l2RGainKnob.setRange(-48.0,12.0,0.1); // (min, max, interval)
     l2RGainKnob.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
@@ -55,7 +55,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     
     r2LGainKnob.addListener(this);
     // Specify location in window (xPos,yPos,width,height)
-    r2LGainKnob.setBounds(450,150,100,100);
+    r2LGainKnob.setBounds(425,200,100,100);
     r2LGainKnob.setValue(0.0); // initial value
     r2LGainKnob.setRange(-48.0,12.0,0.1); // (min, max, interval)
     r2LGainKnob.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
@@ -63,20 +63,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     r2LGainKnob.setName("Right to Left dB Drop");
     r2LGainKnob.getTitle();
     addAndMakeVisible(r2LGainKnob);
-    
-    
-    //
-    // Right to Left Toggle
-    //
-    
-    leftOrRightButton.addListener(this);
-    leftOrRightButton.setBounds(325,475,200,50);
-    leftOrRightButton.setButtonText("Left or Right");
-    leftOrRightButton.setToggleState(false, juce::dontSendNotification);
-    leftOrRightButton.setRadioGroupId(1);
-    addAndMakeVisible(leftOrRightButton);
-    
-    
+        
     
     
     //
@@ -118,6 +105,18 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     noteSelector.addItem("16th",5);
     noteSelector.setText("Select note...");
     addAndMakeVisible(noteSelector);
+    
+    
+    //
+    // L/R Selection Combo Box
+    //
+    
+    leftOrRightSelection.addListener(this);
+    leftOrRightSelection.setBounds(325, 475, 200, 50);
+    leftOrRightSelection.addItem("Left",1);
+    leftOrRightSelection.addItem("Right",2);
+    leftOrRightSelection.setText("Left or Right");
+    addAndMakeVisible(leftOrRightSelection);
 }
 
 Coleman_HW2AudioProcessorEditor::~Coleman_HW2AudioProcessorEditor()
@@ -128,7 +127,7 @@ Coleman_HW2AudioProcessorEditor::~Coleman_HW2AudioProcessorEditor()
 void Coleman_HW2AudioProcessorEditor::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
+    g.fillAll (juce::Colours::darksalmon);
 
     g.setColour (juce::Colours::white);
     g.setFont (15.0f);
@@ -157,8 +156,6 @@ void Coleman_HW2AudioProcessorEditor::sliderValueChanged(juce::Slider * slider)
 void Coleman_HW2AudioProcessorEditor::buttonClicked(juce::Button *button){
     if (button == &bypassButton){
     }
-    if (button == &leftOrRightButton){
-    }
     if (button == &tripletButton){
     }
 }
@@ -180,6 +177,14 @@ void Coleman_HW2AudioProcessorEditor::comboBoxChanged(juce::ComboBox *comboBox){
         }
         if (noteSelector.getSelectedId() == 5){
             // Do something for 8th note
+        }
+    }
+    if (comboBox == &leftOrRightSelection){
+        if (leftOrRightSelection.getSelectedId() == 1){
+            // Do something for Left
+        }
+        if (leftOrRightSelection.getSelectedId() == 2){
+            // Do something for Right
         }
     }
     

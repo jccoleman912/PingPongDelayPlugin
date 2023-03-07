@@ -61,8 +61,11 @@ public:
     double l2RGainDropdB = 0.0;
     double r2LGainDropdB = 0.0;
     
-    double drive = 5.f;
     bool isBypassed = false;
+    bool isTriplet = false;
+    
+    std::string noteType = "quarter";
+    std::string leftOrRight = "left";
 
 private:
     
