@@ -69,6 +69,12 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     // Right to Left Toggle
     //
     
+    leftOrRightButton.addListener(this);
+    leftOrRightButton.setBounds(325,475,200,50);
+    leftOrRightButton.setButtonText("Left or Right");
+    leftOrRightButton.setToggleState(false, juce::dontSendNotification);
+    leftOrRightButton.setRadioGroupId(1);
+    addAndMakeVisible(leftOrRightButton);
     
     
     
@@ -77,24 +83,41 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     // Triplet Toggle
     //
     
+    tripletButton.addListener(this);
+    tripletButton.setBounds(75,420,100,40);
+    tripletButton.setButtonText("Triplet");
+    tripletButton.setToggleState(false, juce::dontSendNotification);
+    tripletButton.setRadioGroupId(1);
+    addAndMakeVisible(tripletButton);
     
     
     //
     // Bypass Toggle
     //
     
+    bypassButton.addListener(this);
+    bypassButton.setBounds(10,10,100,40);
+    bypassButton.setButtonText("Bypass");
+    bypassButton.setToggleState(false, juce::dontSendNotification);
+    bypassButton.setRadioGroupId(1);
+    addAndMakeVisible(bypassButton);
     
-//
-//    // Combo Box
-//    noteSelector.addListener(this);
-//    noteSelector.setBounds(450, 10, 100, 50);
-//    noteSelector.addItem("Whole",1);
-//    noteSelector.addItem("Half",2);
-//    noteSelector.addItem("Quarter",3);
-//    noteSelector.addItem("8th",4);
-//    noteSelector.addItem("16th",5);
-//    noteSelector.setText("Select note...");
-//    addAndMakeVisible(noteSelector);
+    
+
+    //
+    // Note Selection Combo Box
+    //
+    
+    // Combo Box
+    noteSelector.addListener(this);
+    noteSelector.setBounds(75, 475, 200, 50);
+    noteSelector.addItem("Whole",1);
+    noteSelector.addItem("Half",2);
+    noteSelector.addItem("Quarter",3);
+    noteSelector.addItem("8th",4);
+    noteSelector.addItem("16th",5);
+    noteSelector.setText("Select note...");
+    addAndMakeVisible(noteSelector);
 }
 
 Coleman_HW2AudioProcessorEditor::~Coleman_HW2AudioProcessorEditor()
@@ -134,9 +157,9 @@ void Coleman_HW2AudioProcessorEditor::sliderValueChanged(juce::Slider * slider)
 void Coleman_HW2AudioProcessorEditor::buttonClicked(juce::Button *button){
     if (button == &bypassButton){
     }
-    if (button == &leftOrRight){
+    if (button == &leftOrRightButton){
     }
-    if (button == &triplet){
+    if (button == &tripletButton){
     }
 }
 
