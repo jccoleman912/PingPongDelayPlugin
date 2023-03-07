@@ -4,6 +4,9 @@
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1">
   <MAINGROUP id="zYJ9e1" name="Coleman_HW2">
     <GROUP id="{7C73EDE2-6132-478D-AB9F-42BA4516EFC2}" name="Source">
+      <FILE id="T8URg5" name="PingPongDelay.cpp" compile="1" resource="0"
+            file="Source/PingPongDelay.cpp"/>
+      <FILE id="OvsUVc" name="PingPongDelay.h" compile="0" resource="0" file="Source/PingPongDelay.h"/>
       <FILE id="ibvEh5" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="WTObKf" name="PluginProcessor.h" compile="0" resource="0"

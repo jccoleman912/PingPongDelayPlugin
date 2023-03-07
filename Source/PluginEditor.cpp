@@ -38,3 +38,44 @@ void Coleman_HW2AudioProcessorEditor::resized()
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
 }
+
+
+void Coleman_HW2AudioProcessorEditor::sliderValueChanged(juce::Slider * slider)
+{
+    // This is how we check which slider was moved
+    if (slider == &initialGainKnob){
+        auto value = slider->getValue();
+    }
+    if (slider == &l2RGainKnob){
+    }
+    if (slider == &r2LGainKnob){
+    }
+}
+
+void Coleman_HW2AudioProcessorEditor::buttonClicked(juce::Button *button){
+    if (button == &bypassButton){
+    }
+    if (button == &leftOrRight){
+    }
+    if (button == &triplet){
+    }
+}
+
+void Coleman_HW2AudioProcessorEditor::comboBoxChanged(juce::ComboBox *comboBox){
+    
+    if (comboBox == &noteSelector){
+        if (noteSelector.getSelectedId() == 1){
+            // Do something for whole note
+        }
+        if (noteSelector.getSelectedId() == 2){
+            // Do something for half note
+        }
+        if (noteSelector.getSelectedId() == 3){
+            // Do something for quarter note
+        }
+        if (noteSelector.getSelectedId() == 4){
+            // Do something for 8th note
+        }
+    }
+    
+}
