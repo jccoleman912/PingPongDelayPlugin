@@ -9,6 +9,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "PingPongDelay.h"
 
 //==============================================================================
 /**
@@ -55,8 +56,18 @@ public:
     //==============================================================================
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
+    
+    double initialGainDropdB = 0.0;
+    double l2RGainDropdB = 0.0;
+    double r2LGainDropdB = 0.0;
+    
+    double drive = 5.f;
+    bool isBypassed = false;
 
 private:
+    
+    PingPongDelay pingPongDelay;
+    
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Coleman_HW2AudioProcessor)
 };
