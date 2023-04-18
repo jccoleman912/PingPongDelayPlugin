@@ -39,7 +39,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     
     l2RGainKnob.addListener(this);
     // Specify location in window (xPos,yPos,width,height)
-    l2RGainKnob.setBounds(75,200,100,100);
+    l2RGainKnob.setBounds(75,170,100,100);
     l2RGainKnob.setValue(0.0); // initial value
     l2RGainKnob.setRange(-48.0,12.0,0.1); // (min, max, interval)
     l2RGainKnob.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
@@ -55,14 +55,30 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     
     r2LGainKnob.addListener(this);
     // Specify location in window (xPos,yPos,width,height)
-    r2LGainKnob.setBounds(425,200,100,100);
+    r2LGainKnob.setBounds(425,170,100,100);
     r2LGainKnob.setValue(0.0); // initial value
-    r2LGainKnob.setRange(-48.0,12.0,0.1); // (min, max, interval)
+    r2LGainKnob.setRange(-48.0,12.0,0.01); // (min, max, interval)
     r2LGainKnob.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     r2LGainKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
     r2LGainKnob.setName("Right to Left dB Drop");
     r2LGainKnob.getTitle();
     addAndMakeVisible(r2LGainKnob);
+    
+    
+    //
+    // Tempo Knob
+    //
+    
+    tempoSelector.addListener(this);
+    // Specify location in window (xPos,yPos,width,height)
+    tempoSelector.setBounds(425,450,160,100);
+    tempoSelector.setValue(0.0); // initial value
+    tempoSelector.setRange(0.0,160.0,0.1); // (min, max, interval)
+    tempoSelector.setSliderStyle(juce::Slider::SliderStyle::LinearHorizontal);
+    tempoSelector.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
+    tempoSelector.setName("Tempo");
+    tempoSelector.getTitle();
+    addAndMakeVisible(tempoSelector);
         
     
     
@@ -71,10 +87,9 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     //
     
     tripletButton.addListener(this);
-    tripletButton.setBounds(75,420,100,40);
+    tripletButton.setBounds(15,420,100,40);
     tripletButton.setButtonText("Triplet");
     tripletButton.setToggleState(false, juce::dontSendNotification);
-    tripletButton.setRadioGroupId(1);
     addAndMakeVisible(tripletButton);
     
     
@@ -83,11 +98,40 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     //
     
     bypassButton.addListener(this);
-    bypassButton.setBounds(10,10,100,40);
+    bypassButton.setBounds(15,15,100,40);
     bypassButton.setButtonText("Bypass");
     bypassButton.setToggleState(false, juce::dontSendNotification);
-    bypassButton.setRadioGroupId(1);
     addAndMakeVisible(bypassButton);
+    
+    
+    //
+    // Sync Toggle
+    //
+    
+    syncButton.addListener(this);
+    syncButton.setBounds(485,420,100,40);
+    syncButton.setButtonText("Sync");
+    syncButton.setToggleState(false, juce::dontSendNotification);
+    addAndMakeVisible(syncButton);
+    
+    
+    //
+    // L/R Selection Buttons
+    //
+    
+    leftFirstButton.addListener(this);
+    leftFirstButton.setBounds(250,465,100,40);
+    leftFirstButton.setButtonText("Left");
+    leftFirstButton.setToggleState(true, juce::dontSendNotification);
+    leftFirstButton.setRadioGroupId(1);
+    addAndMakeVisible(leftFirstButton);
+    
+    rightFirstButton.addListener(this);
+    rightFirstButton.setBounds(250,490,100,40);
+    rightFirstButton.setButtonText("Right");
+    rightFirstButton.setToggleState(false, juce::dontSendNotification);
+    rightFirstButton.setRadioGroupId(1);
+    addAndMakeVisible(rightFirstButton);
     
     
 
@@ -97,7 +141,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     
     // Combo Box
     noteSelector.addListener(this);
-    noteSelector.setBounds(75, 475, 200, 50);
+    noteSelector.setBounds(15, 475, 150, 50);
     noteSelector.addItem("Whole",1);
     noteSelector.addItem("Half",2);
     noteSelector.addItem("Quarter",3);
@@ -105,18 +149,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     noteSelector.addItem("16th",5);
     noteSelector.setText("Select note...");
     addAndMakeVisible(noteSelector);
-    
-    
-    //
-    // L/R Selection Combo Box
-    //
-    
-    leftOrRightSelection.addListener(this);
-    leftOrRightSelection.setBounds(325, 475, 200, 50);
-    leftOrRightSelection.addItem("Left",1);
-    leftOrRightSelection.addItem("Right",2);
-    leftOrRightSelection.setText("Left or Right");
-    addAndMakeVisible(leftOrRightSelection);
+
 }
 
 Coleman_HW2AudioProcessorEditor::~Coleman_HW2AudioProcessorEditor()
@@ -127,7 +160,7 @@ Coleman_HW2AudioProcessorEditor::~Coleman_HW2AudioProcessorEditor()
 void Coleman_HW2AudioProcessorEditor::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (juce::Colours::darksalmon);
+    g.fillAll (juce::Colours::darkseagreen);
 
     g.setColour (juce::Colours::white);
     g.setFont (15.0f);
@@ -177,14 +210,6 @@ void Coleman_HW2AudioProcessorEditor::comboBoxChanged(juce::ComboBox *comboBox){
         }
         if (noteSelector.getSelectedId() == 5){
             // Do something for 8th note
-        }
-    }
-    if (comboBox == &leftOrRightSelection){
-        if (leftOrRightSelection.getSelectedId() == 1){
-            // Do something for Left
-        }
-        if (leftOrRightSelection.getSelectedId() == 2){
-            // Do something for Right
         }
     }
     

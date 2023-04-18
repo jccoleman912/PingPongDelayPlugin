@@ -40,8 +40,14 @@ private:
     juce::Slider l2RGainKnob;
     juce::Slider r2LGainKnob;
     
+    juce::Slider tempoSelector;
+    
     juce::ToggleButton tripletButton;
     juce::ToggleButton bypassButton;
+    juce::ToggleButton syncButton;
+    
+    juce::ToggleButton leftFirstButton;
+    juce::ToggleButton rightFirstButton;
     
     juce::ComboBox noteSelector;
     juce::ComboBox leftOrRightSelection;
