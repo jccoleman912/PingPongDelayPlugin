@@ -12,7 +12,7 @@
 
 
 
-//float RevDelayEffect::processSample(float x, const int c){
+//float PingPongDelay::processSample(float x, const int c){
 //
 //    // one sample of delay
 //    int currentIndex = i[c];
@@ -51,8 +51,8 @@ float PingPongDelay::processSample(float x, const int c){
     // one sample of delay
     //int currentIndex = i[c];
     float z = delayBuffer[r[c]][c];
-    
-    float y = z * initialLinDrop;
+
+    float y = z * (initialLinDrop + l2RLinDrop + r2LLinDrop);
 
     delayBuffer[w[c]][c] = x;
 
@@ -89,6 +89,14 @@ void PingPongDelay::setDelayMS(float delayMS){
 
 void PingPongDelay::setInitialLinDrop(float mInitialLinDrop) {
     initialLinDrop = mInitialLinDrop;
+}
+
+void PingPongDelay::setL2RLinDrop(float mL2RLinDrop) {
+    l2RLinDrop = mL2RLinDrop;
+}
+
+void PingPongDelay::setR2LLinDrop(float mR2LLinDrop) {
+    r2LLinDrop = mR2LLinDrop;
 }
 
 

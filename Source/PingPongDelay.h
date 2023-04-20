@@ -32,9 +32,9 @@ public:
     
     void setInitialLinDrop(float initialLinDrop);
     
-    void setLtoRLinDrop(float l2RLinDrop);
+    void setL2RLinDrop(float l2RLinDrop);
     
-    void setRtoLLinDrop(float rLRLinDrop);
+    void setR2LLinDrop(float rLRLinDrop);
     
 private:
     

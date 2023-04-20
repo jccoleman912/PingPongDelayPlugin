@@ -178,24 +178,23 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
     
     
     pingPongDelay.setInitialLinDrop(juce::Decibels::decibelsToGain(initialGainDropdB));
+    pingPongDelay.setL2RLinDrop(juce::Decibels::decibelsToGain(l2RGainDropdB));
+    pingPongDelay.setR2LLinDrop(juce::Decibels::decibelsToGain(r2LGainDropdB));
     pingPongDelay.setDelayMS(delayMS);
 
-    // This is the place where you'd normally do the guts of your plugin's
-    // audio processing...
-    // Make sure to reset the state if your inner loop is processing
-    // the samples and the outer loop is handling the channels.
-    // Alternatively, you can process the samples with the channels
-    // interleaved by keeping the same state.
-    for (int channel = 0; channel < totalNumInputChannels; ++channel)
-    {
-        for (int n = 0; n < buffer.getNumSamples(); ++n)
+
+    if(!isBypassed) {
+        for (int channel = 0; channel < totalNumInputChannels; ++channel)
         {
-            
-            float x = buffer.getWritePointer(channel)[n];
-            
-            float y = pingPongDelay.processSample(x,channel);
-            
-            buffer.getWritePointer(channel)[n] = y;
+            for (int n = 0; n < buffer.getNumSamples(); ++n)
+            {
+                
+                float x = buffer.getWritePointer(channel)[n];
+                
+                float y = pingPongDelay.processSample(x,channel);
+                
+                buffer.getWritePointer(channel)[n] = y;
+            }
         }
     }
 }
