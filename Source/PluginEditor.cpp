@@ -24,8 +24,8 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     initialGainKnob.addListener(this);
     // Specify location in window (xPos,yPos,width,height)
     initialGainKnob.setBounds(250,25,100,100);
-    initialGainKnob.setValue(-48.0); // initial value
     initialGainKnob.setRange(-60.0,12.0,0.1); // (min, max, interval)
+    initialGainKnob.setValue(-6.0); // initial value
     initialGainKnob.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     initialGainKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
     initialGainKnob.setName("Initial dB Drop");
@@ -40,8 +40,8 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     l2RGainKnob.addListener(this);
     // Specify location in window (xPos,yPos,width,height)
     l2RGainKnob.setBounds(75,170,100,100);
-    l2RGainKnob.setValue(-48.0); // initial value
     l2RGainKnob.setRange(-60.0,12.0,0.1); // (min, max, interval)
+    l2RGainKnob.setValue(-6.0); // initial value
     l2RGainKnob.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     l2RGainKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
     l2RGainKnob.setName("Left to Right dB Drop");
@@ -56,8 +56,8 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     r2LGainKnob.addListener(this);
     // Specify location in window (xPos,yPos,width,height)
     r2LGainKnob.setBounds(425,170,100,100);
-    r2LGainKnob.setValue(-48.0); // initial value
     r2LGainKnob.setRange(-60.0,12.0,0.1); // (min, max, interval)
+    r2LGainKnob.setValue(-6.0); // initial value
     r2LGainKnob.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     r2LGainKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
     r2LGainKnob.setName("Right to Left dB Drop");
@@ -66,14 +66,14 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     
     
     //
-    // Tempo Knob
+    // Tempo Slider
     //
     
     tempoSelector.addListener(this);
     // Specify location in window (xPos,yPos,width,height)
     tempoSelector.setBounds(425,450,160,100);
-//    tempoSelector.setValue(11.0); // initial value
     tempoSelector.setRange(0.0,160.0,0.1); // (min, max, interval)
+    tempoSelector.setValue(120.0); // initial value
     tempoSelector.setSliderStyle(juce::Slider::SliderStyle::LinearHorizontal);
     tempoSelector.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
     tempoSelector.setName("Tempo");
@@ -214,22 +214,22 @@ void Coleman_HW2AudioProcessorEditor::comboBoxChanged(juce::ComboBox *comboBox){
     
     if (comboBox == &noteSelector){
         if (noteSelector.getSelectedId() == 1){
-            audioProcessor.noteType = "whole";
+            audioProcessor.noteMultiplier = 0.25f;
         }
         if (noteSelector.getSelectedId() == 2){
-            audioProcessor.noteType = "half";
+            audioProcessor.noteMultiplier = 0.25f;
         }
         if (noteSelector.getSelectedId() == 3){
-            audioProcessor.noteType = "quarter";
+            audioProcessor.noteMultiplier = 0.25f;
         }
         if (noteSelector.getSelectedId() == 4){
-            audioProcessor.noteType = "8th";
+            audioProcessor.noteMultiplier = 0.5f;
         }
         if (noteSelector.getSelectedId() == 5){
-            audioProcessor.noteType = "16th";
+            audioProcessor.noteMultiplier = 0.25f;
         }
         if (noteSelector.getSelectedId() == 6){
-            audioProcessor.noteType = "32nd";
+            audioProcessor.noteMultiplier = 0.125f;
         }
     }
     
