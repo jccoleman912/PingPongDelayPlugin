@@ -93,8 +93,7 @@ void Coleman_HW2AudioProcessor::changeProgramName (int index, const juce::String
 //==============================================================================
 void Coleman_HW2AudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    // Use this method as the place to do any pre-playback
-    // initialisation that you need..
+    pingPongDelay.prepareToPlay(sampleRate, samplesPerBlock);
 }
 
 void Coleman_HW2AudioProcessor::releaseResources()

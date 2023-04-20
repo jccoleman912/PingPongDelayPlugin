@@ -57,15 +57,18 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
     
-    double initialGainDropdB = 0.0;
-    double l2RGainDropdB = 0.0;
-    double r2LGainDropdB = 0.0;
+    float initialGainDropdB = -4.f;
+    float l2RGainDropdB = -4.f;
+    float r2LGainDropdB = -4.f;
+    
+    float tempo = 120.f;
     
     bool isBypassed = false;
     bool isTriplet = false;
+    bool leftFirst = true;
+    bool isSynced = false;
     
     std::string noteType = "quarter";
-    std::string leftOrRight = "left";
 
 private:
     
