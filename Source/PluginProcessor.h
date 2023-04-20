@@ -69,6 +69,8 @@ public:
     bool isSynced = false;
     
     std::string noteType = "quarter";
+    float noteMultiplier = 1.f;
+    float delayMS = 500.f;
 
 private:
     

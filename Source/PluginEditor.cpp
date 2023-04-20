@@ -147,6 +147,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     noteSelector.addItem("Quarter",3);
     noteSelector.addItem("8th",4);
     noteSelector.addItem("16th",5);
+    noteSelector.addItem("32nd",6);
     noteSelector.setText("Select note...");
     addAndMakeVisible(noteSelector);
 
@@ -207,19 +208,22 @@ void Coleman_HW2AudioProcessorEditor::comboBoxChanged(juce::ComboBox *comboBox){
     
     if (comboBox == &noteSelector){
         if (noteSelector.getSelectedId() == 1){
-            // Do something for whole note
+            audioProcessor.noteType = "whole";
         }
         if (noteSelector.getSelectedId() == 2){
-            // Do something for half note
+            audioProcessor.noteType = "half";
         }
         if (noteSelector.getSelectedId() == 3){
-            // Do something for quarter note
+            audioProcessor.noteType = "quarter";
         }
         if (noteSelector.getSelectedId() == 4){
-            // Do something for 8th note
+            audioProcessor.noteType = "8th";
         }
         if (noteSelector.getSelectedId() == 5){
-            // Do something for 8th note
+            audioProcessor.noteType = "16th";
+        }
+        if (noteSelector.getSelectedId() == 6){
+            audioProcessor.noteType = "32nd";
         }
     }
     

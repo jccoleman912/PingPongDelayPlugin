@@ -146,8 +146,39 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
     
     int numSamples = buffer.getNumSamples();
     
+    
+    if(noteType == "whole") {
+        noteMultiplier = 4.f;
+    }
+    else if(noteType == "half") {
+        noteMultiplier = 2.f;
+    }
+    else if(noteType == "8th") {
+        noteMultiplier = 0.5f;
+    }
+    else if(noteType == "16th") {
+        noteMultiplier = 0.25f;
+    }
+    else if(noteType == "32nd") {
+        noteMultiplier = 0.125f;
+    }
+    else {
+        noteMultiplier = 1.f;
+    }
+    
+    if(isTriplet) {
+        delayMS = 1000.f * noteMultiplier * (120.f / (3.f * tempo));
+        
+    }
+    else {
+        
+        delayMS = 1000.f * noteMultiplier * (60.f / tempo);
+        
+    }
+    
+    
     pingPongDelay.setInitialLinDrop(juce::Decibels::decibelsToGain(initialGainDropdB));
-    pingPongDelay.setDelayMS(250.f);
+    pingPongDelay.setDelayMS(delayMS);
 
     // This is the place where you'd normally do the guts of your plugin's
     // audio processing...
