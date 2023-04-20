@@ -142,6 +142,12 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
     // this code if your algorithm always overwrites all the output channels.
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
+    
+    
+    int numSamples = buffer.getNumSamples();
+    
+    pingPongDelay.setInitialdBDrop(initialGainDropdB);
+    pingPongDelay.setDelayMS(250.f);
 
     // This is the place where you'd normally do the guts of your plugin's
     // audio processing...
@@ -151,9 +157,15 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
     // interleaved by keeping the same state.
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
-        auto* channelData = buffer.getWritePointer (channel);
-
-        // ..do something to the data...
+        for (int n = 0; n < buffer.getNumSamples(); ++n)
+        {
+            
+            float x = buffer.getWritePointer(channel)[n];
+            
+            float y = pingPongDelay.processSample(x,channel);
+            
+            buffer.getWritePointer(channel)[n] = y;
+        }
     }
 }
 

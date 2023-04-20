@@ -30,34 +30,11 @@ public:
     
     void setDelayMS(float delayMS);
     
-private:
+    void setInitialdBDrop(float initialdBDrop);
     
-    // One sample of delay
-    static const int SIZE = 24000;
-    float delayBuffer[SIZE][2] = {0.f}; // left and right channels
-    int w[2] = {SIZE-1}; // write index for buffer (input), initialize to end of buffer
-    int r[2] = {0}; // read index for buffer (output)
+    void setLtoRdBDrop(float l2RdBDrop);
     
-    int delaySamples = 10000;
-    float Fs = 48000.f;
-    
-};
-
-
-
-class DelayEffect {
- 
-public:
-    
-    float processSample(float x, const int c);
-    
-    void setDelayMS(float delayMS);
-    
-    void prepareToPlay(double sampleRate, int bufferSize){
-        Fs = (float) sampleRate;
-        r[0] = w[0] - delaySamples;
-        r[1] = w[1] - delaySamples;
-    }
+    void setRtoLdBDrop(float rLRdBDrop);
     
 private:
     
@@ -69,4 +46,37 @@ private:
     
     int delaySamples = 10000;
     float Fs = 48000.f;
+    
+    float initialdBDrop = 0.f;
+    float l2RdBDrop = 0.f;
+    float r2LdBDrop = 0.f;
+    
 };
+
+
+
+//class DelayEffect {
+//
+//public:
+//
+//    float processSample(float x, const int c);
+//
+//    void setDelayMS(float delayMS);
+//
+//    void prepareToPlay(double sampleRate, int bufferSize){
+//        Fs = (float) sampleRate;
+//        r[0] = w[0] - delaySamples;
+//        r[1] = w[1] - delaySamples;
+//    }
+//
+//private:
+//
+//    // One sample of delay
+//    static const int SIZE = 24000;
+//    float delayBuffer[SIZE][2] = {0.f}; // left and right channels
+//    int w[2] = {SIZE-1}; // write index for buffer (input), initialize to end of buffer
+//    int r[2] = {0}; // read index for buffer (output)
+//
+//    int delaySamples = 10000;
+//    float Fs = 48000.f;
+//};

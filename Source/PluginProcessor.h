@@ -57,9 +57,9 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
     
-    float initialGainDropdB = -4.f;
-    float l2RGainDropdB = -4.f;
-    float r2LGainDropdB = -4.f;
+    float initialGainDropdB = 0.f;
+    float l2RGainDropdB = 0.f;
+    float r2LGainDropdB = 0.f;
     
     float tempo = 120.f;
     
@@ -73,6 +73,7 @@ public:
 private:
     
     PingPongDelay pingPongDelay;
+   
     
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Coleman_HW2AudioProcessor)

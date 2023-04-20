@@ -24,7 +24,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     initialGainKnob.addListener(this);
     // Specify location in window (xPos,yPos,width,height)
     initialGainKnob.setBounds(250,25,100,100);
-    initialGainKnob.setValue(-4.0); // initial value
+//    initialGainKnob.setValue(-4.0); // initial value
     initialGainKnob.setRange(-48.0,12.0,0.1); // (min, max, interval)
     initialGainKnob.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     initialGainKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
@@ -40,7 +40,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     l2RGainKnob.addListener(this);
     // Specify location in window (xPos,yPos,width,height)
     l2RGainKnob.setBounds(75,170,100,100);
-    l2RGainKnob.setValue(-4.0); // initial value
+//    l2RGainKnob.setValue(-4.0); // initial value
     l2RGainKnob.setRange(-48.0,12.0,0.1); // (min, max, interval)
     l2RGainKnob.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     l2RGainKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
@@ -56,7 +56,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     r2LGainKnob.addListener(this);
     // Specify location in window (xPos,yPos,width,height)
     r2LGainKnob.setBounds(425,170,100,100);
-    r2LGainKnob.setValue(-4.0); // initial value
+//    r2LGainKnob.setValue(-4.0); // initial value
     r2LGainKnob.setRange(-48.0,12.0,0.1); // (min, max, interval)
     r2LGainKnob.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     r2LGainKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
@@ -72,7 +72,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     tempoSelector.addListener(this);
     // Specify location in window (xPos,yPos,width,height)
     tempoSelector.setBounds(425,450,160,100);
-    tempoSelector.setValue(11.0); // initial value
+//    tempoSelector.setValue(11.0); // initial value
     tempoSelector.setRange(0.0,160.0,0.1); // (min, max, interval)
     tempoSelector.setSliderStyle(juce::Slider::SliderStyle::LinearHorizontal);
     tempoSelector.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
@@ -178,11 +178,13 @@ void Coleman_HW2AudioProcessorEditor::sliderValueChanged(juce::Slider * slider)
 {
     // This is how we check which slider was moved
     if (slider == &initialGainKnob){
-        auto value = slider->getValue();
+        audioProcessor.initialGainDropdB = slider->getValue();
     }
     if (slider == &l2RGainKnob){
+        audioProcessor.l2RGainDropdB = slider->getValue();
     }
     if (slider == &r2LGainKnob){
+        audioProcessor.r2LGainDropdB = slider->getValue();
     }
 }
 
