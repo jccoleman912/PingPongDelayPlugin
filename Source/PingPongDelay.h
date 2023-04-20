@@ -30,11 +30,11 @@ public:
     
     void setDelayMS(float delayMS);
     
-    void setInitialdBDrop(float initialdBDrop);
+    void setInitialLinDrop(float initialLinDrop);
     
-    void setLtoRdBDrop(float l2RdBDrop);
+    void setLtoRLinDrop(float l2RLinDrop);
     
-    void setRtoLdBDrop(float rLRdBDrop);
+    void setRtoLLinDrop(float rLRLinDrop);
     
 private:
     
@@ -47,9 +47,9 @@ private:
     int delaySamples = 10000;
     float Fs = 48000.f;
     
-    float initialdBDrop = 0.f;
-    float l2RdBDrop = 0.f;
-    float r2LdBDrop = 0.f;
+    float initialLinDrop = 0.f;
+    float l2RLinDrop = 0.f;
+    float r2LLinDrop = 0.f;
     
 };
 

@@ -50,7 +50,9 @@ float PingPongDelay::processSample(float x, const int c){
 
     // one sample of delay
     //int currentIndex = i[c];
-    float y = delayBuffer[r[c]][c];
+    float z = delayBuffer[r[c]][c];
+    
+    float y = z * initialLinDrop;
 
     delayBuffer[w[c]][c] = x;
 
@@ -85,8 +87,8 @@ void PingPongDelay::setDelayMS(float delayMS){
     }
 }
 
-void PingPongDelay::setInitialdBDrop(float mInitialdBDrop) {
-    initialdBDrop = mInitialdBDrop;
+void PingPongDelay::setInitialLinDrop(float mInitialLinDrop) {
+    initialLinDrop = mInitialLinDrop;
 }
 
 

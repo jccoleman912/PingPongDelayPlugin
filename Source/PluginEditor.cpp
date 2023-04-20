@@ -186,12 +186,20 @@ void Coleman_HW2AudioProcessorEditor::sliderValueChanged(juce::Slider * slider)
     if (slider == &r2LGainKnob){
         audioProcessor.r2LGainDropdB = slider->getValue();
     }
+    if (slider == &tempoSelector) {
+        audioProcessor.tempo = slider->getValue();
+    }
 }
 
 void Coleman_HW2AudioProcessorEditor::buttonClicked(juce::Button *button){
     if (button == &bypassButton){
+        audioProcessor.isBypassed = bypassButton.getToggleState();
     }
     if (button == &tripletButton){
+        audioProcessor.isTriplet = tripletButton.getToggleState();
+    }
+    if (button == &syncButton) {
+        audioProcessor.isSynced = syncButton.getToggleState();
     }
 }
 

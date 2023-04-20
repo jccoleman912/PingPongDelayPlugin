@@ -146,7 +146,7 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
     
     int numSamples = buffer.getNumSamples();
     
-    pingPongDelay.setInitialdBDrop(initialGainDropdB);
+    pingPongDelay.setInitialLinDrop(juce::Decibels::decibelsToGain(initialGainDropdB));
     pingPongDelay.setDelayMS(250.f);
 
     // This is the place where you'd normally do the guts of your plugin's
