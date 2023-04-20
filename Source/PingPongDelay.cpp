@@ -52,7 +52,7 @@ float PingPongDelay::processSample(float x, const int c){
     //int currentIndex = i[c];
     float z = delayBuffer[r[c]][c];
 
-    float y = z * (initialLinDrop + l2RLinDrop + r2LLinDrop);
+    float y = z * (initialLinDrop * (l2RLinDrop + r2LLinDrop));
 
     delayBuffer[w[c]][c] = x;
 
