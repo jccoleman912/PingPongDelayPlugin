@@ -46,15 +46,41 @@
 
 
 
+//float PingPongDelay::processSample(float x, const int c){
+//
+//    // one sample of delay
+//    //int currentIndex = i[c];
+//    float z = delayBuffer[r[c]][c];
+//
+//    float y = z * (initialLinDrop * (l2RLinDrop + r2LLinDrop));
+//
+//    delayBuffer[w[c]][c] = x;
+//
+//    // Increment Index
+//    w[c]++;
+//    if (w[c] >= SIZE){
+//        w[c] = 0; // circular indexing
+//    }
+//
+//    // Increment Index
+//    r[c]++;
+//    if (r[c] >= SIZE){
+//        r[c] = 0; // circular indexing
+//    }
+//    return y;
+//
+//}
+
 float PingPongDelay::processSample(float x, const int c){
 
     // one sample of delay
     //int currentIndex = i[c];
-    float z = delayBuffer[r[c]][c];
+    
+    wet = delayBuffer[r[c]][c];
 
-    float y = z * (initialLinDrop * (l2RLinDrop + r2LLinDrop));
+    float y = (x + wet) * (initialLinDrop * (l2RLinDrop + r2LLinDrop));
 
-    delayBuffer[w[c]][c] = x;
+    delayBuffer[w[c]][c] = y;
 
     // Increment Index
     w[c]++;

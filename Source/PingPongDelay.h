@@ -39,7 +39,7 @@ public:
 private:
     
     // One sample of delay
-    static const int SIZE = 96000;
+    static const int SIZE = 576000;
     float delayBuffer[SIZE][2] = {0.f}; // left and right channels
     int w[2] = {SIZE-1}; // write index for buffer (input), initialize to end of buffer
     int r[2] = {0}; // read index for buffer (output)
@@ -50,6 +50,8 @@ private:
     float initialLinDrop = 0.f;
     float l2RLinDrop = 0.f;
     float r2LLinDrop = 0.f;
+    
+    float wet = 0.f;
     
 };
 

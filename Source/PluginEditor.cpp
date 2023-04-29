@@ -72,7 +72,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     tempoSelector.addListener(this);
     // Specify location in window (xPos,yPos,width,height)
     tempoSelector.setBounds(425,450,160,100);
-    tempoSelector.setRange(0.0,160.0,0.1); // (min, max, interval)
+    tempoSelector.setRange(20.0,240.0,0.1); // (min, max, interval)
     tempoSelector.setValue(120.0); // initial value
     tempoSelector.setSliderStyle(juce::Slider::SliderStyle::LinearHorizontal);
     tempoSelector.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
@@ -148,6 +148,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     noteSelector.addItem("8th",4);
     noteSelector.addItem("16th",5);
     noteSelector.addItem("32nd",6);
+    noteSelector.addItem("64th",7);
     noteSelector.setText("Select note...");
     addAndMakeVisible(noteSelector);
 
@@ -214,13 +215,13 @@ void Coleman_HW2AudioProcessorEditor::comboBoxChanged(juce::ComboBox *comboBox){
     
     if (comboBox == &noteSelector){
         if (noteSelector.getSelectedId() == 1){
-            audioProcessor.noteMultiplier = 0.25f;
+            audioProcessor.noteMultiplier = 4.f;
         }
         if (noteSelector.getSelectedId() == 2){
-            audioProcessor.noteMultiplier = 0.25f;
+            audioProcessor.noteMultiplier = 2.f;
         }
         if (noteSelector.getSelectedId() == 3){
-            audioProcessor.noteMultiplier = 0.25f;
+            audioProcessor.noteMultiplier = 1.f;
         }
         if (noteSelector.getSelectedId() == 4){
             audioProcessor.noteMultiplier = 0.5f;
@@ -230,6 +231,9 @@ void Coleman_HW2AudioProcessorEditor::comboBoxChanged(juce::ComboBox *comboBox){
         }
         if (noteSelector.getSelectedId() == 6){
             audioProcessor.noteMultiplier = 0.125f;
+        }
+        if (noteSelector.getSelectedId() == 7){
+            audioProcessor.noteMultiplier = 0.0625f;
         }
     }
     
