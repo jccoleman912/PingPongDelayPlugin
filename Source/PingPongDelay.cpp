@@ -78,9 +78,9 @@ float PingPongDelay::processSample(float x, const int c){
     
     wet = delayBuffer[r[c]][c];
 
-    float y = (x + wet) * (initialLinDrop * (l2RLinDrop + r2LLinDrop));
+    float y = (wet) * (initialLinDrop * (l2RLinDrop + r2LLinDrop));
 
-    delayBuffer[w[c]][c] = y;
+    delayBuffer[w[c]][c] = x + y;
 
     // Increment Index
     w[c]++;
@@ -102,7 +102,7 @@ void PingPongDelay::setDelayMS(float delayMS){
     
     float delaySec = delayMS / 1000.f;
     delaySamples = delaySec * Fs;
-    delaySamples = juce::jmin(delaySamples,95999);
+//    delaySamples = juce::jmin(delaySamples,95999);
     r[0] = w[0] - delaySamples;
     if (r[0] < 0){
         r[0] += SIZE;

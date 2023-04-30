@@ -176,13 +176,13 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
                 
                 float x = buffer.getWritePointer(channel)[n];
                 
-                float yL = pingPongDelay.processSample(x, channel);
+                float y = pingPongDelay.processSample(x, channel);
 //
 //                float yR = pingPongDelay.processSampleL2R(yL);
 //
 //                yL = pingPongDelay.processSampleR2L(yR);
                 
-                buffer.getWritePointer(channel)[n] = yL;
+                buffer.getWritePointer(channel)[n] = y;
                 
                 if(channel == 0) {
 //                    buffer.getWritePointer(channel)[n] = yL;
