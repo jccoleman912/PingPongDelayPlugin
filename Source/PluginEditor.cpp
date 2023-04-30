@@ -25,7 +25,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     // Specify location in window (xPos,yPos,width,height)
     initialGainKnob.setBounds(250,25,100,100);
     initialGainKnob.setRange(-60.0,12.0,0.1); // (min, max, interval)
-    initialGainKnob.setValue(-6.0); // initial value
+    initialGainKnob.setValue(-10.0); // initial value
     initialGainKnob.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     initialGainKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
     initialGainKnob.setName("Initial dB Drop");
@@ -41,7 +41,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     // Specify location in window (xPos,yPos,width,height)
     l2RGainKnob.setBounds(75,170,100,100);
     l2RGainKnob.setRange(-60.0,12.0,0.1); // (min, max, interval)
-    l2RGainKnob.setValue(-6.0); // initial value
+    l2RGainKnob.setValue(-4.0); // initial value
     l2RGainKnob.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     l2RGainKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
     l2RGainKnob.setName("Left to Right dB Drop");
@@ -57,7 +57,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     // Specify location in window (xPos,yPos,width,height)
     r2LGainKnob.setBounds(425,170,100,100);
     r2LGainKnob.setRange(-60.0,12.0,0.1); // (min, max, interval)
-    r2LGainKnob.setValue(-6.0); // initial value
+    r2LGainKnob.setValue(-4.0); // initial value
     r2LGainKnob.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     r2LGainKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
     r2LGainKnob.setName("Right to Left dB Drop");

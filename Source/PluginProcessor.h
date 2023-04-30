@@ -57,11 +57,20 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
     
+    float alpha = 0.999f;
+    
     float initialGainDropdB = 0.f;
+    float smoothInitialGainDrop[2] = {0.f};
+   
     float l2RGainDropdB = 0.f;
+    float smoothL2RGainDropdB[2] = {0.f};
+    
     float r2LGainDropdB = 0.f;
+    float smoothR2LGainDropdB[2] = {0.f};
+    
     
     float tempo = 120.f;
+    float smoothTempo[2] = {0.f};
     
     bool isBypassed = false;
     bool isTriplet = false;

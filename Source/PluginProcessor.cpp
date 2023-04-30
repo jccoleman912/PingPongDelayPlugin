@@ -94,6 +94,9 @@ void Coleman_HW2AudioProcessor::changeProgramName (int index, const juce::String
 void Coleman_HW2AudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     pingPongDelay.prepareToPlay(sampleRate, samplesPerBlock);
+    
+    float tr = 0.1; // 100 ms response time for smoothing
+    alpha = std::exp(-log(9.f)/(sampleRate * tr));
 }
 
 void Coleman_HW2AudioProcessor::releaseResources()
@@ -173,13 +176,38 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
                 
                 float x = buffer.getWritePointer(channel)[n];
                 
-                float y = pingPongDelay.processSample(x,channel);
+                float yL = pingPongDelay.processSample(x, channel);
+//
+//                float yR = pingPongDelay.processSampleL2R(yL);
+//
+//                yL = pingPongDelay.processSampleR2L(yR);
                 
-                buffer.getWritePointer(channel)[n] = y;
+                buffer.getWritePointer(channel)[n] = yL;
+                
+                if(channel == 0) {
+//                    buffer.getWritePointer(channel)[n] = yL;
+                } else {
+//                    buffer.getWritePointer(channel)[n] = yR;
+                }
             }
+             
         }
     }
 }
+
+//float xL = buffer.getWritePointer(channel)[n];
+//
+//float yL = pingPongDelay.processSample(xL,channel);
+//
+//float yR = pingPongDelay.processSample(yL, channel);
+//
+//yL = pingPongDelay.processSample(yR, channel);
+//
+//if(channel == 0) {
+//    buffer.getWritePointer(channel)[n] = yL;
+//} else {
+//    buffer.getWritePointer(channel)[n] = yR;
+//}
 
 //==============================================================================
 bool Coleman_HW2AudioProcessor::hasEditor() const
