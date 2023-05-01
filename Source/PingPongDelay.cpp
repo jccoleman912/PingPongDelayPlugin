@@ -78,9 +78,31 @@ float PingPongDelay::processSample(float x, const int c){
     
     wet = delayBuffer[r[c]][c];
 
-    float y = (wet) * (initialLinDrop * (l2RLinDrop + r2LLinDrop));
+    float y = (wet) * (initialLinDrop);
 
-    delayBuffer[w[c]][c] = x + y;
+    delayBuffer[w[0]][0] = x;
+    
+    
+    left = delayBuffer2[r2[c]][c];
+    
+    float yOut = (left * r2LLinDrop);
+    
+    delayBuffer2[w2[c]][c] = y;
+    
+    
+    
+    right = delayBuffer3[r3[c]][c];
+    
+    float yRight = (right * l2RLinDrop);
+    
+    delayBuffer3[w3[1]][1] = x;
+    
+    
+    
+    
+    
+    
+    
 
     // Increment Index
     w[c]++;
@@ -93,7 +115,32 @@ float PingPongDelay::processSample(float x, const int c){
     if (r[c] >= SIZE){
         r[c] = 0; // circular indexing
     }
-    return y;
+    
+    // Increment Index
+    w2[c]++;
+    if (w2[c] >= SIZE){
+        w2[c] = 0; // circular indexing
+    }
+
+    // Increment Index
+    r2[c]++;
+    if (r2[c] >= SIZE){
+        r2[c] = 0; // circular indexing
+    }
+    
+    // Increment Index
+    w3[c]++;
+    if (w3[c] >= SIZE){
+        w3[c] = 0; // circular indexing
+    }
+
+    // Increment Index
+    r3[c]++;
+    if (r3[c] >= SIZE){
+        r3[c] = 0; // circular indexing
+    }
+    
+    return y + yOut;
 
 }
 
@@ -110,6 +157,24 @@ void PingPongDelay::setDelayMS(float delayMS){
     r[1] = w[1] - delaySamples;
     if (r[1] < 0){
         r[1] += SIZE;
+    }
+    
+    r2[0] = w2[0] - (delaySamples * 2);
+    if (r2[0] < 0){
+        r2[0] += SIZE;
+    }
+    r2[1] = w2[1] - (delaySamples * 2);
+    if (r2[1] < 0){
+        r2[1] += SIZE;
+    }
+    
+    r3[0] = w3[0] - (delaySamples * 2);
+    if (r3[0] < 0){
+        r3[0] += SIZE;
+    }
+    r3[1] = w3[1] - (delaySamples * 2);
+    if (r3[1] < 0){
+        r3[1] += SIZE;
     }
 }
 
