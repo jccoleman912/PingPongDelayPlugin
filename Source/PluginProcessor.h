@@ -59,13 +59,13 @@ public:
     
     float alpha = 0.999f;
     
-    float initialGainDropdB = -6.f;
+    float initialGainDropdB = -9.f;
     float smoothInitialGainDrop[2] = {0.f};
    
     float l2RGainDropdB = 0.f;
     float smoothL2RGainDropdB[2] = {0.f};
     
-    float r2LGainDropdB = -2.f;
+    float r2LGainDropdB = -6.f;
     float smoothR2LGainDropdB[2] = {0.f};
     
     

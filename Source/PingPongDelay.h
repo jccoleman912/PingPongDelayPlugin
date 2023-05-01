@@ -93,8 +93,8 @@ private:
     float initialRightDropLinear = 0.5f;
     float pingPongDropLinear = 0.5f;
     
-    float initialLeftDropdB = -6.f;
-    float initialRightDropdB = -6.f;
+    float initialLeftDropdB = -9.f;
+    float initialRightDropdB = -9.f;
     float pingPongDropdB = -6.f;
     
     float initialdBDrop = -10.f;
