@@ -85,9 +85,9 @@ float PingPongDelay::processSample(float x, const int c){
     
     left = delayBuffer2[r2[c]][c];
     
-    float yOut = (left * r2LLinDrop);
+    float yLeft = (left * r2LLinDrop);
     
-    delayBuffer2[w2[c]][c] = y;
+    delayBuffer2[w2[c]][c] = y + yLeft;
     
     
     
@@ -95,7 +95,7 @@ float PingPongDelay::processSample(float x, const int c){
     
     float yRight = (right * l2RLinDrop);
     
-    delayBuffer3[w3[1]][1] = x;
+    delayBuffer3[w3[1]][1] = x + yRight;
     
     
     
@@ -140,7 +140,7 @@ float PingPongDelay::processSample(float x, const int c){
         r3[c] = 0; // circular indexing
     }
     
-    return y + yOut;
+    return y + yLeft + yRight;
 
 }
 
