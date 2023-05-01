@@ -72,7 +72,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     tempoSelector.addListener(this);
     // Specify location in window (xPos,yPos,width,height)
     tempoSelector.setBounds(425,450,160,100);
-    tempoSelector.setRange(20.0,240.0,0.1); // (min, max, interval)
+    tempoSelector.setRange(40.0,240.0,0.1); // (min, max, interval)
     tempoSelector.setValue(120.0); // initial value
     tempoSelector.setSliderStyle(juce::Slider::SliderStyle::LinearHorizontal);
     tempoSelector.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
