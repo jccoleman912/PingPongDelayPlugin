@@ -18,7 +18,7 @@ public:
     
     float processSample(float x, const int c);
     
-//    float processSampleRightFirst(float x, const int c);
+    float processSampleRightFirst(float x, const int c);
     
     void processBlock(juce::AudioBuffer<float> &buffer);
     
@@ -37,18 +37,6 @@ public:
         
         r4[0] = w4[0] - (delaySamples * 2);
         r4[1] = w4[1] - (delaySamples * 2);
-        
-        r5[0] = w5[0] - delaySamples;
-        r5[1] = w5[1] - delaySamples;
-        
-        r6[0] = w6[0] - (delaySamples * 2);
-        r6[1] = w6[1] - (delaySamples * 2);
-        
-        r7[0] = w7[0] - (delaySamples * 2);
-        r7[1] = w7[1] - (delaySamples * 2);
-    
-        r8[0] = w8[0] - (delaySamples * 2);
-        r8[1] = w8[1] - (delaySamples * 2);
     }
     
     void setDelayMS(float delayMS);
@@ -95,30 +83,6 @@ private:
     float delayBuffer4[SIZE][2] = {0.f}; // left and right channels
     int w4[2] = {SIZE-1}; // write index for buffer (input), initialize to end of buffer
     int r4[2] = {0}; // read index for buffer (output)
-    
-    
-    
-    float delayBuffer5[SIZE][2] = {0.f}; // left and right channels
-    int w5[2] = {SIZE-1}; // write index for buffer (input), initialize to end of buffer
-    int r5[2] = {0}; // read index for buffer (output)
-    
-    
-    
-    float delayBuffer6[SIZE][2] = {0.f}; // left and right channels
-    int w6[2] = {SIZE-1}; // write index for buffer (input), initialize to end of buffer
-    int r6[2] = {0}; // read index for buffer (output)
-    
-    
-    
-    float delayBuffer7[SIZE][2] = {0.f}; // left and right channels
-    int w7[2] = {SIZE-1}; // write index for buffer (input), initialize to end of buffer
-    int r7[2] = {0}; // read index for buffer (output)
-
-    
-    
-    float delayBuffer8[SIZE][2] = {0.f}; // left and right channels
-    int w8[2] = {SIZE-1}; // write index for buffer (input), initialize to end of buffer
-    int r8[2] = {0}; // read index for buffer (output)
     
     
     

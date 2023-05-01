@@ -84,6 +84,8 @@ public:
 private:
     
     PingPongDelay pingPongDelay;
+    
+    PingPongDelay pingPongDelayRightFirst;
    
     
     //==============================================================================
