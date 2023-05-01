@@ -18,6 +18,8 @@ public:
     
     float processSample(float x, const int c);
     
+    float processSampleRightFirst(float x, const int c);
+    
     void processBlock(juce::AudioBuffer<float> &buffer);
     
     void processInPlace(float * buffer, const int numSamples, const int c);

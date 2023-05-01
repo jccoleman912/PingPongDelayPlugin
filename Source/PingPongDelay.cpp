@@ -145,6 +145,79 @@ float PingPongDelay::processSample(float x, const int c){
 }
 
 
+float PingPongDelay::processSampleRightFirst(float x, const int c) {
+    // one sample of delay
+    //int currentIndex = i[c];
+    
+    wet = delayBuffer[r[c]][c];
+
+    float y = (wet) * (initialLinDrop);
+
+    delayBuffer[w[1]][1] = x;
+    
+    
+    left = delayBuffer2[r2[c]][c];
+    
+    float yLeft = (left * r2LLinDrop);
+    
+    delayBuffer2[w2[c]][c] = y + yLeft;
+    
+    
+    
+    right = delayBuffer3[r3[c]][c];
+    
+    float yRight = (right * l2RLinDrop);
+    
+    delayBuffer3[w3[0]][0] = x + yRight;
+    
+    
+    
+    
+    
+    
+    
+
+    // Increment Index
+    w[c]++;
+    if (w[c] >= SIZE){
+        w[c] = 0; // circular indexing
+    }
+
+    // Increment Index
+    r[c]++;
+    if (r[c] >= SIZE){
+        r[c] = 0; // circular indexing
+    }
+    
+    // Increment Index
+    w2[c]++;
+    if (w2[c] >= SIZE){
+        w2[c] = 0; // circular indexing
+    }
+
+    // Increment Index
+    r2[c]++;
+    if (r2[c] >= SIZE){
+        r2[c] = 0; // circular indexing
+    }
+    
+    // Increment Index
+    w3[c]++;
+    if (w3[c] >= SIZE){
+        w3[c] = 0; // circular indexing
+    }
+
+    // Increment Index
+    r3[c]++;
+    if (r3[c] >= SIZE){
+        r3[c] = 0; // circular indexing
+    }
+    
+    return y + yLeft + yRight;
+
+}
+
+
 void PingPongDelay::setDelayMS(float delayMS){
     
     float delaySec = delayMS / 1000.f;

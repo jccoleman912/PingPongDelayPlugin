@@ -166,6 +166,8 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
     pingPongDelay.setL2RLinDrop(juce::Decibels::decibelsToGain(l2RGainDropdB));
     pingPongDelay.setR2LLinDrop(juce::Decibels::decibelsToGain(r2LGainDropdB));
     pingPongDelay.setDelayMS(delayMS);
+    
+    float y = 0.f;
 
 
     if(!isBypassed) {
@@ -176,19 +178,14 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
                 
                 float x = buffer.getWritePointer(channel)[n];
                 
-                float y = pingPongDelay.processSample(x, channel);
-//
-//                float yR = pingPongDelay.processSampleL2R(yL);
-//
-//                yL = pingPongDelay.processSampleR2L(yR);
+                if(!leftFirst) {
+                    y = pingPongDelay.processSampleRightFirst(x, channel);
+                } else {
+                    y = pingPongDelay.processSample(x, channel);
+                }
                 
                 buffer.getWritePointer(channel)[n] = y;
                 
-                if(channel == 0) {
-//                    buffer.getWritePointer(channel)[n] = yL;
-                } else {
-//                    buffer.getWritePointer(channel)[n] = yR;
-                }
             }
              
         }
