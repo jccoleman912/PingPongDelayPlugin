@@ -74,6 +74,7 @@ public:
     
     bool isBypassed = false;
     bool isTriplet = false;
+    bool isDotted = false;
     bool leftFirst = true;
     bool isSynced = false;
     

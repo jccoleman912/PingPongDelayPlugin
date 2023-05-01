@@ -11,66 +11,6 @@
 #include "PingPongDelay.h"
 
 
-
-//float PingPongDelay::processSample(float x, const int c){
-//
-//    // one sample of delay
-//    int currentIndex = i[c];
-//    float y = delayBuffer[currentIndex][c];
-//
-//    delayBuffer[currentIndex][c] = x;
-//
-//    // Increment Index
-//    i[c] += increment;
-//    if (i[c] >= delaySamples){
-//        increment = -1;
-//        i[c] += increment; // circular indexing
-//    }
-//    if (i[c] <= 0){
-//        increment = 1;
-//        i[c] += increment;
-//    }
-//
-//    return y;
-//
-//}
-
-//
-//void RevDelayEffect::setDelayMS(float delayMS){
-//
-//    float delaySec = delayMS / 1000.f;
-//    delaySamples = delaySec * Fs;
-//    delaySamples = juce::jmin(delaySamples,23999);
-//}
-//
-
-
-
-//float PingPongDelay::processSample(float x, const int c){
-//
-//    // one sample of delay
-//    //int currentIndex = i[c];
-//    float z = delayBuffer[r[c]][c];
-//
-//    float y = z * (initialLinDrop * (l2RLinDrop + r2LLinDrop));
-//
-//    delayBuffer[w[c]][c] = x;
-//
-//    // Increment Index
-//    w[c]++;
-//    if (w[c] >= SIZE){
-//        w[c] = 0; // circular indexing
-//    }
-//
-//    // Increment Index
-//    r[c]++;
-//    if (r[c] >= SIZE){
-//        r[c] = 0; // circular indexing
-//    }
-//    return y;
-//
-//}
-
 float PingPongDelay::processSample(float x, const int c){
    
         
@@ -281,17 +221,6 @@ void PingPongDelay::setDelayMS(float delayMS){
     }
 }
 
-void PingPongDelay::setInitialdBDrop(float mInitialdBDrop) {
-    initialdBDrop = mInitialdBDrop;
-}
-
-void PingPongDelay::setL2RdBDrop(float mL2RdBDrop) {
-    l2RdBDrop = mL2RdBDrop;
-}
-
-void PingPongDelay::setR2LdBDrop(float mR2LdBDrop) {
-    r2LdBDrop = mR2LdBDrop;
-}
 
 void PingPongDelay::setLinearGains(float mInitialdBDrop, float mL2RdBDrop, float mR2LdBDrop)
 {
@@ -302,11 +231,6 @@ void PingPongDelay::setLinearGains(float mInitialdBDrop, float mL2RdBDrop, float
     initialLeftDropLinear = juce::Decibels::decibelsToGain(initialLeftDropdB);
     initialRightDropLinear = juce::Decibels::decibelsToGain(initialRightDropdB);
     pingPongDropLinear = juce::Decibels::decibelsToGain(pingPongDropdB);
-}
-
-void PingPongDelay::setLeftFirst(bool mLeftFirst)
-{
-    leftFirst = mLeftFirst;
 }
 
 

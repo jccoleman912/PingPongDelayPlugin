@@ -151,29 +151,31 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
     
     
     
+    delayMS = 1000.f * noteMultiplier * (60.f / tempo);
+    
+    
     if(isTriplet) {
-        delayMS = 1000.f * noteMultiplier * (120.f / (3.f * tempo));
+        
+        delayMS *= (2.f/3.f);
         
     }
-    else {
+    
+    if(isDotted) {
         
-        delayMS = 1000.f * noteMultiplier * (60.f / tempo);
-        
+        delayMS *= 1.5f;
     }
     
     
 //    pingPongDelay.setInitialdBDrop(juce::Decibels::decibelsToGain(initialGainDropdB));
 //    pingPongDelay.setL2RdBDrop(juce::Decibels::decibelsToGain(l2RGainDropdB));
 //    pingPongDelay.setR2LdBDrop(juce::Decibels::decibelsToGain(r2LGainDropdB));
-    pingPongDelay.setDelayMS(delayMS);
     
-    pingPongDelay.setLeftFirst(leftFirst);
+    
+    pingPongDelay.setDelayMS(delayMS);
     
     pingPongDelay.setLinearGains(initialGainDropdB, l2RGainDropdB, r2LGainDropdB);
     
     pingPongDelayRightFirst.setDelayMS(delayMS);
-    
-    pingPongDelayRightFirst.setLeftFirst(leftFirst);
     
     pingPongDelayRightFirst.setLinearGains(initialGainDropdB, l2RGainDropdB, r2LGainDropdB);
     

@@ -43,6 +43,7 @@ private:
     juce::Slider tempoSelector;
     
     juce::ToggleButton tripletButton;
+    juce::ToggleButton dottedButton;
     juce::ToggleButton bypassButton;
     juce::ToggleButton syncButton;
     

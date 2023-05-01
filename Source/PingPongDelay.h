@@ -41,21 +41,7 @@ public:
     
     void setDelayMS(float delayMS);
     
-    void setInitialdBDrop(float initialLinDrop);
-    
-    void setL2RdBDrop(float l2RLinDrop);
-    
-    void setR2LdBDrop(float rLRLinDrop);
-    
-    void setInitialLeftDropLinear();
-    
-    void setInitialRightDropLiner();
-    
-    void setPingPongDropLinear();
-    
     void setLinearGains(float mInitialdBDrop, float mL2RdBDrop, float mR2LdBDrop);
-    
-    void setLeftFirst(bool mLeftFirst);
     
     
 private:
@@ -97,10 +83,6 @@ private:
     float initialRightDropdB = -9.f;
     float pingPongDropdB = -6.f;
     
-    float initialdBDrop = -10.f;
-    float l2RdBDrop = -12.f;
-    float r2LdBDrop = -2.f;
-    
     float wet = 0.f;
     float rightInitial = 0.f;
     float right = 0.f;
@@ -111,34 +93,4 @@ private:
     float yRightInitial = 0.f;
     float yRight = 0.f;
     
-    bool leftFirst;
-    
 };
-
-
-
-//class DelayEffect {
-//
-//public:
-//
-//    float processSample(float x, const int c);
-//
-//    void setDelayMS(float delayMS);
-//
-//    void prepareToPlay(double sampleRate, int bufferSize){
-//        Fs = (float) sampleRate;
-//        r[0] = w[0] - delaySamples;
-//        r[1] = w[1] - delaySamples;
-//    }
-//
-//private:
-//
-//    // One sample of delay
-//    static const int SIZE = 24000;
-//    float delayBuffer[SIZE][2] = {0.f}; // left and right channels
-//    int w[2] = {SIZE-1}; // write index for buffer (input), initialize to end of buffer
-//    int r[2] = {0}; // read index for buffer (output)
-//
-//    int delaySamples = 10000;
-//    float Fs = 48000.f;
-//};

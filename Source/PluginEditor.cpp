@@ -87,10 +87,20 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     //
     
     tripletButton.addListener(this);
-    tripletButton.setBounds(15,420,100,40);
+    tripletButton.setBounds(15,434,100,40);
     tripletButton.setButtonText("Triplet");
     tripletButton.setToggleState(false, juce::dontSendNotification);
     addAndMakeVisible(tripletButton);
+    
+    //
+    // Dotted Toggle
+    //
+    
+    dottedButton.addListener(this);
+    dottedButton.setBounds(15,405,100,40);
+    dottedButton.setButtonText("Dotted");
+    dottedButton.setToggleState(false, juce::dontSendNotification);
+    addAndMakeVisible(dottedButton);
     
     
     //
@@ -199,6 +209,9 @@ void Coleman_HW2AudioProcessorEditor::buttonClicked(juce::Button *button){
     }
     if (button == &tripletButton){
         audioProcessor.isTriplet = tripletButton.getToggleState();
+    }
+    if (button == &dottedButton){
+        audioProcessor.isDotted = tripletButton.getToggleState();
     }
     if (button == &syncButton) {
         audioProcessor.isSynced = syncButton.getToggleState();
