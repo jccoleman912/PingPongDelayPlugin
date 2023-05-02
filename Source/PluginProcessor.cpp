@@ -144,17 +144,21 @@ void Coleman_HW2AudioProcessor::prepareToPlay (double sampleRate, int samplesPer
 {
     pingPongDelay.prepareToPlay(sampleRate, samplesPerBlock);
     
-    float tr = 0.1; // 100 ms response time for smoothing
-    alpha = std::exp(-log(9.f)/(sampleRate * tr));
+    float tr = 7; // 100 ms response time for smoothing
+//    alpha = std::exp(-log(9.f)/(sampleRate * tr));
     
-    smoothedInitialGainDropdBL.reset(sampleRate,tr);
-    smoothedInitialGainDropdBR.reset(sampleRate,tr);
-    smoothedL2RGainDropdBL.reset(sampleRate,tr);
-    smoothedL2RGainDropdBR.reset(sampleRate,tr);
-    smoothedR2LGainDropdBL.reset(sampleRate,tr);
-    smoothedR2LGainDropdBL.reset(sampleRate,tr);
-    smoothedTempoL.reset(sampleRate,tr);
-    smoothedTempoR.reset(sampleRate,tr);
+    alpha = 0.9999;
+    
+    
+    
+//    smoothedInitialGainDropdBL.reset(sampleRate,tr);
+//    smoothedInitialGainDropdBR.reset(sampleRate,tr);
+//    smoothedL2RGainDropdBL.reset(sampleRate,tr);
+//    smoothedL2RGainDropdBR.reset(sampleRate,tr);
+//    smoothedR2LGainDropdBL.reset(sampleRate,tr);
+//    smoothedR2LGainDropdBL.reset(sampleRate,tr);
+//    smoothedTempoL.reset(sampleRate,tr);
+//    smoothedTempoR.reset(sampleRate,tr);
     
     
 }
@@ -221,6 +225,7 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
     
     
     float tempoValue = *state.getRawParameterValue("tempoValue");
+    
     
     
     
@@ -292,12 +297,11 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
     }
     
     
+    
+    
 //    pingPongDelay.setInitialdBDrop(juce::Decibels::decibelsToGain(initialGainDropdB));
 //    pingPongDelay.setL2RdBDrop(juce::Decibels::decibelsToGain(l2RGainDropdB));
 //    pingPongDelay.setR2LdBDrop(juce::Decibels::decibelsToGain(r2LGainDropdB));
-    
-    
-    pingPongDelay.setDelayMS(delayMS);
     
     pingPongDelay.setLinearGains(initialdBDropValue, l2RdBDropValue, r2LdBDropValue);
     
@@ -327,6 +331,10 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
 //                if(channel == 1) {
 //
 //                }
+                smoothDelayMS[channel] = alpha * smoothDelayMS[channel] + (1.f - alpha) * delayMS;
+                
+                pingPongDelay.setDelayMS(smoothDelayMS[channel]);
+                pingPongDelayRightFirst.setDelayMS(smoothDelayMS[channel]);
                 
 
                 
@@ -339,6 +347,9 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
                 }
                 
                 buffer.getWritePointer(channel)[n] = y;
+                
+
+
                 
             }
         }
@@ -382,6 +393,10 @@ void Coleman_HW2AudioProcessor::setStateInformation (const void* data, int sizeI
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+}
+
+void Coleman_HW2AudioProcessor::setTempo (float mTempo) {
+    tempo = mTempo;
 }
 
 //==============================================================================

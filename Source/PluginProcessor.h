@@ -70,7 +70,7 @@ public:
     
     
     float tempo = 120.f;
-    float smoothTempo[2] = {0.f};
+    float smoothDelayMS[2] = {500.f};
     
     bool isBypassed = false;
     bool isTriplet = false;
@@ -88,14 +88,18 @@ private:
     
     PingPongDelay pingPongDelayRightFirst;
     
-    juce::SmoothedValue<float,juce::ValueSmoothingTypes::Linear> smoothedInitialGainDropdBL {-9.f};
-    juce::SmoothedValue<float,juce::ValueSmoothingTypes::Linear> smoothedInitialGainDropdBR {-9.f};
-    juce::SmoothedValue<float,juce::ValueSmoothingTypes::Linear> smoothedL2RGainDropdBL {0.f};
-    juce::SmoothedValue<float,juce::ValueSmoothingTypes::Linear> smoothedL2RGainDropdBR {0.f};
-    juce::SmoothedValue<float,juce::ValueSmoothingTypes::Linear> smoothedR2LGainDropdBL {-6.f};
-    juce::SmoothedValue<float,juce::ValueSmoothingTypes::Linear> smoothedR2RGainDropdBR {-6.f};
-    juce::SmoothedValue<float,juce::ValueSmoothingTypes::Linear> smoothedTempoL {120.f};
-    juce::SmoothedValue<float,juce::ValueSmoothingTypes::Linear> smoothedTempoR {120.f};
+    void setTempo (float tempo);
+    
+//    juce::SmoothedValue<float,juce::ValueSmoothingTypes::Linear> smoothedInitialGainDropdBL {-9.f};
+//    juce::SmoothedValue<float,juce::ValueSmoothingTypes::Linear> smoothedInitialGainDropdBR {-9.f};
+//    juce::SmoothedValue<float,juce::ValueSmoothingTypes::Linear> smoothedL2RGainDropdBL {0.f};
+//    juce::SmoothedValue<float,juce::ValueSmoothingTypes::Linear> smoothedL2RGainDropdBR {0.f};
+//    juce::SmoothedValue<float,juce::ValueSmoothingTypes::Linear> smoothedR2LGainDropdBL {-6.f};
+//    juce::SmoothedValue<float,juce::ValueSmoothingTypes::Linear> smoothedR2RGainDropdBR {-6.f};
+//    juce::SmoothedValue<float,juce::ValueSmoothingTypes::Linear> smoothedTempoL {120.f};
+//    juce::SmoothedValue<float,juce::ValueSmoothingTypes::Linear> smoothedTempoR {120.f};
+    
+    
     
     
     int countL = 0;
