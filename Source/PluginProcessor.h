@@ -57,16 +57,18 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
     
-    float alpha = 0.999f;
+    float alpha = 0.9999f;
+    
+    float alphaDelay = 0.9999f;
     
     float initialGainDropdB = -9.f;
-    float smoothInitialGainDrop[2] = {0.f};
+    float smoothInitialGainDrop[2] = {-10.f};
    
     float l2RGainDropdB = 0.f;
     float smoothL2RGainDropdB[2] = {0.f};
     
     float r2LGainDropdB = -6.f;
-    float smoothR2LGainDropdB[2] = {0.f};
+    float smoothR2LGainDropdB[2] = {-6.f};
     
     
     float tempo = 120.f;

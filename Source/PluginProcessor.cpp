@@ -144,10 +144,12 @@ void Coleman_HW2AudioProcessor::prepareToPlay (double sampleRate, int samplesPer
 {
     pingPongDelay.prepareToPlay(sampleRate, samplesPerBlock);
     
-    float tr = 7; // 100 ms response time for smoothing
-//    alpha = std::exp(-log(9.f)/(sampleRate * tr));
+    float trDelay = 0.f; // 100 ms response time for smoothing
+    alphaDelay = std::exp(-log(9.f)/(sampleRate * trDelay));
     
-    alpha = 0.9999;
+    float tr = 0.08f; // 100 ms response time for smoothing
+    alpha = std::exp(-log(9.f)/(sampleRate * tr));
+
     
     
     
@@ -331,12 +333,21 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
 //                if(channel == 1) {
 //
 //                }
-                smoothDelayMS[channel] = alpha * smoothDelayMS[channel] + (1.f - alpha) * delayMS;
+                smoothDelayMS[channel] = alphaDelay * smoothDelayMS[channel] + (1.f - alphaDelay) * delayMS;
                 
                 pingPongDelay.setDelayMS(smoothDelayMS[channel]);
                 pingPongDelayRightFirst.setDelayMS(smoothDelayMS[channel]);
                 
-
+                
+                smoothInitialGainDrop[channel] = alpha * smoothInitialGainDrop[channel] + (1.f - alpha) * initialdBDropValue;
+                
+                smoothL2RGainDropdB[channel] = alpha * smoothL2RGainDropdB[channel] + (1.f - alpha) * l2RdBDropValue;
+                
+                smoothR2LGainDropdB[channel] = alpha * smoothR2LGainDropdB[channel] + (1.f - alpha) * r2LdBDropValue;
+                
+                pingPongDelay.setLinearGains(smoothInitialGainDrop[channel], smoothL2RGainDropdB[channel], smoothR2LGainDropdB[channel]);
+                pingPongDelayRightFirst.setLinearGains(smoothInitialGainDrop[channel], smoothL2RGainDropdB[channel], smoothR2LGainDropdB[channel]);
+  
                 
                 float x = buffer.getWritePointer(channel)[n];
                 
