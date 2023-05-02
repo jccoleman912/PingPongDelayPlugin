@@ -173,10 +173,9 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     buttonAttachment.emplace_back(new juce::AudioProcessorValueTreeState::ButtonAttachment(audioProcessor.state, "bypassValue", bypassButton));
     buttonAttachment.emplace_back(new juce::AudioProcessorValueTreeState::ButtonAttachment(audioProcessor.state, "syncValue", syncButton));
     buttonAttachment.emplace_back(new juce::AudioProcessorValueTreeState::ButtonAttachment(audioProcessor.state, "leftFirstValue", leftFirstButton));
+    buttonAttachment.emplace_back(new juce::AudioProcessorValueTreeState::ButtonAttachment(audioProcessor.state, "rightFirstValue", rightFirstButton));
     
     comboBoxAttachment.emplace_back(new juce::AudioProcessorValueTreeState::ComboBoxAttachment(audioProcessor.state, "noteValue", noteSelector));
-
-    
 
 }
 
@@ -200,69 +199,3 @@ void Coleman_HW2AudioProcessorEditor::resized()
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
 }
-
-
-//void Coleman_HW2AudioProcessorEditor::sliderValueChanged(juce::Slider * slider)
-//{
-//    // This is how we check which slider was moved
-//    if (slider == &initialGainKnob){
-//        audioProcessor.initialGainDropdB = slider->getValue();
-//    }
-//    if (slider == &l2RGainKnob){
-//        audioProcessor.l2RGainDropdB = slider->getValue();
-//    }
-//    if (slider == &r2LGainKnob){
-//        audioProcessor.r2LGainDropdB = slider->getValue();
-//    }
-//    if (slider == &tempoSelector) {
-//        audioProcessor.tempo = slider->getValue();
-//    }
-//}
-//
-//void Coleman_HW2AudioProcessorEditor::buttonClicked(juce::Button *button){
-//    if (button == &bypassButton){
-//        audioProcessor.isBypassed = bypassButton.getToggleState();
-//    }
-//    if (button == &tripletButton){
-//        audioProcessor.isTriplet = tripletButton.getToggleState();
-//    }
-//    if (button == &dottedButton){
-//        audioProcessor.isDotted = tripletButton.getToggleState();
-//    }
-//    if (button == &syncButton) {
-//        audioProcessor.isSynced = syncButton.getToggleState();
-//    }
-//    if (button == &rightFirstButton) {
-//        audioProcessor.leftFirst = false;
-//    }
-//    if (button == &leftFirstButton) {
-//        audioProcessor.leftFirst = true;
-//    }
-//}
-//
-//void Coleman_HW2AudioProcessorEditor::comboBoxChanged(juce::ComboBox *comboBox){
-//
-//    if (comboBox == &noteSelector){
-//        if (noteSelector.getSelectedId() == 1){
-//            audioProcessor.noteMultiplier = 4.f;
-//        }
-//        if (noteSelector.getSelectedId() == 2){
-//            audioProcessor.noteMultiplier = 2.f;
-//        }
-//        if (noteSelector.getSelectedId() == 3){
-//            audioProcessor.noteMultiplier = 1.f;
-//        }
-//        if (noteSelector.getSelectedId() == 4){
-//            audioProcessor.noteMultiplier = 0.5f;
-//        }
-//        if (noteSelector.getSelectedId() == 5){
-//            audioProcessor.noteMultiplier = 0.25f;
-//        }
-//        if (noteSelector.getSelectedId() == 6){
-//            audioProcessor.noteMultiplier = 0.125f;
-//        }
-//        if (noteSelector.getSelectedId() == 7){
-//            audioProcessor.noteMultiplier = 0.0625f;
-//        }
-//    }
-//}

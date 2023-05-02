@@ -80,7 +80,7 @@ public:
     bool leftFirst = true;
     bool isSynced = false;
     
-    std::string noteType = "quarter";
+    std::string noteType = "8th";
     float noteMultiplier = 1.f;
     float delayMS = 500.f;
 
@@ -91,22 +91,7 @@ private:
     PingPongDelay pingPongDelayRightFirst;
     
     void setTempo (float tempo);
-    
-//    juce::SmoothedValue<float,juce::ValueSmoothingTypes::Linear> smoothedInitialGainDropdBL {-9.f};
-//    juce::SmoothedValue<float,juce::ValueSmoothingTypes::Linear> smoothedInitialGainDropdBR {-9.f};
-//    juce::SmoothedValue<float,juce::ValueSmoothingTypes::Linear> smoothedL2RGainDropdBL {0.f};
-//    juce::SmoothedValue<float,juce::ValueSmoothingTypes::Linear> smoothedL2RGainDropdBR {0.f};
-//    juce::SmoothedValue<float,juce::ValueSmoothingTypes::Linear> smoothedR2LGainDropdBL {-6.f};
-//    juce::SmoothedValue<float,juce::ValueSmoothingTypes::Linear> smoothedR2RGainDropdBR {-6.f};
-//    juce::SmoothedValue<float,juce::ValueSmoothingTypes::Linear> smoothedTempoL {120.f};
-//    juce::SmoothedValue<float,juce::ValueSmoothingTypes::Linear> smoothedTempoR {120.f};
-    
-    
-    
-    
-    int countL = 0;
-    
-    int countR = 0;
+
     
 public:
     

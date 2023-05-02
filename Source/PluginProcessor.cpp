@@ -66,8 +66,11 @@ juce::AudioProcessorValueTreeState::ParameterLayout Coleman_HW2AudioProcessor::c
                                                                    false));
     
     params.push_back(std::make_unique<juce::AudioParameterBool> ("leftFirstValue",
-                                                                   "Left or Right First",
+                                                                   "Left First",
                                                                    true));
+    params.push_back(std::make_unique<juce::AudioParameterBool> ("rightFirstValue",
+                                                                   "Right First",
+                                                                   false));
     
     params.push_back(std::make_unique<juce::AudioParameterChoice> ("noteValue", "Note Type", juce::StringArray {"Whole", "Half", "Quarter", "8th", "16th", "32nd", "64th"}, 3));
                      
@@ -150,19 +153,7 @@ void Coleman_HW2AudioProcessor::prepareToPlay (double sampleRate, int samplesPer
     float tr = 0.08f; // 100 ms response time for smoothing
     alpha = std::exp(-log(9.f)/(sampleRate * tr));
 
-    
-    
-    
-//    smoothedInitialGainDropdBL.reset(sampleRate,tr);
-//    smoothedInitialGainDropdBR.reset(sampleRate,tr);
-//    smoothedL2RGainDropdBL.reset(sampleRate,tr);
-//    smoothedL2RGainDropdBR.reset(sampleRate,tr);
-//    smoothedR2LGainDropdBL.reset(sampleRate,tr);
-//    smoothedR2LGainDropdBL.reset(sampleRate,tr);
-//    smoothedTempoL.reset(sampleRate,tr);
-//    smoothedTempoR.reset(sampleRate,tr);
-    
-    
+
 }
 
 void Coleman_HW2AudioProcessor::releaseResources()
@@ -212,11 +203,7 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
     
-    
-    int numSamples = buffer.getNumSamples();
-    
-    
-    
+
     float initialdBDropValue = *state.getRawParameterValue("initialDropValue");
     
     
@@ -229,7 +216,7 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
     float tempoValue = *state.getRawParameterValue("tempoValue");
     
     
-    
+
     
     bool boolTripletValue = *state.getRawParameterValue("tripletValue");
     
@@ -282,8 +269,6 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
     
     
     
-    
-    
     delayMS = 1000.f * noteMultiplier * (60.f / tempoValue);
     
     
@@ -298,19 +283,7 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
         delayMS *= 1.5f;
     }
     
-    
-    
-    
-//    pingPongDelay.setInitialdBDrop(juce::Decibels::decibelsToGain(initialGainDropdB));
-//    pingPongDelay.setL2RdBDrop(juce::Decibels::decibelsToGain(l2RGainDropdB));
-//    pingPongDelay.setR2LdBDrop(juce::Decibels::decibelsToGain(r2LGainDropdB));
-    
-    pingPongDelay.setLinearGains(initialdBDropValue, l2RdBDropValue, r2LdBDropValue);
-    
-    pingPongDelayRightFirst.setDelayMS(delayMS);
-    
-    pingPongDelayRightFirst.setLinearGains(initialGainDropdB, l2RGainDropdB, r2LGainDropdB);
-    
+
     float y = 0.f;
 
 
@@ -319,20 +292,7 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
         {
             for (int n = 0; n < buffer.getNumSamples(); ++n)
             {
-                
-//                if(channel == 0) {
-//                    if (countL < 8)
-//                        countL++;
-//                    else
-//                    {
-//                        countL = 0;
-//                        pingPongDelay.setLinearGains(<#float mInitialdBDrop#>, <#float mL2RdBDrop#>, <#float mR2LdBDrop#>)
-//                    }
-//
-//                }
-//                if(channel == 1) {
-//
-//                }
+
                 smoothDelayMS[channel] = alphaDelay * smoothDelayMS[channel] + (1.f - alphaDelay) * delayMS;
                 
                 pingPongDelay.setDelayMS(smoothDelayMS[channel]);
@@ -359,27 +319,10 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
                 
                 buffer.getWritePointer(channel)[n] = y;
                 
-
-
-                
             }
         }
     }
 }
-
-//float xL = buffer.getWritePointer(channel)[n];
-//
-//float yL = pingPongDelay.processSample(xL,channel);
-//
-//float yR = pingPongDelay.processSample(yL, channel);
-//
-//yL = pingPongDelay.processSample(yR, channel);
-//
-//if(channel == 0) {
-//    buffer.getWritePointer(channel)[n] = yL;
-//} else {
-//    buffer.getWritePointer(channel)[n] = yR;
-//}
 
 //==============================================================================
 bool Coleman_HW2AudioProcessor::hasEditor() const
@@ -398,12 +341,21 @@ void Coleman_HW2AudioProcessor::getStateInformation (juce::MemoryBlock& destData
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
+    
+    auto currentState = state.copyState();
+    std::unique_ptr<juce::XmlElement> xml (currentState.createXml());
+    copyXmlToBinary(*xml, destData);
 }
 
 void Coleman_HW2AudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+    std::unique_ptr<juce::XmlElement> xml (getXmlFromBinary(data, sizeInBytes));
+    if (xml && xml->hasTagName(state.state.getType())){
+        state.replaceState(juce::ValueTree::fromXml(*xml));
+        
+    }
 }
 
 void Coleman_HW2AudioProcessor::setTempo (float mTempo) {
