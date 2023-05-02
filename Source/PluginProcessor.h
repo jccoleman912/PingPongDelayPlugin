@@ -87,6 +87,28 @@ private:
     PingPongDelay pingPongDelay;
     
     PingPongDelay pingPongDelayRightFirst;
+    
+    juce::SmoothedValue<float,juce::ValueSmoothingTypes::Linear> smoothedInitialGainDropdBL {-9.f};
+    juce::SmoothedValue<float,juce::ValueSmoothingTypes::Linear> smoothedInitialGainDropdBR {-9.f};
+    juce::SmoothedValue<float,juce::ValueSmoothingTypes::Linear> smoothedL2RGainDropdBL {0.f};
+    juce::SmoothedValue<float,juce::ValueSmoothingTypes::Linear> smoothedL2RGainDropdBR {0.f};
+    juce::SmoothedValue<float,juce::ValueSmoothingTypes::Linear> smoothedR2LGainDropdBL {-6.f};
+    juce::SmoothedValue<float,juce::ValueSmoothingTypes::Linear> smoothedR2RGainDropdBR {-6.f};
+    juce::SmoothedValue<float,juce::ValueSmoothingTypes::Linear> smoothedTempoL {120.f};
+    juce::SmoothedValue<float,juce::ValueSmoothingTypes::Linear> smoothedTempoR {120.f};
+    
+    
+    int countL = 0;
+    
+    int countR = 0;
+    
+public:
+    
+    juce::AudioProcessorValueTreeState state;
+    
+    //Function to fill the value tree.
+    
+    juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
    
     
     //==============================================================================

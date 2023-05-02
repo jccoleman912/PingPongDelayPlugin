@@ -14,10 +14,7 @@
 //==============================================================================
 /**
 */
-class Coleman_HW2AudioProcessorEditor  : public juce::AudioProcessorEditor,
-public juce::Slider::Listener,
-public juce::Button::Listener,
-public juce::ComboBox::Listener
+class Coleman_HW2AudioProcessorEditor  : public juce::AudioProcessorEditor
 {
 public:
     Coleman_HW2AudioProcessorEditor (Coleman_HW2AudioProcessor&);
@@ -27,9 +24,9 @@ public:
     void paint (juce::Graphics&) override;
     void resized() override;
     
-    void sliderValueChanged(juce::Slider *slider) override;
-    void buttonClicked (juce::Button *button) override;
-    void comboBoxChanged (juce::ComboBox *comboBox) override;
+//    void sliderValueChanged(juce::Slider *slider) override;
+//    void buttonClicked (juce::Button *button) override;
+//    void comboBoxChanged (juce::ComboBox *comboBox) override;
 
 private:
     // This reference is provided as a quick way for your editor to
@@ -51,7 +48,13 @@ private:
     juce::ToggleButton rightFirstButton;
     
     juce::ComboBox noteSelector;
-    juce::ComboBox leftOrRightSelection;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Coleman_HW2AudioProcessorEditor)
+    
+public:
+    
+    std::vector<std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>> sliderAttachment;
+    std::vector<std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment>> buttonAttachment;
+    std::vector<std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment>> comboBoxAttachment;
+    
 };

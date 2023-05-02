@@ -21,7 +21,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     // Initial Gain Knob
     //
     
-    initialGainKnob.addListener(this);
+//    initialGainKnob.addListener(this);
     // Specify location in window (xPos,yPos,width,height)
     initialGainKnob.setBounds(250,25,100,100);
     initialGainKnob.setRange(-60.0,24.0,0.1); // (min, max, interval)
@@ -37,7 +37,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     // Left to Right Gain Knob
     //
     
-    l2RGainKnob.addListener(this);
+//    l2RGainKnob.addListener(this);
     // Specify location in window (xPos,yPos,width,height)
     l2RGainKnob.setBounds(75,170,100,100);
     l2RGainKnob.setRange(-60.0,24.0,0.1); // (min, max, interval)
@@ -53,7 +53,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     // Right to Left Gain Knob
     //
     
-    r2LGainKnob.addListener(this);
+//    r2LGainKnob.addListener(this);
     // Specify location in window (xPos,yPos,width,height)
     r2LGainKnob.setBounds(425,170,100,100);
     r2LGainKnob.setRange(-60.0,24.0,0.1); // (min, max, interval)
@@ -69,7 +69,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     // Tempo Slider
     //
     
-    tempoSelector.addListener(this);
+//    tempoSelector.addListener(this);
     // Specify location in window (xPos,yPos,width,height)
     tempoSelector.setBounds(425,450,160,100);
     tempoSelector.setRange(40.0,240.0,0.1); // (min, max, interval)
@@ -86,7 +86,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     // Triplet Toggle
     //
     
-    tripletButton.addListener(this);
+//    tripletButton.addListener(this);
     tripletButton.setBounds(15,434,100,40);
     tripletButton.setButtonText("Triplet");
     tripletButton.setToggleState(false, juce::dontSendNotification);
@@ -96,7 +96,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     // Dotted Toggle
     //
     
-    dottedButton.addListener(this);
+//    dottedButton.addListener(this);
     dottedButton.setBounds(15,405,100,40);
     dottedButton.setButtonText("Dotted");
     dottedButton.setToggleState(false, juce::dontSendNotification);
@@ -107,7 +107,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     // Bypass Toggle
     //
     
-    bypassButton.addListener(this);
+//    bypassButton.addListener(this);
     bypassButton.setBounds(15,15,100,40);
     bypassButton.setButtonText("Bypass");
     bypassButton.setToggleState(false, juce::dontSendNotification);
@@ -118,7 +118,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     // Sync Toggle
     //
     
-    syncButton.addListener(this);
+//    syncButton.addListener(this);
     syncButton.setBounds(485,420,100,40);
     syncButton.setButtonText("Sync");
     syncButton.setToggleState(false, juce::dontSendNotification);
@@ -129,14 +129,14 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     // L/R Selection Buttons
     //
     
-    leftFirstButton.addListener(this);
+//    leftFirstButton.addListener(this);
     leftFirstButton.setBounds(250,465,100,40);
     leftFirstButton.setButtonText("Left");
     leftFirstButton.setToggleState(true, juce::dontSendNotification);
     leftFirstButton.setRadioGroupId(1);
     addAndMakeVisible(leftFirstButton);
     
-    rightFirstButton.addListener(this);
+//    rightFirstButton.addListener(this);
     rightFirstButton.setBounds(250,490,100,40);
     rightFirstButton.setButtonText("Right");
     rightFirstButton.setToggleState(false, juce::dontSendNotification);
@@ -150,7 +150,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     //
     
     // Combo Box
-    noteSelector.addListener(this);
+//    noteSelector.addListener(this);
     noteSelector.setBounds(15, 475, 150, 50);
     noteSelector.addItem("Whole",1);
     noteSelector.addItem("Half",2);
@@ -161,6 +161,22 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     noteSelector.addItem("64th",7);
     noteSelector.setText("Select note...");
     addAndMakeVisible(noteSelector);
+    
+    
+    sliderAttachment.emplace_back(new juce::AudioProcessorValueTreeState::SliderAttachment(audioProcessor.state, "initialDropValue", initialGainKnob));
+    sliderAttachment.emplace_back(new juce::AudioProcessorValueTreeState::SliderAttachment(audioProcessor.state, "l2RDropValue", l2RGainKnob));
+    sliderAttachment.emplace_back(new juce::AudioProcessorValueTreeState::SliderAttachment(audioProcessor.state, "r2LDropValue", r2LGainKnob));
+    sliderAttachment.emplace_back(new juce::AudioProcessorValueTreeState::SliderAttachment(audioProcessor.state, "tempoValue", tempoSelector));
+    
+    buttonAttachment.emplace_back(new juce::AudioProcessorValueTreeState::ButtonAttachment(audioProcessor.state, "tripletValue", tripletButton));
+    buttonAttachment.emplace_back(new juce::AudioProcessorValueTreeState::ButtonAttachment(audioProcessor.state, "dottedValue", dottedButton));
+    buttonAttachment.emplace_back(new juce::AudioProcessorValueTreeState::ButtonAttachment(audioProcessor.state, "bypassValue", bypassButton));
+    buttonAttachment.emplace_back(new juce::AudioProcessorValueTreeState::ButtonAttachment(audioProcessor.state, "syncValue", syncButton));
+    buttonAttachment.emplace_back(new juce::AudioProcessorValueTreeState::ButtonAttachment(audioProcessor.state, "leftFirstValue", leftFirstButton));
+    
+    comboBoxAttachment.emplace_back(new juce::AudioProcessorValueTreeState::ComboBoxAttachment(audioProcessor.state, "noteValue", noteSelector));
+
+    
 
 }
 
@@ -186,68 +202,67 @@ void Coleman_HW2AudioProcessorEditor::resized()
 }
 
 
-void Coleman_HW2AudioProcessorEditor::sliderValueChanged(juce::Slider * slider)
-{
-    // This is how we check which slider was moved
-    if (slider == &initialGainKnob){
-        audioProcessor.initialGainDropdB = slider->getValue();
-    }
-    if (slider == &l2RGainKnob){
-        audioProcessor.l2RGainDropdB = slider->getValue();
-    }
-    if (slider == &r2LGainKnob){
-        audioProcessor.r2LGainDropdB = slider->getValue();
-    }
-    if (slider == &tempoSelector) {
-        audioProcessor.tempo = slider->getValue();
-    }
-}
-
-void Coleman_HW2AudioProcessorEditor::buttonClicked(juce::Button *button){
-    if (button == &bypassButton){
-        audioProcessor.isBypassed = bypassButton.getToggleState();
-    }
-    if (button == &tripletButton){
-        audioProcessor.isTriplet = tripletButton.getToggleState();
-    }
-    if (button == &dottedButton){
-        audioProcessor.isDotted = tripletButton.getToggleState();
-    }
-    if (button == &syncButton) {
-        audioProcessor.isSynced = syncButton.getToggleState();
-    }
-    if (button == &rightFirstButton) {
-        audioProcessor.leftFirst = false;
-    }
-    if (button == &leftFirstButton) {
-        audioProcessor.leftFirst = true;
-    }
-}
-
-void Coleman_HW2AudioProcessorEditor::comboBoxChanged(juce::ComboBox *comboBox){
-    
-    if (comboBox == &noteSelector){
-        if (noteSelector.getSelectedId() == 1){
-            audioProcessor.noteMultiplier = 4.f;
-        }
-        if (noteSelector.getSelectedId() == 2){
-            audioProcessor.noteMultiplier = 2.f;
-        }
-        if (noteSelector.getSelectedId() == 3){
-            audioProcessor.noteMultiplier = 1.f;
-        }
-        if (noteSelector.getSelectedId() == 4){
-            audioProcessor.noteMultiplier = 0.5f;
-        }
-        if (noteSelector.getSelectedId() == 5){
-            audioProcessor.noteMultiplier = 0.25f;
-        }
-        if (noteSelector.getSelectedId() == 6){
-            audioProcessor.noteMultiplier = 0.125f;
-        }
-        if (noteSelector.getSelectedId() == 7){
-            audioProcessor.noteMultiplier = 0.0625f;
-        }
-    }
-    
-}
+//void Coleman_HW2AudioProcessorEditor::sliderValueChanged(juce::Slider * slider)
+//{
+//    // This is how we check which slider was moved
+//    if (slider == &initialGainKnob){
+//        audioProcessor.initialGainDropdB = slider->getValue();
+//    }
+//    if (slider == &l2RGainKnob){
+//        audioProcessor.l2RGainDropdB = slider->getValue();
+//    }
+//    if (slider == &r2LGainKnob){
+//        audioProcessor.r2LGainDropdB = slider->getValue();
+//    }
+//    if (slider == &tempoSelector) {
+//        audioProcessor.tempo = slider->getValue();
+//    }
+//}
+//
+//void Coleman_HW2AudioProcessorEditor::buttonClicked(juce::Button *button){
+//    if (button == &bypassButton){
+//        audioProcessor.isBypassed = bypassButton.getToggleState();
+//    }
+//    if (button == &tripletButton){
+//        audioProcessor.isTriplet = tripletButton.getToggleState();
+//    }
+//    if (button == &dottedButton){
+//        audioProcessor.isDotted = tripletButton.getToggleState();
+//    }
+//    if (button == &syncButton) {
+//        audioProcessor.isSynced = syncButton.getToggleState();
+//    }
+//    if (button == &rightFirstButton) {
+//        audioProcessor.leftFirst = false;
+//    }
+//    if (button == &leftFirstButton) {
+//        audioProcessor.leftFirst = true;
+//    }
+//}
+//
+//void Coleman_HW2AudioProcessorEditor::comboBoxChanged(juce::ComboBox *comboBox){
+//
+//    if (comboBox == &noteSelector){
+//        if (noteSelector.getSelectedId() == 1){
+//            audioProcessor.noteMultiplier = 4.f;
+//        }
+//        if (noteSelector.getSelectedId() == 2){
+//            audioProcessor.noteMultiplier = 2.f;
+//        }
+//        if (noteSelector.getSelectedId() == 3){
+//            audioProcessor.noteMultiplier = 1.f;
+//        }
+//        if (noteSelector.getSelectedId() == 4){
+//            audioProcessor.noteMultiplier = 0.5f;
+//        }
+//        if (noteSelector.getSelectedId() == 5){
+//            audioProcessor.noteMultiplier = 0.25f;
+//        }
+//        if (noteSelector.getSelectedId() == 6){
+//            audioProcessor.noteMultiplier = 0.125f;
+//        }
+//        if (noteSelector.getSelectedId() == 7){
+//            audioProcessor.noteMultiplier = 0.0625f;
+//        }
+//    }
+//}
