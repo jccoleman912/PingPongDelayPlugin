@@ -11,6 +11,90 @@
 #include "PingPongDelay.h"
 
 
+//float PingPongDelay::processSample(float x, const int c){
+//
+//
+//    wet = delayBuffer[r[c]][c];
+//
+//    y = (wet) * (initialLeftDropLinear);
+//
+//    delayBuffer[w[0]][0] = x;
+//
+//
+//    left = delayBuffer2[r2[c]][c];
+//
+//    yLeft = (left * pingPongDropLinear);
+//
+//    delayBuffer2[w2[c]][c] = y + yLeft;
+//
+//
+//
+//    rightInitial = delayBuffer3[r3[c]][c];
+//
+//    yRightInitial = (rightInitial * initialRightDropLinear);
+//
+//    delayBuffer3[w3[1]][1] = x;
+//
+//
+//    right = delayBuffer4[r4[c]][c];
+//
+//    yRight = (right * pingPongDropLinear);
+//
+//    delayBuffer4[w4[c]][c] = yRightInitial + yRight;
+//
+//
+//    // Increment Index
+//    w[c]++;
+//    if (w[c] >= SIZE){
+//        w[c] = 0; // circular indexing
+//    }
+//
+//    // Increment Index
+//    r[c]++;
+//    if (r[c] >= SIZE){
+//        r[c] = 0; // circular indexing
+//    }
+//
+//    // Increment Index
+//    w2[c]++;
+//    if (w2[c] >= SIZE){
+//        w2[c] = 0; // circular indexing
+//    }
+//
+//    // Increment Index
+//    r2[c]++;
+//    if (r2[c] >= SIZE){
+//        r2[c] = 0; // circular indexing
+//    }
+//
+//    // Increment Index
+//    w3[c]++;
+//    if (w3[c] >= SIZE){
+//        w3[c] = 0; // circular indexing
+//    }
+//
+//    // Increment Index
+//    r3[c]++;
+//    if (r3[c] >= SIZE){
+//        r3[c] = 0; // circular indexing
+//    }
+//
+//    // Increment Index
+//    w4[c]++;
+//    if (w4[c] >= SIZE){
+//        w4[c] = 0; // circular indexing
+//    }
+//
+//    // Increment Index
+//    r4[c]++;
+//    if (r4[c] >= SIZE){
+//        r4[c] = 0; // circular indexing
+//    }
+//
+//    return y + yLeft + yRightInitial + yRight;
+//
+//}
+
 float PingPongDelay::processSample(float x, const int c){
    
         
@@ -94,6 +178,7 @@ float PingPongDelay::processSample(float x, const int c){
     return y + yLeft + yRightInitial + yRight;
 
 }
+
 
 
 float PingPongDelay::processSampleRightFirst(float x, const int c) {
