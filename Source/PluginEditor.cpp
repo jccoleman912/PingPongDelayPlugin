@@ -86,7 +86,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     // Triplet Toggle
     //
     
-//    tripletButton.addListener(this);
+    tripletButton.addListener(this);
     tripletButton.setBounds(15,434,100,40);
     tripletButton.setButtonText("Triplet");
     tripletButton.setToggleState(false, juce::dontSendNotification);
@@ -96,7 +96,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     // Dotted Toggle
     //
     
-//    dottedButton.addListener(this);
+    dottedButton.addListener(this);
     dottedButton.setBounds(15,405,100,40);
     dottedButton.setButtonText("Dotted");
     dottedButton.setToggleState(false, juce::dontSendNotification);
@@ -107,7 +107,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     // Bypass Toggle
     //
     
-//    bypassButton.addListener(this);
+    bypassButton.addListener(this);
     bypassButton.setBounds(15,15,100,40);
     bypassButton.setButtonText("Bypass");
     bypassButton.setToggleState(false, juce::dontSendNotification);
@@ -130,14 +130,14 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     // L/R Selection Buttons
     //
     
-//    leftFirstButton.addListener(this);
+    leftFirstButton.addListener(this);
     leftFirstButton.setBounds(250,465,100,40);
     leftFirstButton.setButtonText("Left");
     leftFirstButton.setToggleState(true, juce::dontSendNotification);
     leftFirstButton.setRadioGroupId(1);
     addAndMakeVisible(leftFirstButton);
     
-//    rightFirstButton.addListener(this);
+    rightFirstButton.addListener(this);
     rightFirstButton.setBounds(250,490,100,40);
     rightFirstButton.setButtonText("Right");
     rightFirstButton.setToggleState(false, juce::dontSendNotification);
@@ -221,14 +221,28 @@ void Coleman_HW2AudioProcessorEditor::sliderValueChanged(juce::Slider * slider)
 
 void Coleman_HW2AudioProcessorEditor::buttonClicked(juce::Button *button){
     if (button == &bypassButton){
-//        audioProcessor.isBypassed = bypassButton.getToggleState();
+        bool bypassState = bypassButton.getToggleState();
+        if(bypassState) {
+            color = juce::Colours::slateblue;
+            repaint();
+        } else {
+            color = juce::Colours::darkseagreen;
+            repaint();
+        }
     }
     if (button == &tripletButton){
-//        audioProcessor.isTriplet = tripletButton.getToggleState();
+        bool tripletState = tripletButton.getToggleState();
+        if(tripletState) {
+            color = juce::Colours::rosybrown;
+            repaint();
+        } else {
+            color = juce::Colours::darkseagreen;
+            repaint();
+        }
     }
     if (button == &syncButton) {
-        bool state = syncButton.getToggleState();
-        if(state) {
+        bool syncState = syncButton.getToggleState();
+        if(syncState) {
             color = juce::Colours::darksalmon;
             repaint();
         } else {
@@ -237,14 +251,26 @@ void Coleman_HW2AudioProcessorEditor::buttonClicked(juce::Button *button){
         }
     }
     if (button == &dottedButton) {
-//        audioProcessor.isSynced = syncButton.getToggleState();
-    }
-    if (button == &rightFirstButton) {
-//        audioProcessor.leftFirst = false;
+        bool dottedState = dottedButton.getToggleState();
+        if(dottedState) {
+            color = juce::Colours::saddlebrown;
+            repaint();
+        } else {
+            color = juce::Colours::darkseagreen;
+            repaint();
+        }
     }
     if (button == &leftFirstButton) {
-//        audioProcessor.leftFirst = true;
+        bool dottedState = leftFirstButton.getToggleState();
+        if(!dottedState) {
+            color = juce::Colours::moccasin;
+            repaint();
+        } else {
+            color = juce::Colours::darkseagreen;
+            repaint();
+        }
     }
+
 }
 
 void Coleman_HW2AudioProcessorEditor::comboBoxChanged(juce::ComboBox *comboBox){
