@@ -267,6 +267,7 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
         
     };
     
+    pingPongDelay.setLeftOrRight(boolLeftFirstValue);
     
     
     delayMS = 1000.f * noteMultiplier * (60.f / tempoValue);
@@ -286,13 +287,13 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
 
     float y = 0.f;
 
-
     if(!boolBypassValue) {
+        
         for (int channel = 0; channel < totalNumInputChannels; ++channel)
         {
             for (int n = 0; n < buffer.getNumSamples(); ++n)
             {
-
+                
                 smoothDelayMS[channel] = alphaDelay * smoothDelayMS[channel] + (1.f - alphaDelay) * delayMS;
                 
                 pingPongDelay.setDelayMS(smoothDelayMS[channel]);
@@ -307,20 +308,19 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
                 
                 pingPongDelay.setLinearGains(smoothInitialGainDrop[channel], smoothL2RGainDropdB[channel], smoothR2LGainDropdB[channel]);
                 pingPongDelayRightFirst.setLinearGains(smoothInitialGainDrop[channel], smoothL2RGainDropdB[channel], smoothR2LGainDropdB[channel]);
-  
+                
                 
                 float x = buffer.getWritePointer(channel)[n];
-                
-                if(!boolLeftFirstValue) {
-                    y = pingPongDelayRightFirst.processSampleRightFirst(x, channel);
-                } else {
-                    y = pingPongDelay.processSample(x, channel);
-                }
-                
+
+                    
+                y = pingPongDelay.processSample(x, channel);
+
+                    
                 buffer.getWritePointer(channel)[n] = y;
-                
+                    
+                }
             }
-        }
+
     }
 }
 
