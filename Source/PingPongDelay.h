@@ -46,6 +46,12 @@ public:
     
     void setLinearGains(float mInitialdBDrop, float mL2RdBDrop, float mR2LdBDrop);
     
+    void setInitialDropLinear(float initialLinear);
+    
+    void setL2RDropLinear(float l2RLinear);
+    
+    void setR2LDropLinear(float r2LLinear);
+    
     void setLeftOrRight(bool leftFirst);
     
     
@@ -91,6 +97,10 @@ private:
     
     int delaySamples = 10000;
     float Fs = 48000.f;
+    
+    float initialDropLinear = 0.5f;
+    float l2RDropLinear = 0.0f;
+    float r2LDropLinear = 0.5f;
     
     float initialLeftDropLinear = 0.5f;
     float initialRightDropLinear = 0.5f;

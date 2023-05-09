@@ -62,7 +62,7 @@ public:
     float alphaDelay = 0.9999f;
     
     float initialGainDropdB = -9.f;
-    float smoothInitialGainDrop[2] = {-10.f};
+    float smoothInitialGainDropdB[2] = {-10.f};
    
     float l2RGainDropdB = 0.f;
     float smoothL2RGainDropdB[2] = {0.f};

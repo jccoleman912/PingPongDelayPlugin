@@ -297,17 +297,19 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
                 smoothDelayMS[channel] = alphaDelay * smoothDelayMS[channel] + (1.f - alphaDelay) * delayMS;
                 
                 pingPongDelay.setDelayMS(smoothDelayMS[channel]);
-                pingPongDelayRightFirst.setDelayMS(smoothDelayMS[channel]);
                 
+                smoothInitialGainDropdB[channel] = alpha * smoothInitialGainDropdB[channel] + (1.f - alpha) * initialdBDropValue;
                 
-                smoothInitialGainDrop[channel] = alpha * smoothInitialGainDrop[channel] + (1.f - alpha) * initialdBDropValue;
+                pingPongDelay.setInitialDropLinear(juce::Decibels::decibelsToGain(smoothInitialGainDropdB[channel]));
                 
                 smoothL2RGainDropdB[channel] = alpha * smoothL2RGainDropdB[channel] + (1.f - alpha) * l2RdBDropValue;
                 
+                pingPongDelay.setL2RDropLinear(juce::Decibels::decibelsToGain(smoothL2RGainDropdB[channel]));
+                
                 smoothR2LGainDropdB[channel] = alpha * smoothR2LGainDropdB[channel] + (1.f - alpha) * r2LdBDropValue;
                 
-                pingPongDelay.setLinearGains(smoothInitialGainDrop[channel], smoothL2RGainDropdB[channel], smoothR2LGainDropdB[channel]);
-                pingPongDelayRightFirst.setLinearGains(smoothInitialGainDrop[channel], smoothL2RGainDropdB[channel], smoothR2LGainDropdB[channel]);
+                pingPongDelay.setR2LDropLinear(juce::Decibels::decibelsToGain(smoothR2LGainDropdB[channel]));
+ 
                 
                 
                 float x = buffer.getWritePointer(channel)[n];

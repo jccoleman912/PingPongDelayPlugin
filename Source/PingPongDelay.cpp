@@ -104,15 +104,15 @@ float PingPongDelay::processSample(float x, const int c){
         
         yRight = rightBuffer[read2];
         
-        right = (yRight) * (initialLeftDropLinear);
+        right = yRight;
         
-        rightBuffer[write2] = (leftBuffer[read2] * initialLeftDropLinear);
+        rightBuffer[write2] = (leftBuffer[read2] * l2RDropLinear);
         
         
         
-        left = (yLeft) * (initialLeftDropLinear);
+        left = yLeft;
         
-        leftBuffer[write] = x + (rightBuffer[read] * initialLeftDropLinear);
+        leftBuffer[write] = (x * initialDropLinear) + (rightBuffer[read] * r2LDropLinear);
         
         
         
@@ -160,15 +160,15 @@ float PingPongDelay::processSample(float x, const int c){
         
         yLeft = leftBuffer[read2];
         
-        left = (yLeft);
+        left = yLeft;
         
-        leftBuffer[write2] = (rightBuffer[read2] * initialLeftDropLinear);
+        leftBuffer[write2] = (rightBuffer[read2] * l2RDropLinear);
         
         
         
-        right = (yRight);
+        right = yRight;
         
-        rightBuffer[write] = x + (leftBuffer[read] * initialLeftDropLinear);
+        rightBuffer[write] = (x * initialDropLinear) + (leftBuffer[read] * r2LDropLinear);
         
         
         
@@ -367,6 +367,18 @@ void PingPongDelay::setLinearGains(float mInitialdBDrop, float mL2RdBDrop, float
 
 void PingPongDelay::setLeftOrRight(bool leftFirst) {
     leftDelayFirst = leftFirst;
+}
+
+void PingPongDelay::setInitialDropLinear(float initialLinear) {
+    initialDropLinear = initialLinear;
+}
+
+void PingPongDelay::setL2RDropLinear(float l2RLinear) {
+    l2RDropLinear = l2RLinear;
+}
+
+void PingPongDelay::setR2LDropLinear(float r2LLinear) {
+    r2LDropLinear = r2LLinear;
 }
 
 
