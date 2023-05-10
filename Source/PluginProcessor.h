@@ -61,36 +61,20 @@ public:
     
     float alphaDelay = 0.9999f;
     
-    float initialGainDropdB = -9.f;
     float smoothInitialGainDropdB[2] = {-10.f};
-   
-    float l2RGainDropdB = 0.f;
+
     float smoothL2RGainDropdB[2] = {0.f};
     
-    float r2LGainDropdB = -6.f;
     float smoothR2LGainDropdB[2] = {-6.f};
     
-    
-    float tempo = 120.f;
     float smoothDelayMS[2] = {500.f};
-    
-    bool isBypassed = false;
-    bool isTriplet = false;
-    bool isDotted = false;
-    bool leftFirst = true;
-    bool isSynced = false;
-    
-    std::string noteType = "8th";
+
     float noteMultiplier = 1.f;
     float delayMS = 500.f;
 
 private:
     
     PingPongDelay pingPongDelay;
-    
-    PingPongDelay pingPongDelayRightFirst;
-    
-    void setTempo (float tempo);
 
     
 public:

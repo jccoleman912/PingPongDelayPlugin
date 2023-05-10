@@ -253,7 +253,7 @@ void Coleman_HW2AudioProcessorEditor::buttonClicked(juce::Button *button){
     if (button == &dottedButton) {
         bool dottedState = dottedButton.getToggleState();
         if(dottedState) {
-            color = juce::Colours::saddlebrown;
+            color = juce::Colour (0xff008840);
             repaint();
         } else {
             color = juce::Colours::darkseagreen;

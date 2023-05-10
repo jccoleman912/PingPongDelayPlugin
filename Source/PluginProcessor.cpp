@@ -360,10 +360,6 @@ void Coleman_HW2AudioProcessor::setStateInformation (const void* data, int sizeI
     }
 }
 
-void Coleman_HW2AudioProcessor::setTempo (float mTempo) {
-    tempo = mTempo;
-}
-
 //==============================================================================
 // This creates new instances of the plugin..
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
