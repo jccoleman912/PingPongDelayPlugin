@@ -67,6 +67,8 @@ public:
     
     float smoothR2LGainDropdB[2] = {-6.f};
     
+    float smoothMix[2] = {100.f};
+    
     float smoothDelayMS[2] = {500.f};
 
     float noteMultiplier = 1.f;

@@ -15,7 +15,11 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
-    setSize (600, 600);
+    setSize (625, 625);
+    
+    
+//    bgImage = juce::ImageCache::getFromMemory(BinaryData::FullScalePingpongDelayUI2500_jpg);
+    
     
     //
     // Initial Gain Knob
@@ -69,7 +73,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     // Tempo Slider
     //
     
-//    tempoSelector.addListener(this);
+    tempoSelector.addListener(this);
     // Specify location in window (xPos,yPos,width,height)
     tempoSelector.setBounds(425,450,160,100);
     tempoSelector.setRange(40.0,240.0,0.1); // (min, max, interval)
@@ -79,6 +83,22 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     tempoSelector.setName("Tempo");
     tempoSelector.getTitle();
     addAndMakeVisible(tempoSelector);
+    
+    
+    //
+    // Mix Knob
+    //
+    
+    mixKnob.addListener(this);
+    // Specify location in window (xPos,yPos,width,height)
+    mixKnob.setBounds(340,320,160,100);
+    mixKnob.setRange(0.f,100.f,0.1); // (min, max, interval)
+    mixKnob.setValue(100.f); // initial value
+    mixKnob.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+    mixKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
+    mixKnob.setName("Mix");
+    mixKnob.getTitle();
+    addAndMakeVisible(mixKnob);
         
     
     
@@ -145,29 +165,59 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     addAndMakeVisible(rightFirstButton);
     
     
-
     //
-    // Note Selection Combo Box
+    // Note Selection Buttons
     //
     
-    // Combo Box
-//    noteSelector.addListener(this);
-    noteSelector.setBounds(15, 475, 150, 50);
-    noteSelector.addItem("Whole",1);
-    noteSelector.addItem("Half",2);
-    noteSelector.addItem("Quarter",3);
-    noteSelector.addItem("8th",4);
-    noteSelector.addItem("16th",5);
-    noteSelector.addItem("32nd",6);
-    noteSelector.addItem("64th",7);
-    noteSelector.setText("Select note...");
-    addAndMakeVisible(noteSelector);
+    wholeNoteButton.addListener(this);
+    wholeNoteButton.setBounds(15,475,30,30);
+    wholeNoteButton.setButtonText("Whole");
+    wholeNoteButton.setToggleState(false, juce::dontSendNotification);
+    wholeNoteButton.setRadioGroupId(2);
+    addAndMakeVisible(wholeNoteButton);
+    
+    halfNoteButton.addListener(this);
+    halfNoteButton.setBounds(50,475,30,30);
+    halfNoteButton.setButtonText("Half");
+    halfNoteButton.setToggleState(false, juce::dontSendNotification);
+    halfNoteButton.setRadioGroupId(2);
+    addAndMakeVisible(halfNoteButton);
+    
+    quarterNoteButton.addListener(this);
+    quarterNoteButton.setBounds(85,475,30,30);
+    quarterNoteButton.setButtonText("Quarter");
+    quarterNoteButton.setToggleState(true, juce::dontSendNotification);
+    quarterNoteButton.setRadioGroupId(2);
+    addAndMakeVisible(quarterNoteButton);
+    
+    eighthNoteButton.addListener(this);
+    eighthNoteButton.setBounds(15,520,30,30);
+    eighthNoteButton.setButtonText("8th");
+    eighthNoteButton.setToggleState(false, juce::dontSendNotification);
+    eighthNoteButton.setRadioGroupId(2);
+    addAndMakeVisible(eighthNoteButton);
+    
+    sixteenthNoteButton.addListener(this);
+    sixteenthNoteButton.setBounds(50,520,30,30);
+    sixteenthNoteButton.setButtonText("16th");
+    sixteenthNoteButton.setToggleState(false, juce::dontSendNotification);
+    sixteenthNoteButton.setRadioGroupId(2);
+    addAndMakeVisible(sixteenthNoteButton);
+    
+    thirtysecondNoteButton.addListener(this);
+    thirtysecondNoteButton.setBounds(85,520,30,30);
+    thirtysecondNoteButton.setButtonText("32nd");
+    thirtysecondNoteButton.setToggleState(false, juce::dontSendNotification);
+    thirtysecondNoteButton.setRadioGroupId(2);
+    addAndMakeVisible(thirtysecondNoteButton);
+    
     
     
     sliderAttachment.emplace_back(new juce::AudioProcessorValueTreeState::SliderAttachment(audioProcessor.state, "initialDropValue", initialGainKnob));
     sliderAttachment.emplace_back(new juce::AudioProcessorValueTreeState::SliderAttachment(audioProcessor.state, "l2RDropValue", l2RGainKnob));
     sliderAttachment.emplace_back(new juce::AudioProcessorValueTreeState::SliderAttachment(audioProcessor.state, "r2LDropValue", r2LGainKnob));
     sliderAttachment.emplace_back(new juce::AudioProcessorValueTreeState::SliderAttachment(audioProcessor.state, "tempoValue", tempoSelector));
+    sliderAttachment.emplace_back(new juce::AudioProcessorValueTreeState::SliderAttachment(audioProcessor.state, "mixValue", mixKnob));
     
     buttonAttachment.emplace_back(new juce::AudioProcessorValueTreeState::ButtonAttachment(audioProcessor.state, "tripletValue", tripletButton));
     buttonAttachment.emplace_back(new juce::AudioProcessorValueTreeState::ButtonAttachment(audioProcessor.state, "dottedValue", dottedButton));
@@ -175,8 +225,17 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     buttonAttachment.emplace_back(new juce::AudioProcessorValueTreeState::ButtonAttachment(audioProcessor.state, "syncValue", syncButton));
     buttonAttachment.emplace_back(new juce::AudioProcessorValueTreeState::ButtonAttachment(audioProcessor.state, "leftFirstValue", leftFirstButton));
     buttonAttachment.emplace_back(new juce::AudioProcessorValueTreeState::ButtonAttachment(audioProcessor.state, "rightFirstValue", rightFirstButton));
+    buttonAttachment.emplace_back(new juce::AudioProcessorValueTreeState::ButtonAttachment(audioProcessor.state, "wholeNoteValue", wholeNoteButton));
+    buttonAttachment.emplace_back(new juce::AudioProcessorValueTreeState::ButtonAttachment(audioProcessor.state, "halfNoteValue", halfNoteButton));
+    buttonAttachment.emplace_back(new juce::AudioProcessorValueTreeState::ButtonAttachment(audioProcessor.state, "quarterNoteValue", quarterNoteButton));
+    buttonAttachment.emplace_back(new juce::AudioProcessorValueTreeState::ButtonAttachment(audioProcessor.state, "8thNoteValue", eighthNoteButton));
+    buttonAttachment.emplace_back(new juce::AudioProcessorValueTreeState::ButtonAttachment(audioProcessor.state, "16thNoteValue", sixteenthNoteButton));
+    buttonAttachment.emplace_back(new juce::AudioProcessorValueTreeState::ButtonAttachment(audioProcessor.state, "32ndNoteValue", thirtysecondNoteButton));
+
     
-    comboBoxAttachment.emplace_back(new juce::AudioProcessorValueTreeState::ComboBoxAttachment(audioProcessor.state, "noteValue", noteSelector));
+    
+    
+//    comboBoxAttachment.emplace_back(new juce::AudioProcessorValueTreeState::ComboBoxAttachment(audioProcessor.state, "noteValue", noteSelector));
 
 }
 
@@ -193,7 +252,9 @@ void Coleman_HW2AudioProcessorEditor::paint (juce::Graphics& g)
 
     g.setColour (juce::Colours::white);
     g.setFont (15.0f);
-    g.drawFittedText ("Ping Pong Delay", getLocalBounds(), juce::Justification::centred, 1);
+    
+//    g.drawImageAt(bgImage, 0, 0);
+
 }
 
 void Coleman_HW2AudioProcessorEditor::resized()

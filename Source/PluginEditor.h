@@ -42,6 +42,8 @@ private:
     
     juce::Slider tempoSelector;
     
+    juce::Slider mixKnob;
+    
     juce::ToggleButton tripletButton;
     juce::ToggleButton dottedButton;
     juce::ToggleButton bypassButton;
@@ -50,9 +52,19 @@ private:
     juce::ToggleButton leftFirstButton;
     juce::ToggleButton rightFirstButton;
     
+    juce::ToggleButton wholeNoteButton;
+    juce::ToggleButton halfNoteButton;
+    juce::ToggleButton quarterNoteButton;
+    juce::ToggleButton eighthNoteButton;
+    juce::ToggleButton sixteenthNoteButton;
+    juce::ToggleButton thirtysecondNoteButton;
+    
     juce::ComboBox noteSelector;
     
     juce::Colour color = juce::Colours::darkseagreen;
+    
+    
+//    juce::ScaledImage bgImage;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Coleman_HW2AudioProcessorEditor)
     

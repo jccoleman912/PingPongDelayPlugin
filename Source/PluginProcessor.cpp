@@ -46,6 +46,10 @@ juce::AudioProcessorValueTreeState::ParameterLayout Coleman_HW2AudioProcessor::c
     params.push_back(std::make_unique<juce::AudioParameterFloat> ("tempoValue",
                                                                    "Tempo",
                                                                    juce::NormalisableRange<float> (40.f,   240.f), 120.f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat> ("mixValue",
+                                                                   "Mix %",
+                                                                   juce::NormalisableRange<float> (0.f,   100.f), 100.f));
+    
     
     
     
@@ -72,7 +76,26 @@ juce::AudioProcessorValueTreeState::ParameterLayout Coleman_HW2AudioProcessor::c
                                                                    "Right First",
                                                                    false));
     
-    params.push_back(std::make_unique<juce::AudioParameterChoice> ("noteValue", "Note Type", juce::StringArray {"Whole", "Half", "Quarter", "8th", "16th", "32nd", "64th"}, 3));
+    params.push_back(std::make_unique<juce::AudioParameterBool> ("wholeNoteValue",
+                                                                   "Whole Note",
+                                                                   false));
+    params.push_back(std::make_unique<juce::AudioParameterBool> ("halfNoteValue",
+                                                                   "Half Note",
+                                                                   false));
+    params.push_back(std::make_unique<juce::AudioParameterBool> ("quarterNoteValue",
+                                                                   "Quarter Note",
+                                                                   true));
+    params.push_back(std::make_unique<juce::AudioParameterBool> ("8thNoteValue",
+                                                                   "8th Note",
+                                                                   false));
+    params.push_back(std::make_unique<juce::AudioParameterBool> ("16thNoteValue",
+                                                                   "16th Note",
+                                                                   false));
+    params.push_back(std::make_unique<juce::AudioParameterBool> ("32ndNoteValue",
+                                                                   "32nd Note",
+                                                                   false));
+    
+//    params.push_back(std::make_unique<juce::AudioParameterChoice> ("noteValue", "Note Type", juce::StringArray {"Whole", "Half", "Quarter", "8th", "16th", "32nd", "64th"}, 3));
                      
    
     
@@ -206,22 +229,13 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
 
     float initialdBDropValue = *state.getRawParameterValue("initialDropValue");
     
-    
     float l2RdBDropValue = *state.getRawParameterValue("l2RDropValue");
-    
     
     float r2LdBDropValue = *state.getRawParameterValue("r2LDropValue");
     
+    float mixValue = *state.getRawParameterValue("mixValue");
     
-    float tempoValue = *state.getRawParameterValue("tempoValue");
-    
-    
-
-    
-    bool boolTripletValue = *state.getRawParameterValue("tripletValue");
-    
-    
-    bool boolDottedValue = *state.getRawParameterValue("dottedValue");
+    mixValue /= 100;
     
     
     bool boolBypassValue = *state.getRawParameterValue("bypassValue");
@@ -229,41 +243,55 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
     
     bool boolSyncValue = *state.getRawParameterValue("syncValue");
     
+    float tempoValue = *state.getRawParameterValue("tempoValue");
+    
+    
+    bool boolTripletValue = *state.getRawParameterValue("tripletValue");
+    
+    bool boolDottedValue = *state.getRawParameterValue("dottedValue");
+    
+    bool boolWhole = *state.getRawParameterValue("wholeNoteValue");
+    
+    bool boolHalf = *state.getRawParameterValue("halfNoteValue");
+    
+    bool boolQuarter = *state.getRawParameterValue("quarterNoteValue");
+    
+    bool bool8th = *state.getRawParameterValue("8thNoteValue");
+    
+    bool bool16th = *state.getRawParameterValue("16thNoteValue");
+    
+    bool bool32nd = *state.getRawParameterValue("32ndNoteValue");
+
     
     bool boolLeftFirstValue = *state.getRawParameterValue("leftFirstValue");
     
-    
-    
-    int noteSelectedValue = *state.getRawParameterValue("noteValue");
-
-    
-    if(noteSelectedValue == 0) {
+    if(boolWhole) {
         
         noteMultiplier = 4.f;
         
-    } else if(noteSelectedValue == 1) {
+    } else if(boolHalf) {
         
         noteMultiplier = 2.f;
         
-    } else if(noteSelectedValue == 2) {
+    } else if(boolQuarter) {
         
         noteMultiplier = 1.f;
         
-    } else if(noteSelectedValue == 3) {
+    } else if(bool8th) {
         
         noteMultiplier = 0.5f;
         
-    } else if(noteSelectedValue == 4) {
+    } else if(bool16th) {
         
         noteMultiplier = 0.25f;
         
-    } else if(noteSelectedValue == 5) {
+    } else if(bool32nd) {
         
-        noteMultiplier = 0.125;
+        noteMultiplier = 0.125f;
         
     } else {
         
-        noteMultiplier = 0.0625;
+        noteMultiplier = 1.f;
         
     };
     
@@ -311,14 +339,13 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
                 pingPongDelay.setR2LDropLinear(juce::Decibels::decibelsToGain(smoothR2LGainDropdB[channel]));
  
                 
-                
                 float x = buffer.getWritePointer(channel)[n];
 
                     
                 y = pingPongDelay.processSample(x, channel);
 
                     
-                buffer.getWritePointer(channel)[n] = y;
+                buffer.getWritePointer(channel)[n] = (mixValue * y) + ((1 - mixValue) * x);
                     
                 }
             }
