@@ -18,7 +18,9 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     setSize (625, 625);
     
     
-//    bgImage = juce::ImageCache::getFromMemory(BinaryData::FullScalePingpongDelayUI2500_jpg);
+    bgImage = juce::ImageCache::getFromMemory(BinaryData::FullScalePingpongDelayUI_jpg, BinaryData::FullScalePingpongDelayUI_jpgSize);
+    
+    bgImage = bgImage.rescaled(625, 625, juce::Graphics::highResamplingQuality);
     
     
     //
@@ -253,7 +255,7 @@ void Coleman_HW2AudioProcessorEditor::paint (juce::Graphics& g)
     g.setColour (juce::Colours::white);
     g.setFont (15.0f);
     
-//    g.drawImageAt(bgImage, 0, 0);
+    g.drawImageAt(bgImage, 0, 0);
 
 }
 

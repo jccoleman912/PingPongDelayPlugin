@@ -343,9 +343,11 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
 
                     
                 y = pingPongDelay.processSample(x, channel);
+                
+                smoothMix[channel] = alpha * smoothMix[channel] + (1 - alpha) * mixValue;
 
                     
-                buffer.getWritePointer(channel)[n] = (mixValue * y) + ((1 - mixValue) * x);
+                buffer.getWritePointer(channel)[n] = (smoothMix[channel] * y) + ((1 - smoothMix[channel]) * x);
                     
                 }
             }

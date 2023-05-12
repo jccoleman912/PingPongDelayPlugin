@@ -64,7 +64,7 @@ private:
     juce::Colour color = juce::Colours::darkseagreen;
     
     
-//    juce::ScaledImage bgImage;
+    juce::Image bgImage;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Coleman_HW2AudioProcessorEditor)
     
