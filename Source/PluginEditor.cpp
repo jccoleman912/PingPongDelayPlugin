@@ -73,7 +73,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     
 //    l2RGainKnob.addListener(this);
     // Specify location in window (xPos,yPos,width,height)
-    l2RGainKnob.setBounds(75,170,100,100);
+    l2RGainKnob.setBounds(145,170,100,100);
     l2RGainKnob.setRange(-60.0,24.0,0.1); // (min, max, interval)
     l2RGainKnob.setValue(0.0); // initial value
     l2RGainKnob.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
@@ -151,6 +151,46 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     addAndMakeVisible(syncButton);
     
     //
+    // Note Selection Buttons
+    //
+    
+    wholeNoteButton.addListener(this);
+    wholeNoteButton.setBounds(17,252,30,30);
+    wholeNoteButton.setToggleState(false, juce::dontSendNotification);
+    wholeNoteButton.setRadioGroupId(2);
+    addAndMakeVisible(wholeNoteButton);
+    
+    halfNoteButton.addListener(this);
+    halfNoteButton.setBounds(48,252,30,30);
+    halfNoteButton.setToggleState(false, juce::dontSendNotification);
+    halfNoteButton.setRadioGroupId(2);
+    addAndMakeVisible(halfNoteButton);
+    
+    quarterNoteButton.addListener(this);
+    quarterNoteButton.setBounds(79,252,30,30);
+    quarterNoteButton.setToggleState(true, juce::dontSendNotification);
+    quarterNoteButton.setRadioGroupId(2);
+    addAndMakeVisible(quarterNoteButton);
+    
+    eighthNoteButton.addListener(this);
+    eighthNoteButton.setBounds(17,283,30,30);
+    eighthNoteButton.setToggleState(false, juce::dontSendNotification);
+    eighthNoteButton.setRadioGroupId(2);
+    addAndMakeVisible(eighthNoteButton);
+    
+    sixteenthNoteButton.addListener(this);
+    sixteenthNoteButton.setBounds(48,283,30,30);
+    sixteenthNoteButton.setToggleState(false, juce::dontSendNotification);
+    sixteenthNoteButton.setRadioGroupId(2);
+    addAndMakeVisible(sixteenthNoteButton);
+    
+    thirtysecondNoteButton.addListener(this);
+    thirtysecondNoteButton.setBounds(79,283,30,30);
+    thirtysecondNoteButton.setToggleState(false, juce::dontSendNotification);
+    thirtysecondNoteButton.setRadioGroupId(2);
+    addAndMakeVisible(thirtysecondNoteButton);
+    
+    //
     // Triplet Toggle
     //
     
@@ -173,64 +213,17 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     //
     
     leftFirstButton.addListener(this);
-    leftFirstButton.setBounds(17,465,100,40);
-    leftFirstButton.setButtonText("Left");
+    leftFirstButton.setBounds(17,555,38,40);
     leftFirstButton.setToggleState(true, juce::dontSendNotification);
     leftFirstButton.setRadioGroupId(1);
     addAndMakeVisible(leftFirstButton);
     
     rightFirstButton.addListener(this);
-    rightFirstButton.setBounds(250,490,100,40);
-    rightFirstButton.setButtonText("Right");
+    rightFirstButton.setBounds(70,555,38,40);
     rightFirstButton.setToggleState(false, juce::dontSendNotification);
     rightFirstButton.setRadioGroupId(1);
     addAndMakeVisible(rightFirstButton);
     
-    //
-    // Note Selection Buttons
-    //
-    
-    wholeNoteButton.addListener(this);
-    wholeNoteButton.setBounds(15,475,30,30);
-    wholeNoteButton.setButtonText("Whole");
-    wholeNoteButton.setToggleState(false, juce::dontSendNotification);
-    wholeNoteButton.setRadioGroupId(2);
-    addAndMakeVisible(wholeNoteButton);
-    
-    halfNoteButton.addListener(this);
-    halfNoteButton.setBounds(50,475,30,30);
-    halfNoteButton.setButtonText("Half");
-    halfNoteButton.setToggleState(false, juce::dontSendNotification);
-    halfNoteButton.setRadioGroupId(2);
-    addAndMakeVisible(halfNoteButton);
-    
-    quarterNoteButton.addListener(this);
-    quarterNoteButton.setBounds(85,475,30,30);
-    quarterNoteButton.setButtonText("Quarter");
-    quarterNoteButton.setToggleState(true, juce::dontSendNotification);
-    quarterNoteButton.setRadioGroupId(2);
-    addAndMakeVisible(quarterNoteButton);
-    
-    eighthNoteButton.addListener(this);
-    eighthNoteButton.setBounds(15,520,30,30);
-    eighthNoteButton.setButtonText("8th");
-    eighthNoteButton.setToggleState(false, juce::dontSendNotification);
-    eighthNoteButton.setRadioGroupId(2);
-    addAndMakeVisible(eighthNoteButton);
-    
-    sixteenthNoteButton.addListener(this);
-    sixteenthNoteButton.setBounds(50,520,30,30);
-    sixteenthNoteButton.setButtonText("16th");
-    sixteenthNoteButton.setToggleState(false, juce::dontSendNotification);
-    sixteenthNoteButton.setRadioGroupId(2);
-    addAndMakeVisible(sixteenthNoteButton);
-    
-    thirtysecondNoteButton.addListener(this);
-    thirtysecondNoteButton.setBounds(85,520,30,30);
-    thirtysecondNoteButton.setButtonText("32nd");
-    thirtysecondNoteButton.setToggleState(false, juce::dontSendNotification);
-    thirtysecondNoteButton.setRadioGroupId(2);
-    addAndMakeVisible(thirtysecondNoteButton);
     
     
     sliderAttachment.emplace_back(new juce::AudioProcessorValueTreeState::SliderAttachment(audioProcessor.state, "initialDropValue", initialGainKnob));
@@ -340,6 +333,43 @@ void Coleman_HW2AudioProcessorEditor::buttonClicked(juce::Button *button){
             syncImage = syncOFF;
             repaint();
         }
+    }
+    
+    if (button == &wholeNoteButton) {
+
+            noteImage = noteWHOLE;
+            repaint();
+
+    }
+    if (button == &halfNoteButton) {
+
+            noteImage = noteHALF;
+            repaint();
+
+    }
+    if (button == &quarterNoteButton) {
+
+            noteImage = noteQUARTER;
+            repaint();
+
+    }
+    if (button == &eighthNoteButton) {
+
+            noteImage = note8TH;
+            repaint();
+
+    }
+    if (button == &sixteenthNoteButton) {
+
+            noteImage = note16TH;
+            repaint();
+
+    }
+    if (button == &thirtysecondNoteButton) {
+
+            noteImage = note32ND;
+            repaint();
+
     }
     
     if (button == &dottedButton) {

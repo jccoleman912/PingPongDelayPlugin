@@ -170,10 +170,10 @@ void Coleman_HW2AudioProcessor::prepareToPlay (double sampleRate, int samplesPer
 {
     pingPongDelay.prepareToPlay(sampleRate, samplesPerBlock);
     
-    float trDelay = 0.f; // 100 ms response time for smoothing
+    float trDelay = 0.1f; // 100 ms response time for smoothing
     alphaDelay = std::exp(-log(9.f)/(sampleRate * trDelay));
     
-    float tr = 0.08f; // 100 ms response time for smoothing
+    float tr = 0.08f; // 80 ms response time for smoothing
     alpha = std::exp(-log(9.f)/(sampleRate * tr));
 
 
