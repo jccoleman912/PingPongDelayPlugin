@@ -12,7 +12,7 @@ namespace BinaryData
     const int            FullScalePingpongDelayUI_jpgSize = 956185;
 
     extern const char*   PingPongButtonSpriteSheet_jpg;
-    const int            PingPongButtonSpriteSheet_jpgSize = 839535;
+    const int            PingPongButtonSpriteSheet_jpgSize = 973388;
 
     extern const char*   FullScalePingpongDelayUI2500_jpg;
     const int            FullScalePingpongDelayUI2500_jpgSize = 875273;

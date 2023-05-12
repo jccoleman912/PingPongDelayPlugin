@@ -20,7 +20,35 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     
     bgImage = juce::ImageCache::getFromMemory(BinaryData::FullScalePingpongDelayUI_jpg, BinaryData::FullScalePingpongDelayUI_jpgSize);
     
-    bgImage = bgImage.rescaled(625, 625, juce::Graphics::highResamplingQuality);
+    spriteSheet = juce::ImageCache::getFromMemory(BinaryData::PingPongButtonSpriteSheet_jpg, BinaryData::PingPongButtonSpriteSheet_jpgSize);
+        
+        
+        bgImage = bgImage.rescaled(625, 625, juce::Graphics::highResamplingQuality);
+        
+        rescaledSpriteSheet = spriteSheet.rescaled(625, 625, juce::Graphics::highResamplingQuality);
+        
+        bypassOFF = rescaledSpriteSheet.getClippedImage(bypassOFFCrop);
+        bypassON = rescaledSpriteSheet.getClippedImage(bypassONCrop);
+        
+        syncOFF = rescaledSpriteSheet.getClippedImage(syncOFFCrop);
+        syncON = rescaledSpriteSheet.getClippedImage(syncONCrop);
+        
+        noteWHOLE = rescaledSpriteSheet.getClippedImage(noteWHOLECrop);
+        noteHALF = rescaledSpriteSheet.getClippedImage(noteHALFCrop);
+        noteQUARTER = rescaledSpriteSheet.getClippedImage(noteQUARTERCrop);
+        note8TH = rescaledSpriteSheet.getClippedImage(note8THCrop);
+        note16TH = rescaledSpriteSheet.getClippedImage(note16THCrop);
+        note32ND = rescaledSpriteSheet.getClippedImage(note32NDCrop);
+        
+        tripletOFF = rescaledSpriteSheet.getClippedImage(tripletOFFCrop);
+        tripletON = rescaledSpriteSheet.getClippedImage(tripletONCrop);
+        
+        dottedOFF = rescaledSpriteSheet.getClippedImage(dottedOFFCrop);
+        dottedON = rescaledSpriteSheet.getClippedImage(dottedONCrop);
+        
+        leftFirstImage = rescaledSpriteSheet.getClippedImage(leftFirstCrop);
+        rightFirstImage = rescaledSpriteSheet.getClippedImage(rightFirstCrop);
+
     
     
     //
@@ -105,12 +133,29 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     
     
     //
+    // Bypass Toggle
+    //
+    
+    bypassButton.addListener(this);
+    bypassButton.setBounds(17,22,91,41);
+    bypassButton.setToggleState(false, juce::dontSendNotification);
+    addAndMakeVisible(bypassButton);
+    
+    //
+    // Sync Toggle
+    //
+    
+    syncButton.addListener(this);
+    syncButton.setBounds(17,103,91,34);
+    syncButton.setToggleState(false, juce::dontSendNotification);
+    addAndMakeVisible(syncButton);
+    
+    //
     // Triplet Toggle
     //
     
     tripletButton.addListener(this);
-    tripletButton.setBounds(15,434,100,40);
-    tripletButton.setButtonText("Triplet");
+    tripletButton.setBounds(17,329,91,34);
     tripletButton.setToggleState(false, juce::dontSendNotification);
     addAndMakeVisible(tripletButton);
     
@@ -119,41 +164,16 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     //
     
     dottedButton.addListener(this);
-    dottedButton.setBounds(15,405,100,40);
-    dottedButton.setButtonText("Dotted");
+    dottedButton.setBounds(17,374,91,34);
     dottedButton.setToggleState(false, juce::dontSendNotification);
     addAndMakeVisible(dottedButton);
-    
-    
-    //
-    // Bypass Toggle
-    //
-    
-    bypassButton.addListener(this);
-    bypassButton.setBounds(15,15,100,40);
-    bypassButton.setButtonText("Bypass");
-    bypassButton.setToggleState(false, juce::dontSendNotification);
-    addAndMakeVisible(bypassButton);
-    
-    
-    //
-    // Sync Toggle
-    //
-    
-    syncButton.addListener(this);
-    syncButton.setBounds(485,420,100,40);
-    syncButton.setButtonText("Sync");
-    syncButton.setToggleState(false, juce::dontSendNotification);
-    addAndMakeVisible(syncButton);
- 
-    
     
     //
     // L/R Selection Buttons
     //
     
     leftFirstButton.addListener(this);
-    leftFirstButton.setBounds(250,465,100,40);
+    leftFirstButton.setBounds(17,465,100,40);
     leftFirstButton.setButtonText("Left");
     leftFirstButton.setToggleState(true, juce::dontSendNotification);
     leftFirstButton.setRadioGroupId(1);
@@ -165,7 +185,6 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     rightFirstButton.setToggleState(false, juce::dontSendNotification);
     rightFirstButton.setRadioGroupId(1);
     addAndMakeVisible(rightFirstButton);
-    
     
     //
     // Note Selection Buttons
@@ -214,7 +233,6 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     addAndMakeVisible(thirtysecondNoteButton);
     
     
-    
     sliderAttachment.emplace_back(new juce::AudioProcessorValueTreeState::SliderAttachment(audioProcessor.state, "initialDropValue", initialGainKnob));
     sliderAttachment.emplace_back(new juce::AudioProcessorValueTreeState::SliderAttachment(audioProcessor.state, "l2RDropValue", l2RGainKnob));
     sliderAttachment.emplace_back(new juce::AudioProcessorValueTreeState::SliderAttachment(audioProcessor.state, "r2LDropValue", r2LGainKnob));
@@ -234,10 +252,6 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     buttonAttachment.emplace_back(new juce::AudioProcessorValueTreeState::ButtonAttachment(audioProcessor.state, "16thNoteValue", sixteenthNoteButton));
     buttonAttachment.emplace_back(new juce::AudioProcessorValueTreeState::ButtonAttachment(audioProcessor.state, "32ndNoteValue", thirtysecondNoteButton));
 
-    
-    
-    
-//    comboBoxAttachment.emplace_back(new juce::AudioProcessorValueTreeState::ComboBoxAttachment(audioProcessor.state, "noteValue", noteSelector));
 
 }
 
@@ -256,6 +270,18 @@ void Coleman_HW2AudioProcessorEditor::paint (juce::Graphics& g)
     g.setFont (15.0f);
     
     g.drawImageAt(bgImage, 0, 0);
+    
+    g.drawImageAt(bypassImage, 17, 22);
+        
+    g.drawImageAt(syncImage, 17, 103);
+    
+    g.drawImageAt(noteImage, 17, 252);
+        
+    g.drawImageAt(tripletImage, 17, 329);
+        
+    g.drawImageAt(dottedImage, 17, 374);
+        
+    g.drawImageAt(leftOrRightImage, 17, 555);
 
 }
 
@@ -286,77 +312,67 @@ void Coleman_HW2AudioProcessorEditor::buttonClicked(juce::Button *button){
     if (button == &bypassButton){
         bool bypassState = bypassButton.getToggleState();
         if(bypassState) {
-            color = juce::Colours::slateblue;
+            bypassImage = bypassON;
             repaint();
         } else {
-            color = juce::Colours::darkseagreen;
+            bypassImage = bypassOFF;
             repaint();
         }
     }
+    
     if (button == &tripletButton){
         bool tripletState = tripletButton.getToggleState();
         if(tripletState) {
-            color = juce::Colours::rosybrown;
+            tripletImage = tripletON;
             repaint();
         } else {
-            color = juce::Colours::darkseagreen;
+            tripletImage = tripletOFF;
             repaint();
         }
     }
+    
     if (button == &syncButton) {
         bool syncState = syncButton.getToggleState();
         if(syncState) {
-            color = juce::Colours::darksalmon;
+            syncImage = syncON;
             repaint();
         } else {
-            color = juce::Colours::darkseagreen;
+            syncImage = syncOFF;
             repaint();
         }
     }
+    
     if (button == &dottedButton) {
         bool dottedState = dottedButton.getToggleState();
         if(dottedState) {
-            color = juce::Colour (0xff008840);
+            dottedImage = dottedON;
             repaint();
         } else {
-            color = juce::Colours::darkseagreen;
+            dottedImage = dottedOFF;
             repaint();
         }
     }
+    
     if (button == &leftFirstButton) {
-        bool dottedState = leftFirstButton.getToggleState();
-        if(!dottedState) {
-            color = juce::Colours::moccasin;
+        bool leftState = leftFirstButton.getToggleState();
+        if(leftState) {
+            leftOrRightImage = leftFirstImage;
             repaint();
         } else {
-            color = juce::Colours::darkseagreen;
+            leftOrRightImage = rightFirstImage;
+            repaint();
+        }
+    }
+    
+    if (button == &rightFirstButton) {
+        bool rightState = rightFirstButton.getToggleState();
+        if(rightState) {
+            leftOrRightImage = rightFirstImage;
+            repaint();
+        } else {
+            leftOrRightImage = leftFirstImage;
             repaint();
         }
     }
 
-}
-
-void Coleman_HW2AudioProcessorEditor::comboBoxChanged(juce::ComboBox *comboBox){
-    
-    if (comboBox == &noteSelector){
-        if (noteSelector.getSelectedId() == 1){
-//            audioProcessor.noteType = "whole";
-        }
-        if (noteSelector.getSelectedId() == 2){
-//            audioProcessor.noteType = "half";
-        }
-        if (noteSelector.getSelectedId() == 3){
-//            audioProcessor.noteType = "quarter";
-        }
-        if (noteSelector.getSelectedId() == 4){
-//            audioProcessor.noteType = "8th";
-        }
-        if (noteSelector.getSelectedId() == 5){
-//            audioProcessor.noteType = "16th";
-        }
-        if (noteSelector.getSelectedId() == 6){
-//            audioProcessor.noteType = "32nd";
-        }
-    }
-    
 }
