@@ -63,6 +63,8 @@ private:
     juce::Image bgImage;
     juce::Image spriteSheet;
     juce::Image rescaledSpriteSheet;
+    juce::Image spriteSheetBottomNotes;
+    juce::Image rescaledSpriteSheetBottomNoteSelector;
     
     juce::Image bypassOFF;
     juce::Image bypassON;
@@ -103,9 +105,9 @@ private:
     const juce::Rectangle<int> noteWHOLECrop {0, 76, 91, 61};
     const juce::Rectangle<int> noteHALFCrop {93, 76, 91, 61};
     const juce::Rectangle<int> noteQUARTERCrop {186, 76, 91, 61};
-    const juce::Rectangle<int> note8THCrop {279, 76, 91, 61};
-    const juce::Rectangle<int> note16THCrop {372, 76, 91, 61};
-    const juce::Rectangle<int> note32NDCrop {465, 76, 91, 61};
+    const juce::Rectangle<int> note8THCrop {0, 76, 91, 61};
+    const juce::Rectangle<int> note16THCrop {93, 76, 91, 61};
+    const juce::Rectangle<int> note32NDCrop {186, 76, 91, 61};
     
     const juce::Rectangle<int> tripletOFFCrop {0, 138, 91, 34};
     const juce::Rectangle<int> tripletONCrop {93, 138, 91, 34};

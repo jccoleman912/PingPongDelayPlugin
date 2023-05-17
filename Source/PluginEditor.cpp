@@ -21,33 +21,39 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     bgImage = juce::ImageCache::getFromMemory(BinaryData::FullScalePingpongDelayUI_jpg, BinaryData::FullScalePingpongDelayUI_jpgSize);
     
     spriteSheet = juce::ImageCache::getFromMemory(BinaryData::PingPongButtonSpriteSheet_jpg, BinaryData::PingPongButtonSpriteSheet_jpgSize);
+    
+    spriteSheetBottomNotes = juce::ImageCache::getFromMemory(BinaryData::PingPongButtonSpriteSheetBOTTOMNOTES_jpg, BinaryData::PingPongButtonSpriteSheetBOTTOMNOTES_jpgSize);
         
         
-        bgImage = bgImage.rescaled(625, 625, juce::Graphics::highResamplingQuality);
+    bgImage = bgImage.rescaled(625, 625, juce::Graphics::highResamplingQuality);
         
-        rescaledSpriteSheet = spriteSheet.rescaled(625, 625, juce::Graphics::highResamplingQuality);
+    rescaledSpriteSheet = spriteSheet.rescaled(625, 625, juce::Graphics::highResamplingQuality);
+    
+    rescaledSpriteSheetBottomNoteSelector = spriteSheetBottomNotes.rescaled(625, 625, juce::Graphics::highResamplingQuality);
+    
+    
         
-        bypassOFF = rescaledSpriteSheet.getClippedImage(bypassOFFCrop);
-        bypassON = rescaledSpriteSheet.getClippedImage(bypassONCrop);
+    bypassOFF = rescaledSpriteSheet.getClippedImage(bypassOFFCrop);
+    bypassON = rescaledSpriteSheet.getClippedImage(bypassONCrop);
         
-        syncOFF = rescaledSpriteSheet.getClippedImage(syncOFFCrop);
-        syncON = rescaledSpriteSheet.getClippedImage(syncONCrop);
+    syncOFF = rescaledSpriteSheet.getClippedImage(syncOFFCrop);
+    syncON = rescaledSpriteSheet.getClippedImage(syncONCrop);
         
-        noteWHOLE = rescaledSpriteSheet.getClippedImage(noteWHOLECrop);
-        noteHALF = rescaledSpriteSheet.getClippedImage(noteHALFCrop);
-        noteQUARTER = rescaledSpriteSheet.getClippedImage(noteQUARTERCrop);
-        note8TH = rescaledSpriteSheet.getClippedImage(note8THCrop);
-        note16TH = rescaledSpriteSheet.getClippedImage(note16THCrop);
-        note32ND = rescaledSpriteSheet.getClippedImage(note32NDCrop);
+    noteWHOLE = rescaledSpriteSheet.getClippedImage(noteWHOLECrop);
+    noteHALF = rescaledSpriteSheet.getClippedImage(noteHALFCrop);
+    noteQUARTER = rescaledSpriteSheet.getClippedImage(noteQUARTERCrop);
+    note8TH = rescaledSpriteSheetBottomNoteSelector.getClippedImage(note8THCrop);
+    note16TH = rescaledSpriteSheetBottomNoteSelector.getClippedImage(note16THCrop);
+    note32ND = rescaledSpriteSheetBottomNoteSelector.getClippedImage(note32NDCrop);
         
-        tripletOFF = rescaledSpriteSheet.getClippedImage(tripletOFFCrop);
-        tripletON = rescaledSpriteSheet.getClippedImage(tripletONCrop);
+    tripletOFF = rescaledSpriteSheet.getClippedImage(tripletOFFCrop);
+    tripletON = rescaledSpriteSheet.getClippedImage(tripletONCrop);
         
-        dottedOFF = rescaledSpriteSheet.getClippedImage(dottedOFFCrop);
-        dottedON = rescaledSpriteSheet.getClippedImage(dottedONCrop);
+    dottedOFF = rescaledSpriteSheet.getClippedImage(dottedOFFCrop);
+    dottedON = rescaledSpriteSheet.getClippedImage(dottedONCrop);
         
-        leftFirstImage = rescaledSpriteSheet.getClippedImage(leftFirstCrop);
-        rightFirstImage = rescaledSpriteSheet.getClippedImage(rightFirstCrop);
+    leftFirstImage = rescaledSpriteSheet.getClippedImage(leftFirstCrop);
+    rightFirstImage = rescaledSpriteSheet.getClippedImage(rightFirstCrop);
 
     
     
@@ -65,6 +71,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     initialGainKnob.setName("Initial dB Drop");
     initialGainKnob.getTitle();
     addAndMakeVisible(initialGainKnob);
+
     
     
     //
@@ -140,6 +147,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     bypassButton.setBounds(17,22,91,41);
     bypassButton.setToggleState(false, juce::dontSendNotification);
     addAndMakeVisible(bypassButton);
+    bypassButton.setAlpha(0.f);
     
     //
     // Sync Toggle
@@ -149,6 +157,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     syncButton.setBounds(17,103,91,34);
     syncButton.setToggleState(false, juce::dontSendNotification);
     addAndMakeVisible(syncButton);
+    syncButton.setAlpha(0.f);
     
     //
     // Note Selection Buttons
@@ -159,36 +168,42 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     wholeNoteButton.setToggleState(false, juce::dontSendNotification);
     wholeNoteButton.setRadioGroupId(2);
     addAndMakeVisible(wholeNoteButton);
+    wholeNoteButton.setAlpha(0.f);
     
     halfNoteButton.addListener(this);
     halfNoteButton.setBounds(48,252,30,30);
     halfNoteButton.setToggleState(false, juce::dontSendNotification);
     halfNoteButton.setRadioGroupId(2);
     addAndMakeVisible(halfNoteButton);
+    halfNoteButton.setAlpha(0.f);
     
     quarterNoteButton.addListener(this);
     quarterNoteButton.setBounds(79,252,30,30);
     quarterNoteButton.setToggleState(true, juce::dontSendNotification);
     quarterNoteButton.setRadioGroupId(2);
     addAndMakeVisible(quarterNoteButton);
+    quarterNoteButton.setAlpha(0.f);
     
     eighthNoteButton.addListener(this);
     eighthNoteButton.setBounds(17,283,30,30);
     eighthNoteButton.setToggleState(false, juce::dontSendNotification);
     eighthNoteButton.setRadioGroupId(2);
     addAndMakeVisible(eighthNoteButton);
+    eighthNoteButton.setAlpha(0.f);
     
     sixteenthNoteButton.addListener(this);
     sixteenthNoteButton.setBounds(48,283,30,30);
     sixteenthNoteButton.setToggleState(false, juce::dontSendNotification);
     sixteenthNoteButton.setRadioGroupId(2);
     addAndMakeVisible(sixteenthNoteButton);
+    sixteenthNoteButton.setAlpha(0.f);
     
     thirtysecondNoteButton.addListener(this);
     thirtysecondNoteButton.setBounds(79,283,30,30);
     thirtysecondNoteButton.setToggleState(false, juce::dontSendNotification);
     thirtysecondNoteButton.setRadioGroupId(2);
     addAndMakeVisible(thirtysecondNoteButton);
+    thirtysecondNoteButton.setAlpha(0.f);
     
     //
     // Triplet Toggle
@@ -198,6 +213,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     tripletButton.setBounds(17,329,91,34);
     tripletButton.setToggleState(false, juce::dontSendNotification);
     addAndMakeVisible(tripletButton);
+    tripletButton.setAlpha(0.f);
     
     //
     // Dotted Toggle
@@ -207,6 +223,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     dottedButton.setBounds(17,374,91,34);
     dottedButton.setToggleState(false, juce::dontSendNotification);
     addAndMakeVisible(dottedButton);
+    dottedButton.setAlpha(0.f);
     
     //
     // L/R Selection Buttons
@@ -217,12 +234,14 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     leftFirstButton.setToggleState(true, juce::dontSendNotification);
     leftFirstButton.setRadioGroupId(1);
     addAndMakeVisible(leftFirstButton);
+    leftFirstButton.setAlpha(0.f);
     
     rightFirstButton.addListener(this);
     rightFirstButton.setBounds(70,555,38,40);
     rightFirstButton.setToggleState(false, juce::dontSendNotification);
     rightFirstButton.setRadioGroupId(1);
     addAndMakeVisible(rightFirstButton);
+    rightFirstButton.setAlpha(0.f);
     
     
     

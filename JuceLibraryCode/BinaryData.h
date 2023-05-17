@@ -8,17 +8,20 @@
 
 namespace BinaryData
 {
-    extern const char*   FullScalePingpongDelayUI_jpg;
-    const int            FullScalePingpongDelayUI_jpgSize = 956185;
+    extern const char*   PingPongButtonSpriteSheetBOTTOMNOTES_jpg;
+    const int            PingPongButtonSpriteSheetBOTTOMNOTES_jpgSize = 851515;
 
     extern const char*   PingPongButtonSpriteSheet_jpg;
-    const int            PingPongButtonSpriteSheet_jpgSize = 973388;
+    const int            PingPongButtonSpriteSheet_jpgSize = 974906;
+
+    extern const char*   FullScalePingpongDelayUI_jpg;
+    const int            FullScalePingpongDelayUI_jpgSize = 956185;
 
     extern const char*   FullScalePingpongDelayUI2500_jpg;
     const int            FullScalePingpongDelayUI2500_jpgSize = 875273;
 
     // Number of elements in the namedResourceList and originalFileNames arrays.
-    const int namedResourceListSize = 3;
+    const int namedResourceListSize = 4;
 
     // Points to the start of a list of resource names.
     extern const char* namedResourceList[];
