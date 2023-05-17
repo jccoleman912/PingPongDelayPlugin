@@ -41,6 +41,8 @@ public:
     
     void setLeftOrRight(bool leftFirst);
     
+    float getSampleRate();
+    
     
 private:
     // One sample of delay

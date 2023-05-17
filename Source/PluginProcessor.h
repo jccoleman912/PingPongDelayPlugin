@@ -73,6 +73,7 @@ public:
 
     float noteMultiplier = 1.f;
     float delayMS = 500.f;
+    float trDelay = 0.f;
 
 private:
     

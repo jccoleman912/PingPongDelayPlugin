@@ -89,7 +89,6 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     l2RGainKnob.getTitle();
     addAndMakeVisible(l2RGainKnob);
     
-    
     //
     // Right to Left Gain Knob
     //
@@ -104,7 +103,6 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     r2LGainKnob.setName("Right to Left dB Drop");
     r2LGainKnob.getTitle();
     addAndMakeVisible(r2LGainKnob);
-    
     
     //
     // Tempo Slider
@@ -121,7 +119,6 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     tempoSelector.getTitle();
     addAndMakeVisible(tempoSelector);
     
-    
     //
     // Mix Knob
     //
@@ -135,7 +132,23 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     mixKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
     mixKnob.setName("Mix");
     mixKnob.getTitle();
+//    mixKnob.setLookAndFeel(&mixKnobLookAndFeel);
     addAndMakeVisible(mixKnob);
+    
+    //
+    // Smooth Knob
+    //
+    
+    smoothKnob.addListener(this);
+    // Specify location in window (xPos,yPos,width,height)
+    smoothKnob.setBounds(260,400,160,100);
+    smoothKnob.setRange(0.f,500.f,0.1); // (min, max, interval)
+    smoothKnob.setValue(0.f); // initial value
+    smoothKnob.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+    smoothKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
+    smoothKnob.setName("Smooth MS");
+    smoothKnob.getTitle();
+    addAndMakeVisible(smoothKnob);
         
     
     
@@ -243,6 +256,17 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     addAndMakeVisible(rightFirstButton);
     rightFirstButton.setAlpha(0.f);
     
+    //
+    // Smooth Toggle
+    //
+    
+    smoothButton.addListener(this);
+    smoothButton.setBounds(400,400,40,40);
+    smoothButton.setToggleState(false, juce::dontSendNotification);
+    smoothButton.setButtonText("Smooth MS");
+    addAndMakeVisible(smoothButton);
+//    smoothButton.setAlpha(0.f);
+    
     
     
     sliderAttachment.emplace_back(new juce::AudioProcessorValueTreeState::SliderAttachment(audioProcessor.state, "initialDropValue", initialGainKnob));
@@ -250,6 +274,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     sliderAttachment.emplace_back(new juce::AudioProcessorValueTreeState::SliderAttachment(audioProcessor.state, "r2LDropValue", r2LGainKnob));
     sliderAttachment.emplace_back(new juce::AudioProcessorValueTreeState::SliderAttachment(audioProcessor.state, "tempoValue", tempoSelector));
     sliderAttachment.emplace_back(new juce::AudioProcessorValueTreeState::SliderAttachment(audioProcessor.state, "mixValue", mixKnob));
+    sliderAttachment.emplace_back(new juce::AudioProcessorValueTreeState::SliderAttachment(audioProcessor.state, "smoothKnobValue", smoothKnob));
     
     buttonAttachment.emplace_back(new juce::AudioProcessorValueTreeState::ButtonAttachment(audioProcessor.state, "tripletValue", tripletButton));
     buttonAttachment.emplace_back(new juce::AudioProcessorValueTreeState::ButtonAttachment(audioProcessor.state, "dottedValue", dottedButton));
@@ -263,6 +288,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     buttonAttachment.emplace_back(new juce::AudioProcessorValueTreeState::ButtonAttachment(audioProcessor.state, "8thNoteValue", eighthNoteButton));
     buttonAttachment.emplace_back(new juce::AudioProcessorValueTreeState::ButtonAttachment(audioProcessor.state, "16thNoteValue", sixteenthNoteButton));
     buttonAttachment.emplace_back(new juce::AudioProcessorValueTreeState::ButtonAttachment(audioProcessor.state, "32ndNoteValue", thirtysecondNoteButton));
+    buttonAttachment.emplace_back(new juce::AudioProcessorValueTreeState::ButtonAttachment(audioProcessor.state, "smoothButtonValue", smoothButton));
 
 
 }

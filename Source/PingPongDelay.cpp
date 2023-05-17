@@ -167,6 +167,8 @@ void PingPongDelay::setR2LDropLinear(float r2LLinear) {
 }
 
 
+
+
 void PingPongDelay::processBlock(juce::AudioBuffer<float> &buffer)
 {
     const int numChannels = buffer.getNumChannels();
@@ -184,6 +186,10 @@ void PingPongDelay::processBlock(juce::AudioBuffer<float> &buffer)
         }
         
     }
+}
+
+float PingPongDelay::getSampleRate() {
+    return Fs;
 }
 
 void PingPongDelay::processInPlace(float * buffer, const int numSamples, const int c){

@@ -49,6 +49,9 @@ juce::AudioProcessorValueTreeState::ParameterLayout Coleman_HW2AudioProcessor::c
     params.push_back(std::make_unique<juce::AudioParameterFloat> ("mixValue",
                                                                    "Mix %",
                                                                    juce::NormalisableRange<float> (0.f,   100.f), 100.f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat> ("smoothKnobValue",
+                                                                   "Smooth (MS)",
+                                                                   juce::NormalisableRange<float> (0.f,   500.f), 0.f));
     
     
     
@@ -93,6 +96,10 @@ juce::AudioProcessorValueTreeState::ParameterLayout Coleman_HW2AudioProcessor::c
                                                                    false));
     params.push_back(std::make_unique<juce::AudioParameterBool> ("32ndNoteValue",
                                                                    "32nd Note",
+                                                                   false));
+    
+    params.push_back(std::make_unique<juce::AudioParameterBool> ("smoothButtonValue",
+                                                                   "Smooth Engage",
                                                                    false));
     
 //    params.push_back(std::make_unique<juce::AudioParameterChoice> ("noteValue", "Note Type", juce::StringArray {"Whole", "Half", "Quarter", "8th", "16th", "32nd", "64th"}, 3));
@@ -169,10 +176,7 @@ void Coleman_HW2AudioProcessor::changeProgramName (int index, const juce::String
 void Coleman_HW2AudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     pingPongDelay.prepareToPlay(sampleRate, samplesPerBlock);
-    
-    float trDelay = 0.f; // 100 ms response time for smoothing
-    alphaDelay = std::exp(-log(9.f)/(sampleRate * trDelay));
-    
+
     float tr = 0.08f; // 80 ms response time for smoothing
     alpha = std::exp(-log(9.f)/(sampleRate * tr));
 
@@ -245,6 +249,8 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
     
     float tempoValue = *state.getRawParameterValue("tempoValue");
     
+    float smoothKnobValue = *state.getRawParameterValue("smoothKnobValue");
+    
     
     bool boolTripletValue = *state.getRawParameterValue("tripletValue");
     
@@ -261,6 +267,8 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
     bool bool16th = *state.getRawParameterValue("16thNoteValue");
     
     bool bool32nd = *state.getRawParameterValue("32ndNoteValue");
+    
+    bool boolSmooth = *state.getRawParameterValue("smoothButtonValue");
 
     
     bool boolLeftFirstValue = *state.getRawParameterValue("leftFirstValue");
@@ -314,6 +322,8 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
     
 
     float y = 0.f;
+    
+    float Fs = pingPongDelay.getSampleRate();
 
     if(!boolBypassValue) {
         
@@ -321,6 +331,14 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
         {
             for (int n = 0; n < buffer.getNumSamples(); ++n)
             {
+                
+                if(!boolSmooth) {
+                    trDelay = 0.f; // 100 ms response time for smoothing
+                } else {
+                    trDelay = smoothKnobValue/1000;
+                }
+
+                alphaDelay = std::exp(-log(9.f)/(Fs * trDelay));
                 
                 smoothDelayMS[channel] = alphaDelay * smoothDelayMS[channel] + (1.f - alphaDelay) * delayMS;
                 

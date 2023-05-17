@@ -10,6 +10,7 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
+#include "Components/MixKnob.h"
 
 //==============================================================================
 /**
@@ -42,6 +43,17 @@ private:
     
     juce::Slider mixKnob;
     
+    MixKnob mixKnobLookAndFeel;
+    
+    juce::Slider smoothKnob;
+    
+    juce::ToggleButton wholeNoteButton;
+    juce::ToggleButton halfNoteButton;
+    juce::ToggleButton quarterNoteButton;
+    juce::ToggleButton eighthNoteButton;
+    juce::ToggleButton sixteenthNoteButton;
+    juce::ToggleButton thirtysecondNoteButton;
+    
     juce::ToggleButton tripletButton;
     juce::ToggleButton dottedButton;
     juce::ToggleButton bypassButton;
@@ -50,12 +62,7 @@ private:
     juce::ToggleButton leftFirstButton;
     juce::ToggleButton rightFirstButton;
     
-    juce::ToggleButton wholeNoteButton;
-    juce::ToggleButton halfNoteButton;
-    juce::ToggleButton quarterNoteButton;
-    juce::ToggleButton eighthNoteButton;
-    juce::ToggleButton sixteenthNoteButton;
-    juce::ToggleButton thirtysecondNoteButton;
+    juce::ToggleButton smoothButton;
     
     juce::Colour color = juce::Colours::darkseagreen;
     
