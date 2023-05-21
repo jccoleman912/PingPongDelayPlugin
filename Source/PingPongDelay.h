@@ -41,6 +41,8 @@ public:
     
     void setLeftOrRight(bool leftFirst);
     
+    void clearBuffers();
+    
     float getSampleRate();
     
     

@@ -319,7 +319,7 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
         
         delayMS *= 1.5f;
     }
-    
+        
 
     float y = 0.f;
     
@@ -368,9 +368,10 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
                 buffer.getWritePointer(channel)[n] = (smoothMix[channel] * y) + ((1 - smoothMix[channel]) * x);
                     
                 }
-            }
-
-    }
+            
+        }
+        
+    } else { pingPongDelay.clearBuffers(); }
 }
 
 //==============================================================================

@@ -15,6 +15,21 @@
             file="Source/PluginEditor.cpp"/>
       <FILE id="SS0wG8" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
       <GROUP id="{171362BA-BC12-F66F-6F89-D48AACD70E2C}" name="Binary Data">
+        <FILE id="vpIHEa" name="Mix0Knob.jpg" compile="0" resource="1" file="Source/Binary Data/Mix0Knob.jpg"/>
+        <FILE id="YPmTpg" name="Mix10Knob.jpg" compile="0" resource="1" file="Source/Binary Data/Mix10Knob.jpg"/>
+        <FILE id="Zk4v7n" name="Mix20Knob.jpg" compile="0" resource="1" file="Source/Binary Data/Mix20Knob.jpg"/>
+        <FILE id="AXFO1z" name="Mix30Knob.jpg" compile="0" resource="1" file="Source/Binary Data/Mix30Knob.jpg"/>
+        <FILE id="mlrHJ3" name="Mix40Knob.jpg" compile="0" resource="1" file="Source/Binary Data/Mix40Knob.jpg"/>
+        <FILE id="aHJQkR" name="Mix50Knob.jpg" compile="0" resource="1" file="Source/Binary Data/Mix50Knob.jpg"/>
+        <FILE id="IXB8H9" name="Mix60Knob.jpg" compile="0" resource="1" file="Source/Binary Data/Mix60Knob.jpg"/>
+        <FILE id="HCXCA2" name="Mix70Knob.jpg" compile="0" resource="1" file="Source/Binary Data/Mix70Knob.jpg"/>
+        <FILE id="uGJxVH" name="Mix80Knob.jpg" compile="0" resource="1" file="Source/Binary Data/Mix80Knob.jpg"/>
+        <FILE id="JybDxa" name="Mix90Knob.jpg" compile="0" resource="1" file="Source/Binary Data/Mix90Knob.jpg"/>
+        <FILE id="fE5gDF" name="Mix100Knob.jpg" compile="0" resource="1" file="Source/Binary Data/Mix100Knob.jpg"/>
+        <FILE id="SHhLuj" name="FinalKnob100.jpg" compile="0" resource="1"
+              file="Source/Binary Data/FinalKnob100.jpg"/>
+        <FILE id="ARnuyq" name="KnobSpriteSheet.jpg" compile="0" resource="1"
+              file="Source/Binary Data/KnobSpriteSheet.jpg"/>
         <FILE id="rsu9VF" name="PingPongButtonSpriteSheetBOTTOMNOTES.jpg" compile="0"
               resource="1" file="Source/Binary Data/PingPongButtonSpriteSheetBOTTOMNOTES.jpg"/>
         <FILE id="qoC12n" name="PingPongButtonSpriteSheet.jpg" compile="0"

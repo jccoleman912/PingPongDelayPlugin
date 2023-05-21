@@ -35,6 +35,8 @@ private:
     // access the processor object that created it.
     Coleman_HW2AudioProcessor& audioProcessor;
     
+    int startingY[200];
+    
     juce::Slider initialGainKnob;
     juce::Slider l2RGainKnob;
     juce::Slider r2LGainKnob;
@@ -124,6 +126,33 @@ private:
     
     const juce::Rectangle<int> leftFirstCrop {0, 208, 91, 40};
     const juce::Rectangle<int> rightFirstCrop {93, 208, 91, 40};
+    
+    const juce::Rectangle<int> knobSpriteSheetCrop {0, 0, 248, 50000};
+    
+    
+    juce::Image knobPosition;
+    
+    juce::Image mix0;
+
+    juce::Image mix10;
+    
+    juce::Image mix20;
+    
+    juce::Image mix30;
+    
+    juce::Image mix40;
+
+    juce::Image mix50;
+    
+    juce::Image mix60;
+    
+    juce::Image mix70;
+    
+    juce::Image mix80;
+    
+    juce::Image mix90;
+    
+    juce::Image mix100;
 
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Coleman_HW2AudioProcessorEditor)

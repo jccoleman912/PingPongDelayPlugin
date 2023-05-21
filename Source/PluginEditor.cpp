@@ -17,12 +17,42 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     // editor's size to whatever you need it to be.
     setSize (625, 625);
     
+//    for(int n = 0; n < 200; n++) {
+//        startingY[n] = 2 + (n * );
+//    }
+//
     
     bgImage = juce::ImageCache::getFromMemory(BinaryData::FullScalePingpongDelayUI_jpg, BinaryData::FullScalePingpongDelayUI_jpgSize);
     
     spriteSheet = juce::ImageCache::getFromMemory(BinaryData::PingPongButtonSpriteSheet_jpg, BinaryData::PingPongButtonSpriteSheet_jpgSize);
     
     spriteSheetBottomNotes = juce::ImageCache::getFromMemory(BinaryData::PingPongButtonSpriteSheetBOTTOMNOTES_jpg, BinaryData::PingPongButtonSpriteSheetBOTTOMNOTES_jpgSize);
+    
+    mix0 =  juce::ImageCache::getFromMemory(BinaryData::Mix0Knob_jpg, BinaryData::Mix0Knob_jpgSize);
+    
+    mix10 =  juce::ImageCache::getFromMemory(BinaryData::Mix10Knob_jpg, BinaryData::Mix10Knob_jpgSize);
+    
+    mix20 =  juce::ImageCache::getFromMemory(BinaryData::Mix20Knob_jpg, BinaryData::Mix20Knob_jpgSize);
+    
+    mix30 =  juce::ImageCache::getFromMemory(BinaryData::Mix30Knob_jpg, BinaryData::Mix30Knob_jpgSize);
+    
+    mix40 =  juce::ImageCache::getFromMemory(BinaryData::Mix40Knob_jpg, BinaryData::Mix40Knob_jpgSize);
+    
+    mix50 =  juce::ImageCache::getFromMemory(BinaryData::Mix50Knob_jpg, BinaryData::Mix50Knob_jpgSize);
+    
+    mix60 =  juce::ImageCache::getFromMemory(BinaryData::Mix60Knob_jpg, BinaryData::Mix60Knob_jpgSize);
+    
+    mix70 =  juce::ImageCache::getFromMemory(BinaryData::Mix70Knob_jpg, BinaryData::Mix70Knob_jpgSize);
+    
+    mix80 =  juce::ImageCache::getFromMemory(BinaryData::Mix80Knob_jpg, BinaryData::Mix80Knob_jpgSize);
+    
+    mix90 =  juce::ImageCache::getFromMemory(BinaryData::Mix90Knob_jpg, BinaryData::Mix90Knob_jpgSize);
+    
+    mix100 =  juce::ImageCache::getFromMemory(BinaryData::Mix100Knob_jpg, BinaryData::Mix100Knob_jpgSize);
+    
+    knobPosition = mix100;
+    
+
         
         
     bgImage = bgImage.rescaled(625, 625, juce::Graphics::highResamplingQuality);
@@ -30,6 +60,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     rescaledSpriteSheet = spriteSheet.rescaled(625, 625, juce::Graphics::highResamplingQuality);
     
     rescaledSpriteSheetBottomNoteSelector = spriteSheetBottomNotes.rescaled(625, 625, juce::Graphics::highResamplingQuality);
+    
     
     
         
@@ -52,8 +83,9 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     dottedOFF = rescaledSpriteSheet.getClippedImage(dottedOFFCrop);
     dottedON = rescaledSpriteSheet.getClippedImage(dottedONCrop);
         
-    leftFirstImage = rescaledSpriteSheet.getClippedImage(leftFirstCrop);
-    rightFirstImage = rescaledSpriteSheet.getClippedImage(rightFirstCrop);
+    leftFirstImage = rescaledSpriteSheetBottomNoteSelector.getClippedImage(leftFirstCrop);
+    rightFirstImage = rescaledSpriteSheetBottomNoteSelector.getClippedImage(rightFirstCrop);
+
 
     
     
@@ -125,7 +157,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     
     mixKnob.addListener(this);
     // Specify location in window (xPos,yPos,width,height)
-    mixKnob.setBounds(340,320,160,100);
+    mixKnob.setBounds(20,450,100,100);
     mixKnob.setRange(0.f,100.f,0.1); // (min, max, interval)
     mixKnob.setValue(100.f); // initial value
     mixKnob.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
@@ -295,6 +327,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
 
 Coleman_HW2AudioProcessorEditor::~Coleman_HW2AudioProcessorEditor()
 {
+    setLookAndFeel(nullptr);
 }
 
 //==============================================================================
@@ -320,6 +353,9 @@ void Coleman_HW2AudioProcessorEditor::paint (juce::Graphics& g)
     g.drawImageAt(dottedImage, 17, 374);
         
     g.drawImageAt(leftOrRightImage, 17, 555);
+    
+    g.drawImage(knobPosition, 17, 400, 50, 50, 0, 0, 1000, 1000);
+    
 
 }
 
@@ -327,23 +363,6 @@ void Coleman_HW2AudioProcessorEditor::resized()
 {
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
-}
-
-void Coleman_HW2AudioProcessorEditor::sliderValueChanged(juce::Slider * slider)
-{
-    // This is how we check which slider was moved
-    if (slider == &initialGainKnob){
-//        audioProcessor.initialGainDropdB = slider->getValue();
-    }
-    if (slider == &l2RGainKnob){
-//        audioProcessor.l2RGainDropdB = slider->getValue();
-    }
-    if (slider == &r2LGainKnob){
-//        audioProcessor.r2LGainDropdB = slider->getValue();
-    }
-    if (slider == &tempoSelector) {
-//        audioProcessor.tempo = slider->getValue();
-    }
 }
 
 void Coleman_HW2AudioProcessorEditor::buttonClicked(juce::Button *button){
@@ -451,3 +470,445 @@ void Coleman_HW2AudioProcessorEditor::buttonClicked(juce::Button *button){
     }
 
 }
+
+void Coleman_HW2AudioProcessorEditor::sliderValueChanged(juce::Slider * slider)
+{
+    // This is how we check which slider was moved
+    if (slider == &initialGainKnob){
+//        audioProcessor.initialGainDropdB = slider->getValue();
+    }
+    if (slider == &l2RGainKnob){
+//        audioProcessor.l2RGainDropdB = slider->getValue();
+    }
+    if (slider == &r2LGainKnob){
+//        audioProcessor.r2LGainDropdB = slider->getValue();
+    }
+    if (slider == &tempoSelector) {
+//        audioProcessor.tempo = slider->getValue();
+    }
+    if (slider == &mixKnob) {
+        float mixValue = slider->getValue();
+//
+//        if(mixValue < 0.5f) {
+//
+//        } else if (mixValue < 1.f) {
+//
+//        } else if (mixValue < 1.5f) {
+//
+//        } else if (mixValue < 2.f) {
+//
+//        } else if (mixValue < 2.5f) {
+//
+//        } else if (mixValue < 3.f) {
+//
+//        } else if (mixValue < 3.5f) {
+//
+//        } else if (mixValue < 4.f) {
+//
+//        } else if (mixValue < 4.5f) {
+//
+//        } else if (mixValue < 5.f) {
+//
+//        } else if (mixValue < 5.5f) {
+//
+//        } else if (mixValue < 6.f) {
+//
+//        } else if (mixValue < 6.5f) {
+//
+//        } else if (mixValue < 7.f) {
+//
+//        } else if (mixValue < 7.5f) {
+//
+//        } else if (mixValue < 8.f) {
+//
+//        } else if (mixValue < 8.5f) {
+//
+//        } else if (mixValue < 9.f) {
+//
+//        } else if (mixValue < 9.5f) {
+//
+//        } else if (mixValue < 10.f) {
+//
+//        } else if (mixValue < 10.5f) {
+//
+//        } else if (mixValue < 11.f) {
+//
+//        } else if (mixValue < 11.5f) {
+//
+//        } else if (mixValue < 12.f) {
+//
+//        } else if (mixValue < 12.5f) {
+//
+//        } else if (mixValue < 13.f) {
+//
+//        } else if (mixValue < 13.5f) {
+//
+//        } else if (mixValue < 14.f) {
+//
+//        } else if (mixValue < 14.5f) {
+//
+//        } else if (mixValue < 15.f) {
+//
+//        } else if (mixValue < 15.5f) {
+//
+//        } else if (mixValue < 16.f) {
+//
+//        } else if (mixValue < 16.5f) {
+//
+//        } else if (mixValue < 17.f) {
+//
+//        } else if (mixValue < 17.5f) {
+//
+//        } else if (mixValue < 18.f) {
+//
+//        } else if (mixValue < 18.5f) {
+//
+//        } else if (mixValue < 19.f) {
+//
+//        } else if (mixValue < 19.5f) {
+//
+//        } else if (mixValue < 20.f) {
+//
+//        } else if (mixValue < 20.5f) {
+//
+//        } else if (mixValue < 21.f) {
+//
+//        } else if (mixValue < 21.5f) {
+//
+//        } else if (mixValue < 22.f) {
+//
+//        } else if (mixValue < 22.5f) {
+//
+//        } else if (mixValue < 23.f) {
+//
+//        } else if (mixValue < 23.5f) {
+//
+//        } else if (mixValue < 24.f) {
+//
+//        } else if (mixValue < 24.5f) {
+//
+//        } else if (mixValue < 25.f) {
+//
+//        } else if (mixValue < 25.5f) {
+//
+//        } else if (mixValue < 26.f) {
+//
+//        } else if (mixValue < 26.5f) {
+//
+//        } else if (mixValue < 27.f) {
+//
+//        } else if (mixValue < 27.5f) {
+//
+//        } else if (mixValue < 28.f) {
+//
+//        } else if (mixValue < 28.5f) {
+//
+//        } else if (mixValue < 29.f) {
+//
+//        } else if (mixValue < 29.5f) {
+//
+//        } else if (mixValue < 30.f) {
+//
+//        } else if (mixValue < 30.5f) {
+//
+//        } else if (mixValue < 31.f) {
+//
+//        } else if (mixValue < 31.5f) {
+//
+//        } else if (mixValue < 32.f) {
+//
+//        } else if (mixValue < 32.5f) {
+//
+//        } else if (mixValue < 33.f) {
+//
+//        } else if (mixValue < 33.5f) {
+//
+//        } else if (mixValue < 34.f) {
+//
+//        } else if (mixValue < 34.5f) {
+//
+//        } else if (mixValue < 35.f) {
+//
+//        } else if (mixValue < 35.5f) {
+//
+//        } else if (mixValue < 36.f) {
+//
+//        } else if (mixValue < 36.5f) {
+//
+//        } else if (mixValue < 37.f) {
+//
+//        } else if (mixValue < 37.5f) {
+//
+//        } else if (mixValue < 38.f) {
+//
+//        } else if (mixValue < 38.5f) {
+//
+//        } else if (mixValue < 39.f) {
+//
+//        } else if (mixValue < 39.5f) {
+//
+//        } else if (mixValue < 40.f) {
+//
+//        } else if (mixValue < 40.5f) {
+//
+//        } else if (mixValue < 41.f) {
+//
+//        } else if (mixValue < 41.5f) {
+//
+//        } else if (mixValue < 42.f) {
+//
+//        } else if (mixValue < 42.5f) {
+//
+//        } else if (mixValue < 43.f) {
+//
+//        } else if (mixValue < 43.5f) {
+//
+//        } else if (mixValue < 44.f) {
+//
+//        } else if (mixValue < 44.5f) {
+//
+//        } else if (mixValue < 45.f) {
+//
+//        } else if (mixValue < 45.5f) {
+//
+//        } else if (mixValue < 46.f) {
+//
+//        } else if (mixValue < 46.5f) {
+//
+//        } else if (mixValue < 47.f) {
+//
+//        } else if (mixValue < 47.5f) {
+//
+//        } else if (mixValue < 48.f) {
+//
+//        } else if (mixValue < 48.5f) {
+//
+//        } else if (mixValue < 49.f) {
+//
+//        } else if (mixValue < 49.5f) {
+//
+//        } else if (mixValue < 50.f) {
+//
+//            knobPosition = mix0;
+//
+//        } else if (mixValue < 50.5f) {
+//
+//        } else if (mixValue < 51.f) {
+//
+//        } else if (mixValue < 51.5f) {
+//
+//        } else if (mixValue < 52.f) {
+//
+//        } else if (mixValue < 52.5f) {
+//
+//        } else if (mixValue < 53.f) {
+//
+//        } else if (mixValue < 53.5f) {
+//
+//        } else if (mixValue < 54.f) {
+//
+//        } else if (mixValue < 54.5f) {
+//
+//        } else if (mixValue < 55.f) {
+//
+//        } else if (mixValue < 55.5f) {
+//
+//        } else if (mixValue < 56.f) {
+//
+//        } else if (mixValue < 56.5f) {
+//
+//        } else if (mixValue < 57.f) {
+//
+//        } else if (mixValue < 57.5f) {
+//
+//        } else if (mixValue < 58.f) {
+//
+//        } else if (mixValue < 58.5f) {
+//
+//        } else if (mixValue < 59.f) {
+//
+//        } else if (mixValue < 59.5f) {
+//
+//        } else if (mixValue < 60.f) {
+//
+//        } else if (mixValue < 60.5f) {
+//
+//        } else if (mixValue < 61.f) {
+//
+//        } else if (mixValue < 61.5f) {
+//
+//        } else if (mixValue < 62.f) {
+//
+//        } else if (mixValue < 62.5f) {
+//
+//        } else if (mixValue < 63.f) {
+//
+//        } else if (mixValue < 63.5f) {
+//
+//        } else if (mixValue < 64.f) {
+//
+//        } else if (mixValue < 64.5f) {
+//
+//        } else if (mixValue < 65.f) {
+//
+//        } else if (mixValue < 65.5f) {
+//
+//        } else if (mixValue < 66.f) {
+//
+//        } else if (mixValue < 66.5f) {
+//
+//        } else if (mixValue < 67.f) {
+//
+//        } else if (mixValue < 67.5f) {
+//
+//        } else if (mixValue < 68.f) {
+//
+//        } else if (mixValue < 68.5f) {
+//
+//        } else if (mixValue < 69.f) {
+//
+//        } else if (mixValue < 69.5f) {
+//
+//        } else if (mixValue < 70.f) {
+//
+//        } else if (mixValue < 70.5f) {
+//
+//        } else if (mixValue < 71.f) {
+//
+//        } else if (mixValue < 71.5f) {
+//
+//        } else if (mixValue < 72.f) {
+//
+//        } else if (mixValue < 72.5f) {
+//
+//        } else if (mixValue < 73.f) {
+//
+//        } else if (mixValue < 73.5f) {
+//
+//        } else if (mixValue < 74.f) {
+//
+//        } else if (mixValue < 74.5f) {
+//
+//        } else if (mixValue < 75.f) {
+//
+//        } else if (mixValue < 75.5f) {
+//
+//        } else if (mixValue < 76.f) {
+//
+//        } else if (mixValue < 76.5f) {
+//
+//        } else if (mixValue < 77.f) {
+//
+//        } else if (mixValue < 77.5f) {
+//
+//        } else if (mixValue < 78.f) {
+//
+//        } else if (mixValue < 78.5f) {
+//
+//        } else if (mixValue < 79.f) {
+//
+//        } else if (mixValue < 79.5f) {
+//
+//        } else if (mixValue < 80.f) {
+//
+//        } else if (mixValue < 80.5f) {
+//
+//        } else if (mixValue < 81.f) {
+//
+//        } else if (mixValue < 81.5f) {
+//
+//        } else if (mixValue < 82.f) {
+//
+//        } else if (mixValue < 82.5f) {
+//
+//        } else if (mixValue < 83.f) {
+//
+//        } else if (mixValue < 83.5f) {
+//
+//        } else if (mixValue < 84.f) {
+//
+//        } else if (mixValue < 84.5f) {
+//
+//        } else if (mixValue < 85.f) {
+//
+//        } else if (mixValue < 85.5f) {
+//
+//        } else if (mixValue < 86.f) {
+//
+//        } else if (mixValue < 86.5f) {
+//
+//        } else if (mixValue < 87.f) {
+//
+//        } else if (mixValue < 87.5f) {
+//
+//        } else if (mixValue < 88.f) {
+//
+//        } else if (mixValue < 88.5f) {
+//
+//        } else if (mixValue < 89.f) {
+//
+//        } else if (mixValue < 89.5f) {
+//
+//        } else if (mixValue < 90.f) {
+//
+//        } else if (mixValue < 90.5f) {
+//
+//        } else if (mixValue < 91.f) {
+//
+//        } else if (mixValue < 91.5f) {
+//
+//        } else if (mixValue < 92.f) {
+//
+//        } else if (mixValue < 92.5f) {
+//
+//        } else if (mixValue < 93.f) {
+//
+//        } else if (mixValue < 93.5f) {
+//
+//        } else if (mixValue < 94.f) {
+//
+//        } else if (mixValue < 94.5f) {
+//
+//        } else if (mixValue < 95.f) {
+//
+//        } else if (mixValue < 95.5f) {
+//
+//        } else if (mixValue < 96.f) {
+//
+//        } else if (mixValue < 96.5f) {
+//
+//        } else if (mixValue < 97.f) {
+//
+//        } else if (mixValue < 97.5f) {
+//
+//        } else if (mixValue < 98.f) {
+//
+//        } else if (mixValue < 98.5f) {
+//
+//        } else if (mixValue < 99.f) {
+//
+//        } else if (mixValue < 99.5f) {
+//
+//        } else if (mixValue < 100.f) {
+//
+//        } else {
+//
+//            knobPosition = mix100;
+//
+//        }
+        
+        if(mixValue < 10.f) {knobPosition = mix0;}
+        else if (mixValue < 20.f) {knobPosition = mix10;}
+        else if (mixValue < 30.f) {knobPosition = mix20;}
+        else if (mixValue < 40.f) {knobPosition = mix30;}
+        else if (mixValue < 50.f) {knobPosition = mix40;}
+        else if (mixValue < 60.f) {knobPosition = mix50;}
+        else if (mixValue < 70.f) {knobPosition = mix60;}
+        else if (mixValue < 80.f) {knobPosition = mix70;}
+        else if (mixValue < 90.f) {knobPosition = mix80;}
+        else if (mixValue < 100.f) {knobPosition = mix90;}
+        else {knobPosition = mix100;}
+        repaint();
+    }
+}
+

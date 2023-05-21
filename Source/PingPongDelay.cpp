@@ -166,6 +166,13 @@ void PingPongDelay::setR2LDropLinear(float r2LLinear) {
     r2LDropLinear = r2LLinear;
 }
 
+void PingPongDelay::clearBuffers() {
+    
+    std::fill(leftBuffer, leftBuffer + SIZE, 0);
+    std::fill(rightBuffer, rightBuffer + SIZE, 0);
+    
+}
+
 
 
 
@@ -187,6 +194,8 @@ void PingPongDelay::processBlock(juce::AudioBuffer<float> &buffer)
         
     }
 }
+
+
 
 float PingPongDelay::getSampleRate() {
     return Fs;
