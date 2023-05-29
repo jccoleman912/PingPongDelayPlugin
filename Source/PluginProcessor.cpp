@@ -87,10 +87,10 @@ juce::AudioProcessorValueTreeState::ParameterLayout Coleman_HW2AudioProcessor::c
                                                                    false));
     params.push_back(std::make_unique<juce::AudioParameterBool> ("quarterNoteValue",
                                                                    "Quarter Note",
-                                                                   true));
+                                                                   false));
     params.push_back(std::make_unique<juce::AudioParameterBool> ("8thNoteValue",
                                                                    "8th Note",
-                                                                   false));
+                                                                   true));
     params.push_back(std::make_unique<juce::AudioParameterBool> ("16thNoteValue",
                                                                    "16th Note",
                                                                    false));

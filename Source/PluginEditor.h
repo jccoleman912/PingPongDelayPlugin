@@ -34,21 +34,33 @@ private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     Coleman_HW2AudioProcessor& audioProcessor;
+
+    /*
+     The knobs and sliders of the interface.
+    */
     
-    int startingY[200];
-    
+    // Gain knobs
     juce::Slider initialGainKnob;
     juce::Slider l2RGainKnob;
     juce::Slider r2LGainKnob;
     
+    // Tempo slider
     juce::Slider tempoSelector;
     
+    // Mix knob
     juce::Slider mixKnob;
-    
-    MixKnob mixKnobLookAndFeel;
-    
+
+    // Smooth knob
     juce::Slider smoothKnob;
     
+    /*
+     The buttons of the interface.
+    */
+    
+    // Bypass button
+    juce::ToggleButton bypassButton;
+    
+    // Note selector buttons
     juce::ToggleButton wholeNoteButton;
     juce::ToggleButton halfNoteButton;
     juce::ToggleButton quarterNoteButton;
@@ -56,25 +68,52 @@ private:
     juce::ToggleButton sixteenthNoteButton;
     juce::ToggleButton thirtysecondNoteButton;
     
+    // Other rhythm buttons
     juce::ToggleButton tripletButton;
     juce::ToggleButton dottedButton;
-    juce::ToggleButton bypassButton;
     juce::ToggleButton syncButton;
-    
+
+    // Left/Right first selector
     juce::ToggleButton leftFirstButton;
     juce::ToggleButton rightFirstButton;
     
+    // Smooth button
     juce::ToggleButton smoothButton;
     
-    juce::Colour color = juce::Colours::darkseagreen;
-    
-    
+    // Images of interface and buttons from Binary Data
     juce::Image bgImage;
     juce::Image spriteSheet;
     juce::Image rescaledSpriteSheet;
-    juce::Image spriteSheetBottomNotes;
-    juce::Image rescaledSpriteSheetBottomNoteSelector;
     
+    juce::Image bypassOFFImage;
+    juce::Image bypassONImage;
+    
+    juce::Image syncOFFImage;
+    juce::Image syncONImage;
+    
+    juce::Image noteSelectorWhole;
+    juce::Image noteSelectorHalf;
+    juce::Image noteSelectorQuarter;
+    juce::Image noteSelector8th;
+    juce::Image noteSelector16th;
+    juce::Image noteSelector32nd;
+    
+    juce::Image tripletOFFImage;
+    juce::Image tripletONImage;
+    
+    juce::Image dottedOFFImage;
+    juce::Image dottedONImage;
+    
+    juce::Image leftFirstImage;
+    juce::Image rightFirstImage;
+    
+    juce::Image smoothOFFImage;
+    juce::Image smoothONImage;
+    
+
+
+    // Images that are clipped portions of the sprite sheet.
+    // These are associated with the correct boolean outcome of the button's toggle state.
     juce::Image bypassOFF;
     juce::Image bypassON;
     
@@ -93,44 +132,87 @@ private:
     
     juce::Image dottedOFF;
     juce::Image dottedON;
+//
+//    juce::Image leftFirstImage;
+//    juce::Image rightFirstImage;
     
-    juce::Image leftFirstImage;
-    juce::Image rightFirstImage;
+    juce::Image smoothOFF;
+    juce::Image smoothON;
     
-    juce::Image bypassImage = bypassOFF;
-    juce::Image syncImage = syncOFF;
-    juce::Image noteImage = noteQUARTER;
-    juce::Image tripletImage = tripletOFF;
-    juce::Image dottedImage = dottedOFF;
-    juce::Image leftOrRightImage = leftFirstImage;
+    // Images placed in the paint() method that are updated in the listener using repaint().
+    juce::Image bypassOutcome;
+    juce::Image syncOutcome;
+    juce::Image noteOutcome;
+    juce::Image tripletOutcome;
+    juce::Image dottedOutcome;
+    juce::Image leftRightOutcome;
+    juce::Image smoothOutcome;
     
+    // Rectangles that are used for .rescale() in the constructor.
+//    const juce::Rectangle<int> bypassCrop {0, 0, 128, 80};
+//    const juce::Rectangle<int> bypassONCrop {128, 0, 128, 80};
+//
+//    const juce::Rectangle<int> syncOFFCrop {0, 64, 128, 80};
+//    const juce::Rectangle<int> syncONCrop {128, 64, 128, 64};
+//
+//    const juce::Rectangle<int> tripletOFFCrop {0, 128, 128, 80};
+//    const juce::Rectangle<int> tripletONCrop {128, 128, 128, 80};
+//
+//    const juce::Rectangle<int> dottedOFFCrop {0, 192, 128, 64};
+//    const juce::Rectangle<int> dottedONCrop {128, 192, 128, 64};
+//
+//    const juce::Rectangle<int> leftFirstCrop {0, 256, 128, 64};
+//    const juce::Rectangle<int> rightFirstCrop {128, 256, 128, 64};
+//
+//    const juce::Rectangle<int> noteSelectorCrop {0, 320, 128, 96};
+//
+//    const juce::Rectangle<int> smoothOFFCrop {0, 416, 128, 64};
+//    const juce::Rectangle<int> smoothONCrop {128, 416, 128, 64};
     
-    const juce::Rectangle<int> bypassOFFCrop {0, 0, 91, 41};
-    const juce::Rectangle<int> bypassONCrop {93, 0, 91, 41};
-    
-    const juce::Rectangle<int> syncOFFCrop {0, 42, 91, 34};
-    const juce::Rectangle<int> syncONCrop {93, 42, 91, 34};
-    
-    const juce::Rectangle<int> noteWHOLECrop {0, 76, 91, 61};
-    const juce::Rectangle<int> noteHALFCrop {93, 76, 91, 61};
-    const juce::Rectangle<int> noteQUARTERCrop {186, 76, 91, 61};
-    const juce::Rectangle<int> note8THCrop {0, 76, 91, 61};
-    const juce::Rectangle<int> note16THCrop {93, 76, 91, 61};
-    const juce::Rectangle<int> note32NDCrop {186, 76, 91, 61};
-    
-    const juce::Rectangle<int> tripletOFFCrop {0, 138, 91, 34};
-    const juce::Rectangle<int> tripletONCrop {93, 138, 91, 34};
-    
-    const juce::Rectangle<int> dottedOFFCrop {0, 173, 91, 34};
-    const juce::Rectangle<int> dottedONCrop {93, 173, 91, 34};
-    
-    const juce::Rectangle<int> leftFirstCrop {0, 208, 91, 40};
-    const juce::Rectangle<int> rightFirstCrop {93, 208, 91, 40};
-    
-    const juce::Rectangle<int> knobSpriteSheetCrop {0, 0, 248, 50000};
+    const juce::Rectangle<int> imageCrop {0, 0, 400, 250};
+//
+//    const juce::Rectangle<int> syncCrop {0, 0, 400, 250};
+//
+//    const juce::Rectangle<int> tripletCrop {0, 0, 400, 250};
+//
+//    const juce::Rectangle<int> dottedCrop {0, 0, 400, 250};
+//
+//    const juce::Rectangle<int> leftRightCrop {0, 0, 400, 250};
+//
+//    const juce::Rectangle<int> smoothCrop {0, 0, 400, 250};
     
     
     juce::Image knobPosition;
+    
+    juce::Image emptyInitial;
+    juce::DrawableImage emptyInitialDrawable;
+    juce::Image orangeInitial;
+    juce::DrawableImage orangeInitialDrawable;
+    juce::Image redInitial;
+    juce::DrawableImage redInitialDrawable;
+    
+    float redInitialOpacity;
+    float orangeInitialOpacity;
+    
+    float redOpacity[122] = {0.f, 0.03f, 0.06f, 0.09f, 0.12f, 0.15f, 0.18f, 0.21f, 0.24f,
+        0.27f, 0.3f, 0.32f, 0.34f, 0.36f, 0.38f, 0.4f, 0.42f, 0.44f, 0.46f, 0.48f, 0.5f,
+        0.52f, 0.54f, 0.56f, 0.58f, 0.59f, 0.6f, 0.61f, 0.62f, 0.63f, 0.64f, 0.65f, 0.66f,
+        0.67f, 0.68f, 0.69f, 0.7f, 0.71f, 0.72f, 0.73f, 0.74f, 0.75f, 0.757f, 0.764f,
+        0.769f, 0.772f, 0.775f, 0.778f, 0.781f, 0.784f, 0.787f, 0.79f, 0.793f,
+        0.796f, 0.799f, 0.802f, 0.805f, 0.808f, 0.811f, 0.814f, 0.817f, 0.82f, 0.823f,
+        0.826f, 0.829f, 0.832f, 0.835f, 0.838f, 0.841f, 0.844f, 0.847f, 0.85f, 0.853f,
+        0.856f, 0.859f, 0.862f, 0.865f, 0.868f, 0.871f, 0.874f, 0.877f, 0.88f, 0.883f,
+        0.886f, 0.889f, 0.892f, 0.895f, 0.898f, 0.901f, 0.904f, 0.907f, 0.91f, 0.913f,
+        0.916f, 0.919f, 0.922f, 0.925f, 0.928f, 0.931f, 0.934f, 0.937f, 0.94f, 0.943f,
+        0.946f, 0.949f, 0.952f, 0.955f, 0.958f, 0.961f, 0.964f, 0.967f, 0.97f, 0.973f,
+        0.976f, 0.979f, 0.982f, 0.985f, 0.988f, 0.991f, 0.994f, 0.997f, 1.f};
+    
+    float baseOpacity[302] = {};
+    
+    
+    juce::DrawableImage redI100;
+    juce::Image redI50;
+    juce::Image redI0;
     
     // Knob images 0 - 9.5
     juce::Image mix0;

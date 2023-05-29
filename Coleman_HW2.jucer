@@ -15,6 +15,53 @@
             file="Source/PluginEditor.cpp"/>
       <FILE id="SS0wG8" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
       <GROUP id="{171362BA-BC12-F66F-6F89-D48AACD70E2C}" name="Binary Data">
+        <FILE id="CaKlYa" name="PingPongDelayUI.jpg" compile="0" resource="1"
+              file="Source/Binary Data/PingPongDelayUI.jpg"/>
+        <FILE id="ZdFf9Z" name="QuarterNoteSelected.jpg" compile="0" resource="1"
+              file="Source/Binary Data/QuarterNoteSelected.jpg"/>
+        <FILE id="GHM9Bs" name="RightSelected.jpg" compile="0" resource="1"
+              file="Source/Binary Data/RightSelected.jpg"/>
+        <FILE id="zwq0o6" name="SixteenthNoteSelected.jpg" compile="0" resource="1"
+              file="Source/Binary Data/SixteenthNoteSelected.jpg"/>
+        <FILE id="QZDC8T" name="SmoothOFF.jpg" compile="0" resource="1" file="Source/Binary Data/SmoothOFF.jpg"/>
+        <FILE id="vN16zc" name="SmoothON.jpg" compile="0" resource="1" file="Source/Binary Data/SmoothON.jpg"/>
+        <FILE id="gJxgNz" name="SyncOFF.jpg" compile="0" resource="1" file="Source/Binary Data/SyncOFF.jpg"/>
+        <FILE id="qaBVFR" name="SyncON.jpg" compile="0" resource="1" file="Source/Binary Data/SyncON.jpg"/>
+        <FILE id="EYWHPp" name="ThirtysecondNoteSelected.jpg" compile="0" resource="1"
+              file="Source/Binary Data/ThirtysecondNoteSelected.jpg"/>
+        <FILE id="k53bSB" name="TripletOFF.jpg" compile="0" resource="1" file="Source/Binary Data/TripletOFF.jpg"/>
+        <FILE id="hA8Os1" name="TripletON.jpg" compile="0" resource="1" file="Source/Binary Data/TripletON.jpg"/>
+        <FILE id="NLb5Ar" name="WholeNoteSelected.jpg" compile="0" resource="1"
+              file="Source/Binary Data/WholeNoteSelected.jpg"/>
+        <FILE id="MSlfk1" name="LeftSelected.jpg" compile="0" resource="1"
+              file="Source/Binary Data/LeftSelected.jpg"/>
+        <FILE id="A1Vmaz" name="HalfNoteSelected.jpg" compile="0" resource="1"
+              file="Source/Binary Data/HalfNoteSelected.jpg"/>
+        <FILE id="kgn4SE" name="BypassOFF.jpg" compile="0" resource="1" file="Source/Binary Data/BypassOFF.jpg"/>
+        <FILE id="ort7aH" name="BypassON.jpg" compile="0" resource="1" file="Source/Binary Data/BypassON.jpg"/>
+        <FILE id="Q8Vbth" name="DottedOFF.jpg" compile="0" resource="1" file="Source/Binary Data/DottedOFF.jpg"/>
+        <FILE id="FWzut4" name="DottedON.jpg" compile="0" resource="1" file="Source/Binary Data/DottedON.jpg"/>
+        <FILE id="AJyJVD" name="EighthNoteSelected.jpg" compile="0" resource="1"
+              file="Source/Binary Data/EighthNoteSelected.jpg"/>
+        <FILE id="EpnaPV" name="PingPongSpriteSheetHalfNote.jpg" compile="0"
+              resource="1" file="Source/Binary Data/PingPongSpriteSheetHalfNote.jpg"/>
+        <FILE id="XpuEv3" name="PingPongSpriteSheetSixteenthNote.jpg" compile="0"
+              resource="1" file="Source/Binary Data/PingPongSpriteSheetSixteenthNote.jpg"/>
+        <FILE id="SoQMu6" name="PingPongSpriteSheetThirtysecondNote.jpg" compile="0"
+              resource="1" file="Source/Binary Data/PingPongSpriteSheetThirtysecondNote.jpg"/>
+        <FILE id="JAXJ9L" name="PingPongSpriteSheetWholeNote.jpg" compile="0"
+              resource="1" file="Source/Binary Data/PingPongSpriteSheetWholeNote.jpg"/>
+        <FILE id="Txv5qD" name="FinalPingPongSpriteSheetBottomNotes.jpg" compile="0"
+              resource="1" file="Source/Binary Data/FinalPingPongSpriteSheetBottomNotes.jpg"/>
+        <FILE id="srQVFj" name="FinalPingPongDelayUI.jpg" compile="0" resource="1"
+              file="Source/Binary Data/FinalPingPongDelayUI.jpg"/>
+        <FILE id="n3W39H" name="FinalPingPongSpriteSheet.jpg" compile="0" resource="1"
+              file="Source/Binary Data/FinalPingPongSpriteSheet.jpg"/>
+        <FILE id="xPHeZH" name="InitialEmpty.jpg" compile="0" resource="1"
+              file="Source/Binary Data/InitialEmpty.jpg"/>
+        <FILE id="sA8Ush" name="InitialOrange.jpg" compile="0" resource="1"
+              file="Source/Binary Data/InitialOrange.jpg"/>
+        <FILE id="GmMuwJ" name="InitialRed.jpg" compile="0" resource="1" file="Source/Binary Data/InitialRed.jpg"/>
         <FILE id="GojY46" name="Mix90x5Knob.jpg" compile="0" resource="1" file="Source/Binary Data/Mix90x5Knob.jpg"/>
         <FILE id="lwpCj4" name="Mix91Knob.jpg" compile="0" resource="1" file="Source/Binary Data/Mix91Knob.jpg"/>
         <FILE id="lkQqh7" name="Mix91x5Knob.jpg" compile="0" resource="1" file="Source/Binary Data/Mix91x5Knob.jpg"/>

@@ -13,20 +13,130 @@
 Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2AudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
-    // Make sure that before the constructor has finished, you've set the
-    // editor's size to whatever you need it to be.
-    setSize (625, 625);
+
+    setSize (800, 640);
     
-//    for(int n = 0; n < 200; n++) {
-//        startingY[n] = 2 + (n * );
-//    }
+
+    
+    bgImage = juce::ImageCache::getFromMemory(BinaryData::PingPongDelayUI_jpg, BinaryData::PingPongDelayUI_jpgSize);
+    
+    bgImage = bgImage.rescaled(800, 640, juce::Graphics::highResamplingQuality);
+    
+//    spriteSheet = juce::ImageCache::getFromMemory(BinaryData::FinalPingPongSpriteSheet_jpg, BinaryData::FinalPingPongSpriteSheet_jpgSize);
 //
+//    rescaledSpriteSheet = spriteSheet.rescaled(800, 800, juce::Graphics::highResamplingQuality);
     
-    bgImage = juce::ImageCache::getFromMemory(BinaryData::FullScalePingpongDelayUI_jpg, BinaryData::FullScalePingpongDelayUI_jpgSize);
+    //
+    // Setting up the note selector images
+    //
     
-    spriteSheet = juce::ImageCache::getFromMemory(BinaryData::PingPongButtonSpriteSheet_jpg, BinaryData::PingPongButtonSpriteSheet_jpgSize);
+//    noteSelectorHalf = juce::ImageCache::getFromMemory(BinaryData::PingPongSpriteSheetHalfNote_jpg, BinaryData::PingPongSpriteSheetHalfNote_jpgSize);
+//
+//    rescaledNoteSelectorHalf = noteSelectorHalf.rescaled(800, 800, juce::Graphics::highResamplingQuality);
+//
+//    noteSelectorQuarter = juce::ImageCache::getFromMemory(BinaryData::PingPongSpriteSheetWholeNote_jpg, BinaryData::PingPongSpriteSheetWholeNote_jpgSize);
+//
+//    rescaledNoteSelectorQuarter = noteSelectorQuarter.rescaled(800, 800, juce::Graphics::highResamplingQuality);
+//
+//    noteSelector8th = juce::ImageCache::getFromMemory(BinaryData::FinalPingPongSpriteSheetBottomNotes_jpg, BinaryData::FinalPingPongSpriteSheetBottomNotes_jpgSize);
+//
+//    rescaledNoteSelector8th = noteSelector8th.rescaled(800, 800, juce::Graphics::highResamplingQuality);
+//
+//    noteSelector16th = juce::ImageCache::getFromMemory(BinaryData::PingPongSpriteSheetSixteenthNote_jpg, BinaryData::PingPongSpriteSheetSixteenthNote_jpgSize);
+//
+//    rescaledNoteSelector16th = noteSelector16th.rescaled(800, 800, juce::Graphics::highResamplingQuality);
+//
+//    noteSelector32nd = juce::ImageCache::getFromMemory(BinaryData::PingPongSpriteSheetThirtysecondNote_jpg, BinaryData::PingPongSpriteSheetThirtysecondNote_jpgSize);
+//
+//    rescaledNoteSelector32nd = noteSelector32nd.rescaled(800, 800, juce::Graphics::highResamplingQuality);
+//
+//    bypassOFF = rescaledSpriteSheet.getClippedImage(bypassOFFCrop);
+//    bypassON = rescaledSpriteSheet.getClippedImage(bypassONCrop);
+//
+//    syncOFF = rescaledSpriteSheet.getClippedImage(syncOFFCrop);
+//    syncON = rescaledSpriteSheet.getClippedImage(syncONCrop);
+//
+//    noteWHOLE = rescaledSpriteSheet.getClippedImage(noteSelectorCrop);
+//    noteHALF = rescaledNoteSelectorHalf.getClippedImage(noteSelectorCrop);
+//    noteQUARTER = rescaledNoteSelectorQuarter.getClippedImage(noteSelectorCrop);
+//    note8TH = rescaledNoteSelector8th.getClippedImage(noteSelectorCrop);
+//    note16TH = rescaledNoteSelector16th.getClippedImage(noteSelectorCrop);
+//    note32ND = rescaledNoteSelector32nd.getClippedImage(noteSelectorCrop);
+//
+//    tripletOFF = rescaledSpriteSheet.getClippedImage(tripletOFFCrop);
+//    tripletON = rescaledSpriteSheet.getClippedImage(tripletONCrop);
+//
+//    dottedOFF = rescaledSpriteSheet.getClippedImage(dottedOFFCrop);
+//    dottedON = rescaledSpriteSheet.getClippedImage(dottedONCrop);
+//
+//    leftFirstImage = rescaledSpriteSheet.getClippedImage(leftFirstCrop);
+//    rightFirstImage = rescaledSpriteSheet.getClippedImage(rightFirstCrop);
+//
+//    smoothOFF = rescaledSpriteSheet.getClippedImage(smoothOFFCrop);
+//    smoothON = rescaledSpriteSheet.getClippedImage(smoothONCrop);
+//
+//
+//
+    bypassOFFImage = juce::ImageCache::getFromMemory(BinaryData::BypassOFF_jpg, BinaryData::BypassOFF_jpgSize);
+    bypassONImage = juce::ImageCache::getFromMemory(BinaryData::BypassON_jpg, BinaryData::BypassON_jpgSize);
     
-    spriteSheetBottomNotes = juce::ImageCache::getFromMemory(BinaryData::PingPongButtonSpriteSheetBOTTOMNOTES_jpg, BinaryData::PingPongButtonSpriteSheetBOTTOMNOTES_jpgSize);
+    syncOFFImage = juce::ImageCache::getFromMemory(BinaryData::SyncOFF_jpg, BinaryData::SyncOFF_jpgSize);
+    syncONImage = juce::ImageCache::getFromMemory(BinaryData::SyncON_jpg, BinaryData::SyncON_jpgSize);
+    
+    noteSelectorWhole = juce::ImageCache::getFromMemory(BinaryData::WholeNoteSelected_jpg, BinaryData::WholeNoteSelected_jpgSize);
+    noteSelectorHalf = juce::ImageCache::getFromMemory(BinaryData::HalfNoteSelected_jpg, BinaryData::HalfNoteSelected_jpgSize);
+    noteSelectorQuarter = juce::ImageCache::getFromMemory(BinaryData::QuarterNoteSelected_jpg, BinaryData::QuarterNoteSelected_jpgSize);
+    noteSelector8th = juce::ImageCache::getFromMemory(BinaryData::EighthNoteSelected_jpg, BinaryData::EighthNoteSelected_jpgSize);
+    noteSelector16th = juce::ImageCache::getFromMemory(BinaryData::SixteenthNoteSelected_jpg, BinaryData::SixteenthNoteSelected_jpgSize);
+    noteSelector32nd = juce::ImageCache::getFromMemory(BinaryData::ThirtysecondNoteSelected_jpg, BinaryData::ThirtysecondNoteSelected_jpgSize);
+    
+    tripletOFFImage = juce::ImageCache::getFromMemory(BinaryData::TripletOFF_jpg, BinaryData::TripletOFF_jpgSize);
+    tripletONImage = juce::ImageCache::getFromMemory(BinaryData::TripletON_jpg, BinaryData::TripletON_jpgSize);
+    
+    dottedOFFImage = juce::ImageCache::getFromMemory(BinaryData::DottedOFF_jpg, BinaryData::DottedOFF_jpgSize);
+    dottedONImage = juce::ImageCache::getFromMemory(BinaryData::DottedON_jpg, BinaryData::DottedON_jpgSize);
+    
+    leftFirstImage = juce::ImageCache::getFromMemory(BinaryData::LeftSelected_jpg, BinaryData::LeftSelected_jpgSize);
+    rightFirstImage = juce::ImageCache::getFromMemory(BinaryData::RightSelected_jpg, BinaryData::RightSelected_jpgSize);
+    
+    smoothOFFImage = juce::ImageCache::getFromMemory(BinaryData::SmoothOFF_jpg, BinaryData::SmoothOFF_jpgSize);
+    smoothONImage = juce::ImageCache::getFromMemory(BinaryData::SmoothON_jpg, BinaryData::SmoothON_jpgSize);
+    
+//    bypassOFFImage = bypassOFFImage.rescaled(128, 96, juce::Graphics::highResamplingQuality);
+//    bypassONImage = bypassONImage.rescaled(128, 96, juce::Graphics::highResamplingQuality);
+//
+//    syncOFFImage = syncOFFImage.rescaled(128, 96, juce::Graphics::highResamplingQuality);
+//    syncONImage = syncONImage.rescaled(128, 96, juce::Graphics::highResamplingQuality);
+//
+//    noteSelectorWhole = noteSelectorWhole.rescaled(128, 96, juce::Graphics::highResamplingQuality);
+//    noteSelectorHalf = noteSelectorHalf.rescaled(128, 96, juce::Graphics::highResamplingQuality);
+//    noteSelectorQuarter = bypassOFFImage.rescaled(128, 96, juce::Graphics::highResamplingQuality);
+//    noteSelector8th = bypassOFFImage.rescaled(128, 96, juce::Graphics::highResamplingQuality);
+//    noteSelector16th = bypassOFFImage.rescaled(128, 96, juce::Graphics::highResamplingQuality);
+//    noteSelector32nd = bypassOFFImage.rescaled(128, 96, juce::Graphics::highResamplingQuality);
+//
+//    tripletOFFImage = bypassOFFImage.rescaled(128, 96, juce::Graphics::highResamplingQuality);
+//    tripletONImage = bypassOFFImage.rescaled(128, 96, juce::Graphics::highResamplingQuality);
+//
+//    dottedOFFImage = bypassOFFImage.rescaled(128, 96, juce::Graphics::highResamplingQuality);
+//    dottedONImage = bypassOFFImage.rescaled(128, 96, juce::Graphics::highResamplingQuality);
+//
+//    leftFirstImage = bypassOFFImage.rescaled(128, 96, juce::Graphics::highResamplingQuality);
+//    rightFirstImage = bypassOFFImage.rescaled(128, 96, juce::Graphics::highResamplingQuality);
+//
+//    smoothOFFImage = bypassOFFImage.rescaled(128, 96, juce::Graphics::highResamplingQuality);
+//    smoothONImage = bypassOFFImage.rescaled(128, 96, juce::Graphics::highResamplingQuality);
+    
+    
+    
+    emptyInitial = juce::ImageCache::getFromMemory(BinaryData::InitialEmpty_jpg, BinaryData::InitialEmpty_jpgSize);
+    orangeInitial = juce::ImageCache::getFromMemory(BinaryData::InitialOrange_jpg, BinaryData::InitialOrange_jpgSize);
+    redInitial = juce::ImageCache::getFromMemory(BinaryData::InitialRed_jpg, BinaryData::InitialRed_jpgSize);
+    
+    emptyInitial = emptyInitial.rescaled(150, 75);
+    orangeInitial = orangeInitial.rescaled(150, 75);
+    redInitial = redInitial.rescaled(150, 75);
+
     
     // Knob images 0 - 9.5 YYY
     mix0 = juce::ImageCache::getFromMemory(BinaryData::Mix0Knob_jpg, BinaryData::Mix0Knob_jpgSize);
@@ -253,52 +363,16 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     
     knobPosition = mix100;
     
-
-        
-        
-    bgImage = bgImage.rescaled(625, 625, juce::Graphics::highResamplingQuality);
-        
-    rescaledSpriteSheet = spriteSheet.rescaled(625, 625, juce::Graphics::highResamplingQuality);
-    
-    rescaledSpriteSheetBottomNoteSelector = spriteSheetBottomNotes.rescaled(625, 625, juce::Graphics::highResamplingQuality);
-    
-    
-    
-        
-    bypassOFF = rescaledSpriteSheet.getClippedImage(bypassOFFCrop);
-    bypassON = rescaledSpriteSheet.getClippedImage(bypassONCrop);
-        
-    syncOFF = rescaledSpriteSheet.getClippedImage(syncOFFCrop);
-    syncON = rescaledSpriteSheet.getClippedImage(syncONCrop);
-        
-    noteWHOLE = rescaledSpriteSheet.getClippedImage(noteWHOLECrop);
-    noteHALF = rescaledSpriteSheet.getClippedImage(noteHALFCrop);
-    noteQUARTER = rescaledSpriteSheet.getClippedImage(noteQUARTERCrop);
-    note8TH = rescaledSpriteSheetBottomNoteSelector.getClippedImage(note8THCrop);
-    note16TH = rescaledSpriteSheetBottomNoteSelector.getClippedImage(note16THCrop);
-    note32ND = rescaledSpriteSheetBottomNoteSelector.getClippedImage(note32NDCrop);
-        
-    tripletOFF = rescaledSpriteSheet.getClippedImage(tripletOFFCrop);
-    tripletON = rescaledSpriteSheet.getClippedImage(tripletONCrop);
-        
-    dottedOFF = rescaledSpriteSheet.getClippedImage(dottedOFFCrop);
-    dottedON = rescaledSpriteSheet.getClippedImage(dottedONCrop);
-        
-    leftFirstImage = rescaledSpriteSheetBottomNoteSelector.getClippedImage(leftFirstCrop);
-    rightFirstImage = rescaledSpriteSheetBottomNoteSelector.getClippedImage(rightFirstCrop);
-
-
-    
     
     //
     // Initial Gain Knob
     //
     
-//    initialGainKnob.addListener(this);
+    initialGainKnob.addListener(this);
     // Specify location in window (xPos,yPos,width,height)
     initialGainKnob.setBounds(250,25,100,100);
-    initialGainKnob.setRange(-60.0,24.0,0.1); // (min, max, interval)
-    initialGainKnob.setValue(-9.0); // initial value
+    initialGainKnob.setRange(-60.f,24.f,0.1f); // (min, max, interval)
+    initialGainKnob.setValue(-9.f); // initial value
     initialGainKnob.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     initialGainKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
     initialGainKnob.setName("Initial dB Drop");
@@ -306,16 +380,15 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     addAndMakeVisible(initialGainKnob);
 
     
-    
     //
     // Left to Right Gain Knob
     //
     
-//    l2RGainKnob.addListener(this);
+    l2RGainKnob.addListener(this);
     // Specify location in window (xPos,yPos,width,height)
     l2RGainKnob.setBounds(145,170,100,100);
-    l2RGainKnob.setRange(-60.0,24.0,0.1); // (min, max, interval)
-    l2RGainKnob.setValue(0.0); // initial value
+    l2RGainKnob.setRange(-60.f,24.f,0.1f); // (min, max, interval)
+    l2RGainKnob.setValue(0.f); // initial value
     l2RGainKnob.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     l2RGainKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
     l2RGainKnob.setName("Left to Right dB Drop");
@@ -326,11 +399,11 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     // Right to Left Gain Knob
     //
     
-//    r2LGainKnob.addListener(this);
+    r2LGainKnob.addListener(this);
     // Specify location in window (xPos,yPos,width,height)
     r2LGainKnob.setBounds(425,170,100,100);
-    r2LGainKnob.setRange(-60.0,24.0,0.1); // (min, max, interval)
-    r2LGainKnob.setValue(-6.0); // initial value
+    r2LGainKnob.setRange(-60.f,24.f,0.1f); // (min, max, interval)
+    r2LGainKnob.setValue(-6.f); // initial value
     r2LGainKnob.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     r2LGainKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
     r2LGainKnob.setName("Right to Left dB Drop");
@@ -375,7 +448,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     
     smoothKnob.addListener(this);
     // Specify location in window (xPos,yPos,width,height)
-    smoothKnob.setBounds(260,400,160,100);
+//    smoothKnob.setBounds(260,400,160,100);
     smoothKnob.setRange(0.f,500.f,0.1); // (min, max, interval)
     smoothKnob.setValue(0.f); // initial value
     smoothKnob.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
@@ -391,7 +464,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     //
     
     bypassButton.addListener(this);
-    bypassButton.setBounds(17,22,91,41);
+    bypassButton.setBounds(20,37,116,52);
     bypassButton.setToggleState(false, juce::dontSendNotification);
     addAndMakeVisible(bypassButton);
     bypassButton.setAlpha(0.f);
@@ -401,7 +474,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     //
     
     syncButton.addListener(this);
-    syncButton.setBounds(17,103,91,34);
+    syncButton.setBounds(20,157,116,43);
     syncButton.setToggleState(false, juce::dontSendNotification);
     addAndMakeVisible(syncButton);
     syncButton.setAlpha(0.f);
@@ -411,42 +484,42 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     //
     
     wholeNoteButton.addListener(this);
-    wholeNoteButton.setBounds(17,252,30,30);
+    wholeNoteButton.setBounds(20,382,38,38);
     wholeNoteButton.setToggleState(false, juce::dontSendNotification);
     wholeNoteButton.setRadioGroupId(2);
     addAndMakeVisible(wholeNoteButton);
     wholeNoteButton.setAlpha(0.f);
     
     halfNoteButton.addListener(this);
-    halfNoteButton.setBounds(48,252,30,30);
+    halfNoteButton.setBounds(60,382,38,38);
     halfNoteButton.setToggleState(false, juce::dontSendNotification);
     halfNoteButton.setRadioGroupId(2);
     addAndMakeVisible(halfNoteButton);
     halfNoteButton.setAlpha(0.f);
     
     quarterNoteButton.addListener(this);
-    quarterNoteButton.setBounds(79,252,30,30);
+    quarterNoteButton.setBounds(99,382,38,38);
     quarterNoteButton.setToggleState(true, juce::dontSendNotification);
     quarterNoteButton.setRadioGroupId(2);
     addAndMakeVisible(quarterNoteButton);
     quarterNoteButton.setAlpha(0.f);
     
     eighthNoteButton.addListener(this);
-    eighthNoteButton.setBounds(17,283,30,30);
+    eighthNoteButton.setBounds(20,421,38,38);
     eighthNoteButton.setToggleState(false, juce::dontSendNotification);
     eighthNoteButton.setRadioGroupId(2);
     addAndMakeVisible(eighthNoteButton);
     eighthNoteButton.setAlpha(0.f);
     
     sixteenthNoteButton.addListener(this);
-    sixteenthNoteButton.setBounds(48,283,30,30);
+    sixteenthNoteButton.setBounds(60,421,38,38);
     sixteenthNoteButton.setToggleState(false, juce::dontSendNotification);
     sixteenthNoteButton.setRadioGroupId(2);
     addAndMakeVisible(sixteenthNoteButton);
     sixteenthNoteButton.setAlpha(0.f);
     
     thirtysecondNoteButton.addListener(this);
-    thirtysecondNoteButton.setBounds(79,283,30,30);
+    thirtysecondNoteButton.setBounds(99,421,38,38);
     thirtysecondNoteButton.setToggleState(false, juce::dontSendNotification);
     thirtysecondNoteButton.setRadioGroupId(2);
     addAndMakeVisible(thirtysecondNoteButton);
@@ -457,7 +530,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     //
     
     tripletButton.addListener(this);
-    tripletButton.setBounds(17,329,91,34);
+    tripletButton.setBounds(20,490,116,43);
     tripletButton.setToggleState(false, juce::dontSendNotification);
     addAndMakeVisible(tripletButton);
     tripletButton.setAlpha(0.f);
@@ -467,7 +540,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     //
     
     dottedButton.addListener(this);
-    dottedButton.setBounds(17,374,91,34);
+    dottedButton.setBounds(20,554,116,43);
     dottedButton.setToggleState(false, juce::dontSendNotification);
     addAndMakeVisible(dottedButton);
     dottedButton.setAlpha(0.f);
@@ -477,14 +550,14 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     //
     
     leftFirstButton.addListener(this);
-    leftFirstButton.setBounds(17,555,38,40);
+    leftFirstButton.setBounds(662,37,52,52);
     leftFirstButton.setToggleState(true, juce::dontSendNotification);
     leftFirstButton.setRadioGroupId(1);
     addAndMakeVisible(leftFirstButton);
     leftFirstButton.setAlpha(0.f);
     
     rightFirstButton.addListener(this);
-    rightFirstButton.setBounds(70,555,38,40);
+    rightFirstButton.setBounds(728,37,52,52);
     rightFirstButton.setToggleState(false, juce::dontSendNotification);
     rightFirstButton.setRadioGroupId(1);
     addAndMakeVisible(rightFirstButton);
@@ -495,11 +568,11 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     //
     
     smoothButton.addListener(this);
-    smoothButton.setBounds(400,400,40,40);
+    smoothButton.setBounds(662,382,116,43);
     smoothButton.setToggleState(false, juce::dontSendNotification);
     smoothButton.setButtonText("Smooth MS");
     addAndMakeVisible(smoothButton);
-//    smoothButton.setAlpha(0.f);
+    smoothButton.setAlpha(0.f);
     
     
     
@@ -535,28 +608,65 @@ Coleman_HW2AudioProcessorEditor::~Coleman_HW2AudioProcessorEditor()
 //==============================================================================
 void Coleman_HW2AudioProcessorEditor::paint (juce::Graphics& g)
 {
-    // (Our component is opaque, so we must completely fill the background with a solid colour)
-  
-    g.fillAll (color);
-
-    g.setColour (juce::Colours::white);
-    g.setFont (15.0f);
-    
     g.drawImageAt(bgImage, 0, 0);
     
-    g.drawImageAt(bypassImage, 17, 22);
-        
-    g.drawImageAt(syncImage, 17, 103);
+    if(!bypassOutcome.isValid()) {
+        bypassOutcome = bypassOFFImage.getClippedImage(imageCrop);
+    }
+    if(!syncOutcome.isValid()) {
+        syncOutcome = syncOFFImage.getClippedImage(imageCrop);
+    }
+    if(!noteOutcome.isValid()) {
+        noteOutcome = noteSelector8th;
+    }
+    if(!tripletOutcome.isValid()) {
+        tripletOutcome = tripletOFFImage.getClippedImage(imageCrop);
+    }
+    if(!dottedOutcome.isValid()) {
+        dottedOutcome = dottedOFFImage.getClippedImage(imageCrop);
+    }
+    if(!leftRightOutcome.isValid()) {
+        leftRightOutcome = leftFirstImage.getClippedImage(imageCrop);
+    }
+    if(!smoothOutcome.isValid()) {
+        smoothOutcome = smoothOFFImage.getClippedImage(imageCrop);
+    }
     
-    g.drawImageAt(noteImage, 17, 252);
-        
-    g.drawImageAt(tripletImage, 17, 329);
-        
-    g.drawImageAt(dottedImage, 17, 374);
-        
-    g.drawImageAt(leftOrRightImage, 17, 555);
+    g.drawImage(bypassOutcome, 16, 32, 128, 80, 0, 0, 400, 250);
     
-    g.drawImage(knobPosition, 32, 465, 50, 50, 0, 0, 1000, 1000);
+    g.drawImage(syncOutcome, 16, 144, 128, 80, 0, 0, 400, 250);
+    
+    g.drawImage(noteOutcome, 16, 368, 128, 96, 0, 0, 400, 300);
+    
+    g.drawImage(tripletOutcome, 16, 480, 128, 80, 0, 0, 400, 250);
+    
+    g.drawImage(dottedOutcome, 16, 544, 128, 80, 0, 0, 400, 250);
+    
+    g.drawImage(leftRightOutcome, 656, 32, 128, 80, 0, 0, 400, 250);
+    
+    g.drawImage(smoothOutcome, 656, 368, 128, 80, 0, 0, 400, 250);
+
+    g.drawImage(knobPosition, 680, 190, 100, 100, 0, 0, 1000, 1000);
+
+    
+    emptyInitialDrawable.setImage(emptyInitial);
+    
+    emptyInitialDrawable.drawAt(g, 300, 20, 1.f);
+
+    
+    orangeInitialDrawable.setImage(orangeInitial);
+    
+    orangeInitialDrawable.drawAt(g, 300, 20, 1.f);
+    
+
+    redInitialDrawable.setImage(redInitial);
+    
+    redInitialDrawable.drawAt(g, 300, 20, redInitialOpacity);
+    
+
+
+//    g.drawImage(emptyInitial, 300, 20, 150, 75, 0, 0, 600, 300);
+//    g.drawImage(orangeInitial, 300, 20, 150, 75, 0, 0, 600, 300);
     
 
 }
@@ -567,126 +677,573 @@ void Coleman_HW2AudioProcessorEditor::resized()
     // subcomponents in your editor..
 }
 
+//g.drawImageAt(bypassOutcome, 16, 32);
+//
+//g.drawImageAt(syncOutcome, 16, 144);
+//
+//g.drawImageAt(noteOutcome, 16, 368);
+//
+//g.drawImageAt(tripletOutcome, 16, 480);
+//
+//g.drawImageAt(dottedOutcome, 16, 544);
+//
+//g.drawImageAt(leftRightOutcome, 656, 32);
+//
+//g.drawImageAt(smoothOutcome, 656, 480);
+
 void Coleman_HW2AudioProcessorEditor::buttonClicked(juce::Button *button){
     if (button == &bypassButton){
-        bool bypassState = bypassButton.getToggleState();
-        if(bypassState) {
-            bypassImage = bypassON;
-            repaint();
+        bool bypassBool = bypassButton.getToggleState();
+        if(bypassBool) {
+            bypassOutcome = bypassONImage.getClippedImage(imageCrop);
         } else {
-            bypassImage = bypassOFF;
-            repaint();
+            bypassOutcome = bypassOFFImage.getClippedImage(imageCrop);
         }
+        repaint(16, 32, 128, 64);
     }
-    
-    if (button == &tripletButton){
-        bool tripletState = tripletButton.getToggleState();
-        if(tripletState) {
-            tripletImage = tripletON;
-            repaint();
-        } else {
-            tripletImage = tripletOFF;
-            repaint();
-        }
-    }
-    
     if (button == &syncButton) {
-        bool syncState = syncButton.getToggleState();
-        if(syncState) {
-            syncImage = syncON;
-            repaint();
+        bool syncBool = syncButton.getToggleState();
+        if(syncBool) {
+            syncOutcome = syncONImage.getClippedImage(imageCrop);
         } else {
-            syncImage = syncOFF;
-            repaint();
+            syncOutcome = syncOFFImage.getClippedImage(imageCrop);
         }
+        repaint(16, 144, 128, 64);
     }
-    
     if (button == &wholeNoteButton) {
-
-            noteImage = noteWHOLE;
-            repaint();
-
+        noteOutcome = noteSelectorWhole;
+        repaint(16, 368, 128, 96);
     }
     if (button == &halfNoteButton) {
-
-            noteImage = noteHALF;
-            repaint();
-
+        noteOutcome = noteSelectorHalf;
+        repaint(16, 368, 128, 96);
     }
     if (button == &quarterNoteButton) {
-
-            noteImage = noteQUARTER;
-            repaint();
-
+        noteOutcome = noteSelectorQuarter;
+        repaint(16, 368, 128, 96);
     }
     if (button == &eighthNoteButton) {
-
-            noteImage = note8TH;
-            repaint();
-
+        noteOutcome = noteSelector8th;
+        repaint(16, 368, 128, 96);
     }
     if (button == &sixteenthNoteButton) {
-
-            noteImage = note16TH;
-            repaint();
-
+        noteOutcome = noteSelector16th;
+        repaint(16, 368, 128, 96);
     }
     if (button == &thirtysecondNoteButton) {
-
-            noteImage = note32ND;
-            repaint();
-
+        noteOutcome = noteSelector32nd;
+        repaint(16, 368, 128, 96);
     }
-    
+    if (button == &tripletButton){
+        bool tripletBool = tripletButton.getToggleState();
+        if(tripletBool) {
+            tripletOutcome = tripletONImage.getClippedImage(imageCrop);
+        } else {
+            tripletOutcome = tripletOFFImage.getClippedImage(imageCrop);
+        }
+        repaint(16, 480, 128, 64);
+    }
     if (button == &dottedButton) {
-        bool dottedState = dottedButton.getToggleState();
-        if(dottedState) {
-            dottedImage = dottedON;
-            repaint();
+        bool dottedBool = dottedButton.getToggleState();
+        if(dottedBool) {
+            dottedOutcome = dottedONImage.getClippedImage(imageCrop);
         } else {
-            dottedImage = dottedOFF;
-            repaint();
+            dottedOutcome = dottedOFFImage.getClippedImage(imageCrop);
         }
+        repaint(16, 544, 128, 64);
     }
-    
     if (button == &leftFirstButton) {
-        bool leftState = leftFirstButton.getToggleState();
-        if(leftState) {
-            leftOrRightImage = leftFirstImage;
-            repaint();
-        } else {
-            leftOrRightImage = rightFirstImage;
-            repaint();
+        bool leftSelectedBool = leftFirstButton.getToggleState();
+        if(leftSelectedBool) {
+            leftRightOutcome = leftFirstImage.getClippedImage(imageCrop);
+            repaint(656, 32, 128, 64);
         }
     }
-    
     if (button == &rightFirstButton) {
-        bool rightState = rightFirstButton.getToggleState();
-        if(rightState) {
-            leftOrRightImage = rightFirstImage;
-            repaint();
-        } else {
-            leftOrRightImage = leftFirstImage;
-            repaint();
+        bool rightSelectedBool = rightFirstButton.getToggleState();
+        if(rightSelectedBool) {
+            leftRightOutcome = rightFirstImage.getClippedImage(imageCrop);
+            repaint(656, 32, 128, 64);
         }
     }
-
+    if (button == &smoothButton) {
+        bool smoothBool = smoothButton.getToggleState();
+        if(smoothBool) {
+            smoothOutcome = smoothONImage.getClippedImage(imageCrop);
+        } else {
+            smoothOutcome = smoothOFFImage.getClippedImage(imageCrop);
+        }
+        repaint(656, 368, 128, 64);
+    }
 }
 
 void Coleman_HW2AudioProcessorEditor::sliderValueChanged(juce::Slider * slider)
 {
     // This is how we check which slider was moved
     if (slider == &initialGainKnob){
-//        audioProcessor.initialGainDropdB = slider->getValue();
+        
+        float initialValue = slider->getValue();
+        
+        // Red values < 6 dB
+        if(initialValue <= 0.f) {redInitialOpacity = redOpacity[0];}
+        else if(initialValue < 0.2f) {redInitialOpacity = redOpacity[1];}
+        else if(initialValue < 0.4f) {redInitialOpacity = redOpacity[2];}
+        else if(initialValue < 0.6f) {redInitialOpacity = redOpacity[3];}
+        else if(initialValue < 0.8f) {redInitialOpacity = redOpacity[4];}
+        else if(initialValue < 1.f)  {redInitialOpacity = redOpacity[5];}
+        else if(initialValue < 1.2f) {redInitialOpacity = redOpacity[6];}
+        else if(initialValue < 1.4f) {redInitialOpacity = redOpacity[7];}
+        else if(initialValue < 1.6f) {redInitialOpacity = redOpacity[8];}
+        else if(initialValue < 1.8f) {redInitialOpacity = redOpacity[9];}
+        else if(initialValue < 2.f)  {redInitialOpacity = redOpacity[10];}
+        else if(initialValue < 2.2f) {redInitialOpacity = redOpacity[11];}
+        else if(initialValue < 2.4f) {redInitialOpacity = redOpacity[12];}
+        else if(initialValue < 2.6f) {redInitialOpacity = redOpacity[13];}
+        else if(initialValue < 2.8f) {redInitialOpacity = redOpacity[14];}
+        else if(initialValue < 3.f)  {redInitialOpacity = redOpacity[15];}
+        else if(initialValue < 3.2f) {redInitialOpacity = redOpacity[16];}
+        else if(initialValue < 3.4f) {redInitialOpacity = redOpacity[17];}
+        else if(initialValue < 3.6f) {redInitialOpacity = redOpacity[18];}
+        else if(initialValue < 3.8f) {redInitialOpacity = redOpacity[19];}
+        else if(initialValue < 4.f)  {redInitialOpacity = redOpacity[20];}
+        else if(initialValue < 4.2f) {redInitialOpacity = redOpacity[21];}
+        else if(initialValue < 4.4f) {redInitialOpacity = redOpacity[22];}
+        else if(initialValue < 4.6f) {redInitialOpacity = redOpacity[23];}
+        else if(initialValue < 4.8f) {redInitialOpacity = redOpacity[24];}
+        else if(initialValue < 5.f)  {redInitialOpacity = redOpacity[25];}
+        else if(initialValue < 5.2f) {redInitialOpacity = redOpacity[26];}
+        else if(initialValue < 5.4f) {redInitialOpacity = redOpacity[27];}
+        else if(initialValue < 5.6f) {redInitialOpacity = redOpacity[28];}
+        else if(initialValue < 5.8f) {redInitialOpacity = redOpacity[29];}
+        else if(initialValue < 6.f)  {redInitialOpacity = redOpacity[30];}
+        
+        // 6 dB <= Red values < 12 dB
+        else if(initialValue < 6.2f) {redInitialOpacity = redOpacity[31];}
+        else if(initialValue < 6.4f) {redInitialOpacity = redOpacity[32];}
+        else if(initialValue < 6.6f) {redInitialOpacity = redOpacity[33];}
+        else if(initialValue < 6.8f) {redInitialOpacity = redOpacity[34];}
+        else if(initialValue < 7.f)  {redInitialOpacity = redOpacity[35];}
+        else if(initialValue < 7.2f) {redInitialOpacity = redOpacity[36];}
+        else if(initialValue < 7.4f) {redInitialOpacity = redOpacity[37];}
+        else if(initialValue < 7.6f) {redInitialOpacity = redOpacity[38];}
+        else if(initialValue < 7.8f) {redInitialOpacity = redOpacity[39];}
+        else if(initialValue < 8.f)  {redInitialOpacity = redOpacity[40];}
+        else if(initialValue < 8.2f) {redInitialOpacity = redOpacity[41];}
+        else if(initialValue < 8.4f) {redInitialOpacity = redOpacity[42];}
+        else if(initialValue < 8.6f) {redInitialOpacity = redOpacity[43];}
+        else if(initialValue < 8.8f) {redInitialOpacity = redOpacity[44];}
+        else if(initialValue < 9.f)  {redInitialOpacity = redOpacity[45];}
+        else if(initialValue < 9.2f) {redInitialOpacity = redOpacity[46];}
+        else if(initialValue < 9.4f) {redInitialOpacity = redOpacity[47];}
+        else if(initialValue < 9.6f) {redInitialOpacity = redOpacity[48];}
+        else if(initialValue < 9.8f) {redInitialOpacity = redOpacity[49];}
+        else if(initialValue < 10.f) {redInitialOpacity = redOpacity[50];}
+        else if(initialValue < 10.2f) {redInitialOpacity = redOpacity[51];}
+        else if(initialValue < 10.4f) {redInitialOpacity = redOpacity[52];}
+        else if(initialValue < 10.6f) {redInitialOpacity = redOpacity[53];}
+        else if(initialValue < 10.8f) {redInitialOpacity = redOpacity[54];}
+        else if(initialValue < 11.f)  {redInitialOpacity = redOpacity[55];}
+        else if(initialValue < 11.2f) {redInitialOpacity = redOpacity[56];}
+        else if(initialValue < 11.4f) {redInitialOpacity = redOpacity[57];}
+        else if(initialValue < 11.6f) {redInitialOpacity = redOpacity[58];}
+        else if(initialValue < 11.8f) {redInitialOpacity = redOpacity[59];}
+        else if(initialValue < 12.f)  {redInitialOpacity = redOpacity[60];}
+        
+        // 12 dB <= Red values < 18 dB
+        else if(initialValue < 12.2f) {redInitialOpacity = redOpacity[61];}
+        else if(initialValue < 12.4f) {redInitialOpacity = redOpacity[62];}
+        else if(initialValue < 12.6f) {redInitialOpacity = redOpacity[63];}
+        else if(initialValue < 12.8f) {redInitialOpacity = redOpacity[64];}
+        else if(initialValue < 13.f)  {redInitialOpacity = redOpacity[65];}
+        else if(initialValue < 13.2f) {redInitialOpacity = redOpacity[66];}
+        else if(initialValue < 13.4f) {redInitialOpacity = redOpacity[67];}
+        else if(initialValue < 13.6f) {redInitialOpacity = redOpacity[68];}
+        else if(initialValue < 13.8f) {redInitialOpacity = redOpacity[69];}
+        else if(initialValue < 14.f)  {redInitialOpacity = redOpacity[70];}
+        else if(initialValue < 14.2f) {redInitialOpacity = redOpacity[71];}
+        else if(initialValue < 14.4f) {redInitialOpacity = redOpacity[72];}
+        else if(initialValue < 14.6f) {redInitialOpacity = redOpacity[73];}
+        else if(initialValue < 14.8f) {redInitialOpacity = redOpacity[74];}
+        else if(initialValue < 15.f)  {redInitialOpacity = redOpacity[75];}
+        else if(initialValue < 15.2f) {redInitialOpacity = redOpacity[76];}
+        else if(initialValue < 15.4f) {redInitialOpacity = redOpacity[77];}
+        else if(initialValue < 15.6f) {redInitialOpacity = redOpacity[78];}
+        else if(initialValue < 15.8f) {redInitialOpacity = redOpacity[79];}
+        else if(initialValue < 16.f)  {redInitialOpacity = redOpacity[80];}
+        else if(initialValue < 16.2f) {redInitialOpacity = redOpacity[81];}
+        else if(initialValue < 16.4f) {redInitialOpacity = redOpacity[82];}
+        else if(initialValue < 16.6f) {redInitialOpacity = redOpacity[83];}
+        else if(initialValue < 16.8f) {redInitialOpacity = redOpacity[84];}
+        else if(initialValue < 17.f)  {redInitialOpacity = redOpacity[85];}
+        else if(initialValue < 17.2f) {redInitialOpacity = redOpacity[86];}
+        else if(initialValue < 17.4f) {redInitialOpacity = redOpacity[87];}
+        else if(initialValue < 17.6f) {redInitialOpacity = redOpacity[88];}
+        else if(initialValue < 17.8f) {redInitialOpacity = redOpacity[89];}
+        else if(initialValue < 18.f)  {redInitialOpacity = redOpacity[90];}
+        
+        // 18 dB <= Red values <= 24 dB
+        else if(initialValue < 18.2f) {redInitialOpacity = redOpacity[91];}
+        else if(initialValue < 18.4f) {redInitialOpacity = redOpacity[92];}
+        else if(initialValue < 18.6f) {redInitialOpacity = redOpacity[93];}
+        else if(initialValue < 18.8f) {redInitialOpacity = redOpacity[94];}
+        else if(initialValue < 19.f)  {redInitialOpacity = redOpacity[95];}
+        else if(initialValue < 19.2f) {redInitialOpacity = redOpacity[96];}
+        else if(initialValue < 19.4f) {redInitialOpacity = redOpacity[97];}
+        else if(initialValue < 19.6f) {redInitialOpacity = redOpacity[98];}
+        else if(initialValue < 19.8f) {redInitialOpacity = redOpacity[99];}
+        else if(initialValue < 20.f)  {redInitialOpacity = redOpacity[100];}
+        else if(initialValue < 20.2f) {redInitialOpacity = redOpacity[101];}
+        else if(initialValue < 20.4f) {redInitialOpacity = redOpacity[102];}
+        else if(initialValue < 20.6f) {redInitialOpacity = redOpacity[103];}
+        else if(initialValue < 20.8f) {redInitialOpacity = redOpacity[104];}
+        else if(initialValue < 21.f)  {redInitialOpacity = redOpacity[105];}
+        else if(initialValue < 21.2f) {redInitialOpacity = redOpacity[106];}
+        else if(initialValue < 21.4f) {redInitialOpacity = redOpacity[107];}
+        else if(initialValue < 21.6f) {redInitialOpacity = redOpacity[108];}
+        else if(initialValue < 21.8f) {redInitialOpacity = redOpacity[109];}
+        else if(initialValue < 22.f)  {redInitialOpacity = redOpacity[110];}
+        else if(initialValue < 22.2f) {redInitialOpacity = redOpacity[111];}
+        else if(initialValue < 22.4f) {redInitialOpacity = redOpacity[112];}
+        else if(initialValue < 22.6f) {redInitialOpacity = redOpacity[113];}
+        else if(initialValue < 22.8f) {redInitialOpacity = redOpacity[114];}
+        else if(initialValue < 23.f)  {redInitialOpacity = redOpacity[115];}
+        else if(initialValue < 23.2f) {redInitialOpacity = redOpacity[116];}
+        else if(initialValue < 23.4f) {redInitialOpacity = redOpacity[117];}
+        else if(initialValue < 23.6f) {redInitialOpacity = redOpacity[118];}
+        else if(initialValue < 23.8f) {redInitialOpacity = redOpacity[119];}
+        else if(initialValue < 24.f)  {redInitialOpacity = redOpacity[120];}
+        else if(initialValue == 24.f) {redInitialOpacity = redOpacity[121];}
+        else {redInitialOpacity = redOpacity[0];}
+        
+        
+        if(initialValue == 0.f) {orangeInitialOpacity = 0.f;}
+        else if(initialValue > -0.2f) {redInitialOpacity = 0.03f;}
+        else if(initialValue > -0.4f) {redInitialOpacity = 0.06f;}
+        else if(initialValue > -0.6f) {redInitialOpacity = 0.09f;}
+        else if(initialValue > -0.8f) {redInitialOpacity = 0.12f;}
+        else if(initialValue > -1.f)  {redInitialOpacity = 0.15f;}
+        else if(initialValue > -1.2f) {redInitialOpacity = 0.18f;}
+        else if(initialValue > -1.4f) {redInitialOpacity = 0.21f;}
+        else if(initialValue > -1.6f) {redInitialOpacity = 0.24f;}
+        else if(initialValue > -1.8f) {redInitialOpacity = 0.27f;}
+        else if(initialValue > -2.f)  {redInitialOpacity = 0.3f;}
+        else if(initialValue > -2.2f) {redInitialOpacity = 0.32f;}
+        else if(initialValue > -2.4f) {redInitialOpacity = 0.34f;}
+        else if(initialValue > -2.6f) {redInitialOpacity = 0.36f;}
+        else if(initialValue > -2.8f) {redInitialOpacity = 0.38f;}
+        else if(initialValue > -3.f)  {redInitialOpacity = 0.4f;}
+        else if(initialValue > -3.2f) {redInitialOpacity = 0.42f;}
+        else if(initialValue > -3.4f) {redInitialOpacity = 0.44f;}
+        else if(initialValue > -3.6f) {redInitialOpacity = 0.46f;}
+        else if(initialValue > -3.8f) {redInitialOpacity = 0.48f;}
+        else if(initialValue > -4.f)  {redInitialOpacity = 0.5f;}
+        else if(initialValue > -4.2f) {redInitialOpacity = 0.52f;}
+        else if(initialValue > -4.4f) {redInitialOpacity = 0.54f;}
+        else if(initialValue > -4.6f) {redInitialOpacity = 0.56f;}
+        else if(initialValue > -4.8f) {redInitialOpacity = 0.58f;}
+        else if(initialValue > -5.f)  {redInitialOpacity = 0.59f;}
+        else if(initialValue > -5.2f) {redInitialOpacity = 0.60f;}
+        else if(initialValue > -5.4f) {redInitialOpacity = 0.61f;}
+        else if(initialValue > -5.6f) {redInitialOpacity = 0.62f;}
+        else if(initialValue > -5.8f) {redInitialOpacity = 0.63f;}
+        else if(initialValue > -6.f)  {redInitialOpacity = 0.64f;}
+
+        // 6 dB <= Red values < 12 dB
+        else if(initialValue > -6.2f) {redInitialOpacity = 0.65f;}
+        else if(initialValue > -6.4f) {redInitialOpacity = 0.66f;}
+        else if(initialValue > -6.6f) {redInitialOpacity = 0.67f;}
+        else if(initialValue > -6.8f) {redInitialOpacity = 0.68f;}
+        else if(initialValue > -7.f) {redInitialOpacity = 0.69f;}
+        else if(initialValue > -7.2f) {redInitialOpacity = 0.70f;}
+        else if(initialValue > -7.4f) {redInitialOpacity = 0.71f;}
+        else if(initialValue > -7.6f) {redInitialOpacity = 0.72f;}
+        else if(initialValue > -7.8f) {redInitialOpacity = 0.73f;}
+        else if(initialValue > -8.f) {redInitialOpacity = 0.74f;}
+        else if(initialValue > -8.2f) {redInitialOpacity = 0.75f;}
+        else if(initialValue > -8.4f) {redInitialOpacity = 0.757f;}
+        else if(initialValue > -8.6f) {redInitialOpacity = 0.764f;}
+        else if(initialValue > -8.8f) {redInitialOpacity = 0.77f;}
+        else if(initialValue > -9.f) {redInitialOpacity = 0.772f;}
+        else if(initialValue > -9.2f) {redInitialOpacity = 0.775f;}
+        else if(initialValue > -9.4f) {redInitialOpacity = 0.778f;}
+        else if(initialValue > -9.6f) {redInitialOpacity = 0.781f;}
+        else if(initialValue > -9.8f) {redInitialOpacity = 0.784f;}
+        else if(initialValue > -10.f) {redInitialOpacity = 0.787f;}
+        else if(initialValue > -10.2f) {redInitialOpacity = 0.79f;}
+        else if(initialValue > -10.4f) {redInitialOpacity = 0.793f;}
+        else if(initialValue > -10.6f) {redInitialOpacity = 0.796f;}
+        else if(initialValue > -10.8f) {redInitialOpacity = 0.799f;}
+        else if(initialValue > -11.f) {redInitialOpacity = 0.802f;}
+        else if(initialValue > -11.2f) {redInitialOpacity = 0.805f;}
+        else if(initialValue > -11.4f) {redInitialOpacity = 0.808f;}
+        else if(initialValue > -11.6f) {redInitialOpacity = 0.811f;}
+        else if(initialValue > -11.8f) {redInitialOpacity = 0.814f;}
+        else if(initialValue > -12.f) {redInitialOpacity = 0.817f;}
+
+        // 12 dB <= Red values < 18 dB
+        else if(initialValue > -12.2f) {redInitialOpacity = 0.82f;}
+        else if(initialValue > -12.4f) {redInitialOpacity = 0.823f;}
+        else if(initialValue > -12.6f) {redInitialOpacity = 0.826f;}
+        else if(initialValue > -12.8f) {redInitialOpacity = 0.829f;}
+        else if(initialValue > -13.f) {redInitialOpacity = 0.832f;}
+        else if(initialValue > -13.2f) {redInitialOpacity = 0.835f;}
+        else if(initialValue > -13.4f) {redInitialOpacity = 0.838f;}
+        else if(initialValue > -13.6f) {redInitialOpacity = 0.841f;}
+        else if(initialValue > -13.8f) {redInitialOpacity = 0.844f;}
+        else if(initialValue > -14.f) {redInitialOpacity = 0.847f;}
+        else if(initialValue > -14.2f) {redInitialOpacity = 0.85f;}
+        else if(initialValue > -14.4f) {redInitialOpacity = 0.853f;}
+        else if(initialValue > -14.6f) {redInitialOpacity = 0.856f;}
+        else if(initialValue > -14.8f) {redInitialOpacity = 0.859f;}
+        else if(initialValue > -15.f) {redInitialOpacity = 0.862f;}
+        else if(initialValue > -15.2f) {redInitialOpacity = 0.865f;}
+        else if(initialValue > -15.4f) {redInitialOpacity = 0.868f;}
+        else if(initialValue > -15.6f) {redInitialOpacity = 0.871f;}
+        else if(initialValue > -15.8f) {redInitialOpacity = 0.874f;}
+        else if(initialValue > -16.f) {redInitialOpacity = 0.877f;}
+        else if(initialValue > -16.2f) {redInitialOpacity = 0.88f;}
+        else if(initialValue > -16.4f) {redInitialOpacity = 0.883f;}
+        else if(initialValue > -16.6f) {redInitialOpacity = 0.886f;}
+        else if(initialValue > -16.8f) {redInitialOpacity = 0.889f;}
+        else if(initialValue > -17.f) {redInitialOpacity = 0.892f;}
+        else if(initialValue > -17.2f) {redInitialOpacity = 0.895f;}
+        else if(initialValue > -17.4f) {redInitialOpacity = 0.898f;}
+        else if(initialValue > -17.6f) {redInitialOpacity = 0.901f;}
+        else if(initialValue > -17.8f) {redInitialOpacity = 0.904f;}
+        else if(initialValue > -18.f) {redInitialOpacity = 0.907f;}
+
+        // 18 dB <= Red values <= 24 dB
+        else if(initialValue > -18.2f) {redInitialOpacity = 0.91f;}
+        else if(initialValue > -18.4f) {redInitialOpacity = 0.913f;}
+        else if(initialValue > -18.6f) {redInitialOpacity = 0.916f;}
+        else if(initialValue > -18.8f) {redInitialOpacity = 0.919f;}
+        else if(initialValue > -19.f) {redInitialOpacity = 0.922f;}
+        else if(initialValue > -19.2f) {redInitialOpacity = 0.925f;}
+        else if(initialValue > -19.4f) {redInitialOpacity = 0.928f;}
+        else if(initialValue > -19.6f) {redInitialOpacity = 0.931f;}
+        else if(initialValue > -19.8f) {redInitialOpacity = 0.934f;}
+        else if(initialValue > -20.f) {redInitialOpacity = 0.937f;}
+        else if(initialValue > -20.2f) {redInitialOpacity = 0.940f;}
+        else if(initialValue > -20.4f) {redInitialOpacity = 0.943f;}
+        else if(initialValue > -20.6f) {redInitialOpacity = 0.946f;}
+        else if(initialValue > -20.8f) {redInitialOpacity = 0.949f;}
+        else if(initialValue > -21.f) {redInitialOpacity = 0.952f;}
+        else if(initialValue > -21.2f) {redInitialOpacity = 0.955f;}
+        else if(initialValue > -21.4f) {redInitialOpacity = 0.958f;}
+        else if(initialValue > -21.6f) {redInitialOpacity = 0.961f;}
+        else if(initialValue > -21.8f) {redInitialOpacity = 0.964f;}
+        else if(initialValue > -22.f) {redInitialOpacity = 0.967f;}
+        else if(initialValue > -22.2f) {redInitialOpacity = 0.97f;}
+        else if(initialValue > -22.4f) {redInitialOpacity = 0.973f;}
+        else if(initialValue > -22.6f) {redInitialOpacity = 0.976f;}
+        else if(initialValue > -22.8f) {redInitialOpacity = 0.979f;}
+        else if(initialValue > -23.f) {redInitialOpacity = 0.982f;}
+        else if(initialValue > -23.2f) {redInitialOpacity = 0.985f;}
+        else if(initialValue > -23.4f) {redInitialOpacity = 0.988f;}
+        else if(initialValue > -23.6f) {redInitialOpacity = 0.991f;}
+        else if(initialValue > -23.8f) {redInitialOpacity = 0.994f;}
+        else if(initialValue > -24.f) {redInitialOpacity = 0.997f;}
+
+        // 18 dB <= Red values <= 24 dB
+        else if(initialValue > -24.2f) {redInitialOpacity = 0.91f;}
+        else if(initialValue > -24.4f) {redInitialOpacity = 0.913f;}
+        else if(initialValue > -24.6f) {redInitialOpacity = 0.916f;}
+        else if(initialValue > -24.8f) {redInitialOpacity = 0.919f;}
+        else if(initialValue > -25.f) {redInitialOpacity = 0.922f;}
+        else if(initialValue > -25.2f) {redInitialOpacity = 0.925f;}
+        else if(initialValue > -25.4f) {redInitialOpacity = 0.928f;}
+        else if(initialValue > -25.6f) {redInitialOpacity = 0.931f;}
+        else if(initialValue > -25.8f) {redInitialOpacity = 0.934f;}
+        else if(initialValue > -26.f) {redInitialOpacity = 0.937f;}
+        else if(initialValue > -26.2f) {redInitialOpacity = 0.940f;}
+        else if(initialValue > -26.4f) {redInitialOpacity = 0.943f;}
+        else if(initialValue > -26.6f) {redInitialOpacity = 0.946f;}
+        else if(initialValue > -26.8f) {redInitialOpacity = 0.949f;}
+        else if(initialValue > -27.f) {redInitialOpacity = 0.952f;}
+        else if(initialValue > -27.2f) {redInitialOpacity = 0.955f;}
+        else if(initialValue > -27.4f) {redInitialOpacity = 0.958f;}
+        else if(initialValue > -27.6f) {redInitialOpacity = 0.961f;}
+        else if(initialValue > -27.8f) {redInitialOpacity = 0.964f;}
+        else if(initialValue > -28.f) {redInitialOpacity = 0.967f;}
+        else if(initialValue > -28.2f) {redInitialOpacity = 0.97f;}
+        else if(initialValue > -28.4f) {redInitialOpacity = 0.973f;}
+        else if(initialValue > -28.6f) {redInitialOpacity = 0.976f;}
+        else if(initialValue > -28.8f) {redInitialOpacity = 0.979f;}
+        else if(initialValue > -29.f) {redInitialOpacity = 0.982f;}
+        else if(initialValue > -29.2f) {redInitialOpacity = 0.985f;}
+        else if(initialValue > -29.4f) {redInitialOpacity = 0.988f;}
+        else if(initialValue > -29.6f) {redInitialOpacity = 0.991f;}
+        else if(initialValue > -29.8f) {redInitialOpacity = 0.994f;}
+        else if(initialValue > -30.f) {redInitialOpacity = 0.997f;}
+        
+        else if(initialValue > -30.2f) {redInitialOpacity = 0.03f;}
+        else if(initialValue > -30.4f) {redInitialOpacity = 0.06f;}
+        else if(initialValue > -30.6f) {redInitialOpacity = 0.09f;}
+        else if(initialValue > -30.8f) {redInitialOpacity = 0.12f;}
+        else if(initialValue > -31.f)  {redInitialOpacity = 0.15f;}
+        else if(initialValue > -31.2f) {redInitialOpacity = 0.18f;}
+        else if(initialValue > -31.4f) {redInitialOpacity = 0.21f;}
+        else if(initialValue > -31.6f) {redInitialOpacity = 0.24f;}
+        else if(initialValue > -31.8f) {redInitialOpacity = 0.27f;}
+        else if(initialValue > -32.f)  {redInitialOpacity = 0.3f;}
+        else if(initialValue > -32.2f) {redInitialOpacity = 0.32f;}
+        else if(initialValue > -32.4f) {redInitialOpacity = 0.34f;}
+        else if(initialValue > -32.6f) {redInitialOpacity = 0.36f;}
+        else if(initialValue > -32.8f) {redInitialOpacity = 0.38f;}
+        else if(initialValue > -33.f)  {redInitialOpacity = 0.4f;}
+        else if(initialValue > -33.2f) {redInitialOpacity = 0.42f;}
+        else if(initialValue > -33.4f) {redInitialOpacity = 0.44f;}
+        else if(initialValue > -33.6f) {redInitialOpacity = 0.46f;}
+        else if(initialValue > -33.8f) {redInitialOpacity = 0.48f;}
+        else if(initialValue > -34.f)  {redInitialOpacity = 0.5f;}
+        else if(initialValue > -34.2f) {redInitialOpacity = 0.52f;}
+        else if(initialValue > -34.4f) {redInitialOpacity = 0.54f;}
+        else if(initialValue > -34.6f) {redInitialOpacity = 0.56f;}
+        else if(initialValue > -34.8f) {redInitialOpacity = 0.58f;}
+        else if(initialValue > -35.f)  {redInitialOpacity = 0.59f;}
+        else if(initialValue > -35.2f) {redInitialOpacity = 0.60f;}
+        else if(initialValue > -35.4f) {redInitialOpacity = 0.61f;}
+        else if(initialValue > -35.6f) {redInitialOpacity = 0.62f;}
+        else if(initialValue > -35.8f) {redInitialOpacity = 0.63f;}
+        else if(initialValue > -36.f)  {redInitialOpacity = 0.64f;}
+        
+        else if(initialValue > -36.2f) {redInitialOpacity = 0.65f;}
+        else if(initialValue > -36.4f) {redInitialOpacity = 0.66f;}
+        else if(initialValue > -36.6f) {redInitialOpacity = 0.67f;}
+        else if(initialValue > -36.8f) {redInitialOpacity = 0.68f;}
+        else if(initialValue > -37.f) {redInitialOpacity = 0.69f;}
+        else if(initialValue > -37.2f) {redInitialOpacity = 0.70f;}
+        else if(initialValue > -37.4f) {redInitialOpacity = 0.71f;}
+        else if(initialValue > -37.6f) {redInitialOpacity = 0.72f;}
+        else if(initialValue > -37.8f) {redInitialOpacity = 0.73f;}
+        else if(initialValue > -38.f) {redInitialOpacity = 0.74f;}
+        else if(initialValue > -38.2f) {redInitialOpacity = 0.75f;}
+        else if(initialValue > -38.4f) {redInitialOpacity = 0.757f;}
+        else if(initialValue > -38.6f) {redInitialOpacity = 0.764f;}
+        else if(initialValue > -38.8f) {redInitialOpacity = 0.77f;}
+        else if(initialValue > -39.f) {redInitialOpacity = 0.772f;}
+        else if(initialValue > -39.2f) {redInitialOpacity = 0.775f;}
+        else if(initialValue > -39.4f) {redInitialOpacity = 0.778f;}
+        else if(initialValue > -39.6f) {redInitialOpacity = 0.781f;}
+        else if(initialValue > -39.8f) {redInitialOpacity = 0.784f;}
+        else if(initialValue > -40.f) {redInitialOpacity = 0.787f;}
+        else if(initialValue > -40.2f) {redInitialOpacity = 0.79f;}
+        else if(initialValue > -40.4f) {redInitialOpacity = 0.793f;}
+        else if(initialValue > -40.6f) {redInitialOpacity = 0.796f;}
+        else if(initialValue > -40.8f) {redInitialOpacity = 0.799f;}
+        else if(initialValue > -41.f) {redInitialOpacity = 0.802f;}
+        else if(initialValue > -41.2f) {redInitialOpacity = 0.805f;}
+        else if(initialValue > -41.4f) {redInitialOpacity = 0.808f;}
+        else if(initialValue > -41.6f) {redInitialOpacity = 0.811f;}
+        else if(initialValue > -41.8f) {redInitialOpacity = 0.814f;}
+        else if(initialValue > -42.f) {redInitialOpacity = 0.817f;}
+        
+        else if(initialValue > -42.2f) {redInitialOpacity = 0.82f;}
+        else if(initialValue > -42.4f) {redInitialOpacity = 0.823f;}
+        else if(initialValue > -42.6f) {redInitialOpacity = 0.826f;}
+        else if(initialValue > -42.8f) {redInitialOpacity = 0.829f;}
+        else if(initialValue > -43.f) {redInitialOpacity = 0.832f;}
+        else if(initialValue > -43.2f) {redInitialOpacity = 0.835f;}
+        else if(initialValue > -43.4f) {redInitialOpacity = 0.838f;}
+        else if(initialValue > -43.6f) {redInitialOpacity = 0.841f;}
+        else if(initialValue > -43.8f) {redInitialOpacity = 0.844f;}
+        else if(initialValue > -44.f) {redInitialOpacity = 0.847f;}
+        else if(initialValue > -44.2f) {redInitialOpacity = 0.85f;}
+        else if(initialValue > -44.4f) {redInitialOpacity = 0.853f;}
+        else if(initialValue > -44.6f) {redInitialOpacity = 0.856f;}
+        else if(initialValue > -44.8f) {redInitialOpacity = 0.859f;}
+        else if(initialValue > -45.f) {redInitialOpacity = 0.862f;}
+        else if(initialValue > -45.2f) {redInitialOpacity = 0.865f;}
+        else if(initialValue > -45.4f) {redInitialOpacity = 0.868f;}
+        else if(initialValue > -45.6f) {redInitialOpacity = 0.871f;}
+        else if(initialValue > -45.8f) {redInitialOpacity = 0.874f;}
+        else if(initialValue > -46.f) {redInitialOpacity = 0.877f;}
+        else if(initialValue > -46.2f) {redInitialOpacity = 0.88f;}
+        else if(initialValue > -46.4f) {redInitialOpacity = 0.883f;}
+        else if(initialValue > -46.6f) {redInitialOpacity = 0.886f;}
+        else if(initialValue > -46.8f) {redInitialOpacity = 0.889f;}
+        else if(initialValue > -47.f) {redInitialOpacity = 0.892f;}
+        else if(initialValue > -47.2f) {redInitialOpacity = 0.895f;}
+        else if(initialValue > -47.4f) {redInitialOpacity = 0.898f;}
+        else if(initialValue > -47.6f) {redInitialOpacity = 0.901f;}
+        else if(initialValue > -47.8f) {redInitialOpacity = 0.904f;}
+        else if(initialValue > -48.f) {redInitialOpacity = 0.907f;}
+        
+        else if(initialValue > -48.2f) {redInitialOpacity = 0.91f;}
+        else if(initialValue > -48.4f) {redInitialOpacity = 0.913f;}
+        else if(initialValue > -48.6f) {redInitialOpacity = 0.916f;}
+        else if(initialValue > -48.8f) {redInitialOpacity = 0.919f;}
+        else if(initialValue > -49.f) {redInitialOpacity = 0.922f;}
+        else if(initialValue > -49.2f) {redInitialOpacity = 0.925f;}
+        else if(initialValue > -49.4f) {redInitialOpacity = 0.928f;}
+        else if(initialValue > -49.6f) {redInitialOpacity = 0.931f;}
+        else if(initialValue > -49.8f) {redInitialOpacity = 0.934f;}
+        else if(initialValue > -50.f) {redInitialOpacity = 0.937f;}
+        else if(initialValue > -50.2f) {redInitialOpacity = 0.940f;}
+        else if(initialValue > -50.4f) {redInitialOpacity = 0.943f;}
+        else if(initialValue > -50.6f) {redInitialOpacity = 0.946f;}
+        else if(initialValue > -50.8f) {redInitialOpacity = 0.949f;}
+        else if(initialValue > -51.f) {redInitialOpacity = 0.952f;}
+        else if(initialValue > -51.2f) {redInitialOpacity = 0.955f;}
+        else if(initialValue > -51.4f) {redInitialOpacity = 0.958f;}
+        else if(initialValue > -51.6f) {redInitialOpacity = 0.961f;}
+        else if(initialValue > -51.8f) {redInitialOpacity = 0.964f;}
+        else if(initialValue > -52.f) {redInitialOpacity = 0.967f;}
+        else if(initialValue > -52.2f) {redInitialOpacity = 0.97f;}
+        else if(initialValue > -52.4f) {redInitialOpacity = 0.973f;}
+        else if(initialValue > -52.6f) {redInitialOpacity = 0.976f;}
+        else if(initialValue > -52.8f) {redInitialOpacity = 0.979f;}
+        else if(initialValue > -53.f) {redInitialOpacity = 0.982f;}
+        else if(initialValue > -53.2f) {redInitialOpacity = 0.985f;}
+        else if(initialValue > -53.4f) {redInitialOpacity = 0.988f;}
+        else if(initialValue > -53.6f) {redInitialOpacity = 0.991f;}
+        else if(initialValue > -53.8f) {redInitialOpacity = 0.994f;}
+        else if(initialValue > -54.f) {redInitialOpacity = 0.997f;}
+        
+        else if(initialValue > -54.2f) {redInitialOpacity = 0.91f;}
+        else if(initialValue > -54.4f) {redInitialOpacity = 0.913f;}
+        else if(initialValue > -54.6f) {redInitialOpacity = 0.916f;}
+        else if(initialValue > -54.8f) {redInitialOpacity = 0.919f;}
+        else if(initialValue > -55.f) {redInitialOpacity = 0.922f;}
+        else if(initialValue > -55.2f) {redInitialOpacity = 0.925f;}
+        else if(initialValue > -55.4f) {redInitialOpacity = 0.928f;}
+        else if(initialValue > -55.6f) {redInitialOpacity = 0.931f;}
+        else if(initialValue > -55.8f) {redInitialOpacity = 0.934f;}
+        else if(initialValue > -56.f) {redInitialOpacity = 0.937f;}
+        else if(initialValue > -56.2f) {redInitialOpacity = 0.940f;}
+        else if(initialValue > -56.4f) {redInitialOpacity = 0.943f;}
+        else if(initialValue > -56.6f) {redInitialOpacity = 0.946f;}
+        else if(initialValue > -56.8f) {redInitialOpacity = 0.949f;}
+        else if(initialValue > -57.f) {redInitialOpacity = 0.952f;}
+        else if(initialValue > -57.2f) {redInitialOpacity = 0.955f;}
+        else if(initialValue > -57.4f) {redInitialOpacity = 0.958f;}
+        else if(initialValue > -57.6f) {redInitialOpacity = 0.961f;}
+        else if(initialValue > -57.8f) {redInitialOpacity = 0.964f;}
+        else if(initialValue > -58.f) {redInitialOpacity = 0.967f;}
+        else if(initialValue > -58.2f) {redInitialOpacity = 0.97f;}
+        else if(initialValue > -58.4f) {redInitialOpacity = 0.973f;}
+        else if(initialValue > -58.6f) {redInitialOpacity = 0.976f;}
+        else if(initialValue > -58.8f) {redInitialOpacity = 0.979f;}
+        else if(initialValue > -59.f) {redInitialOpacity = 0.982f;}
+        else if(initialValue > -59.2f) {redInitialOpacity = 0.985f;}
+        else if(initialValue > -59.4f) {redInitialOpacity = 0.988f;}
+        else if(initialValue > -59.6f) {redInitialOpacity = 0.991f;}
+        else if(initialValue > -59.8f) {redInitialOpacity = 0.994f;}
+        else if(initialValue > -60.f) {redInitialOpacity = 0.997f;}
+        else if(initialValue == -60.f) {redInitialOpacity = redOpacity[121];}
+        else {redInitialOpacity = redOpacity[0];}
+        
+        repaint();
+            
     }
     if (slider == &l2RGainKnob){
-//        audioProcessor.l2RGainDropdB = slider->getValue();
+        float l2RValue = slider -> getValue();
     }
     if (slider == &r2LGainKnob){
-//        audioProcessor.r2LGainDropdB = slider->getValue();
+        float r2LValue = slider -> getValue();
     }
     if (slider == &tempoSelector) {
-//        audioProcessor.tempo = slider->getValue();
+
     }
     if (slider == &mixKnob) {
         float mixValue = slider->getValue();

@@ -8,6 +8,93 @@
 
 namespace BinaryData
 {
+    extern const char*   PingPongDelayUI_jpg;
+    const int            PingPongDelayUI_jpgSize = 308159;
+
+    extern const char*   QuarterNoteSelected_jpg;
+    const int            QuarterNoteSelected_jpgSize = 47082;
+
+    extern const char*   RightSelected_jpg;
+    const int            RightSelected_jpgSize = 32567;
+
+    extern const char*   SixteenthNoteSelected_jpg;
+    const int            SixteenthNoteSelected_jpgSize = 47434;
+
+    extern const char*   SmoothOFF_jpg;
+    const int            SmoothOFF_jpgSize = 30290;
+
+    extern const char*   SmoothON_jpg;
+    const int            SmoothON_jpgSize = 42723;
+
+    extern const char*   SyncOFF_jpg;
+    const int            SyncOFF_jpgSize = 26996;
+
+    extern const char*   SyncON_jpg;
+    const int            SyncON_jpgSize = 34862;
+
+    extern const char*   ThirtysecondNoteSelected_jpg;
+    const int            ThirtysecondNoteSelected_jpgSize = 47944;
+
+    extern const char*   TripletOFF_jpg;
+    const int            TripletOFF_jpgSize = 26422;
+
+    extern const char*   TripletON_jpg;
+    const int            TripletON_jpgSize = 32144;
+
+    extern const char*   WholeNoteSelected_jpg;
+    const int            WholeNoteSelected_jpgSize = 47483;
+
+    extern const char*   LeftSelected_jpg;
+    const int            LeftSelected_jpgSize = 30566;
+
+    extern const char*   HalfNoteSelected_jpg;
+    const int            HalfNoteSelected_jpgSize = 47341;
+
+    extern const char*   BypassOFF_jpg;
+    const int            BypassOFF_jpgSize = 31093;
+
+    extern const char*   BypassON_jpg;
+    const int            BypassON_jpgSize = 42131;
+
+    extern const char*   DottedOFF_jpg;
+    const int            DottedOFF_jpgSize = 28615;
+
+    extern const char*   DottedON_jpg;
+    const int            DottedON_jpgSize = 36915;
+
+    extern const char*   EighthNoteSelected_jpg;
+    const int            EighthNoteSelected_jpgSize = 47416;
+
+    extern const char*   PingPongSpriteSheetHalfNote_jpg;
+    const int            PingPongSpriteSheetHalfNote_jpgSize = 476595;
+
+    extern const char*   PingPongSpriteSheetSixteenthNote_jpg;
+    const int            PingPongSpriteSheetSixteenthNote_jpgSize = 476699;
+
+    extern const char*   PingPongSpriteSheetThirtysecondNote_jpg;
+    const int            PingPongSpriteSheetThirtysecondNote_jpgSize = 477247;
+
+    extern const char*   PingPongSpriteSheetWholeNote_jpg;
+    const int            PingPongSpriteSheetWholeNote_jpgSize = 476340;
+
+    extern const char*   FinalPingPongSpriteSheetBottomNotes_jpg;
+    const int            FinalPingPongSpriteSheetBottomNotes_jpgSize = 564737;
+
+    extern const char*   FinalPingPongDelayUI_jpg;
+    const int            FinalPingPongDelayUI_jpgSize = 508113;
+
+    extern const char*   FinalPingPongSpriteSheet_jpg;
+    const int            FinalPingPongSpriteSheet_jpgSize = 695500;
+
+    extern const char*   InitialEmpty_jpg;
+    const int            InitialEmpty_jpgSize = 36308;
+
+    extern const char*   InitialOrange_jpg;
+    const int            InitialOrange_jpgSize = 44346;
+
+    extern const char*   InitialRed_jpg;
+    const int            InitialRed_jpgSize = 45461;
+
     extern const char*   Mix90x5Knob_jpg;
     const int            Mix90x5Knob_jpgSize = 131796;
 
@@ -630,7 +717,7 @@ namespace BinaryData
     const int            FullScalePingpongDelayUI2500_jpgSize = 875273;
 
     // Number of elements in the namedResourceList and originalFileNames arrays.
-    const int namedResourceListSize = 207;
+    const int namedResourceListSize = 236;
 
     // Points to the start of a list of resource names.
     extern const char* namedResourceList[];
