@@ -129,13 +129,43 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     
     
     
-    emptyInitial = juce::ImageCache::getFromMemory(BinaryData::InitialEmpty_jpg, BinaryData::InitialEmpty_jpgSize);
-    orangeInitial = juce::ImageCache::getFromMemory(BinaryData::InitialOrange_jpg, BinaryData::InitialOrange_jpgSize);
-    redInitial = juce::ImageCache::getFromMemory(BinaryData::InitialRed_jpg, BinaryData::InitialRed_jpgSize);
+//    emptyInitial = juce::ImageCache::getFromMemory(BinaryData::InitialEmpty_jpg, BinaryData::InitialEmpty_jpgSize);
+//    orangeInitial = juce::ImageCache::getFromMemory(BinaryData::InitialOrange_jpg, BinaryData::InitialOrange_jpgSize);
+//    redInitial = juce::ImageCache::getFromMemory(BinaryData::InitialRed_jpg, BinaryData::InitialRed_jpgSize);
+//
+//    emptyInitial = emptyInitial.rescaled(150, 75);
+//    orangeInitial = orangeInitial.rescaled(150, 75);
+//    redInitial = redInitial.rescaled(150, 75);
     
-    emptyInitial = emptyInitial.rescaled(150, 75);
-    orangeInitial = orangeInitial.rescaled(150, 75);
-    redInitial = redInitial.rescaled(150, 75);
+    leftPingPong = juce::ImageCache::getFromMemory(BinaryData::LeftPingPong_png, BinaryData::LeftPingPong_pngSize);
+    rightPingPong = juce::ImageCache::getFromMemory(BinaryData::RightPingPong_png, BinaryData::RightPingPong_pngSize);
+    leftPingPongRed = juce::ImageCache::getFromMemory(BinaryData::LeftPingPongRed_png, BinaryData::LeftPingPongRed_pngSize);
+    rightPingPongRed = juce::ImageCache::getFromMemory(BinaryData::RightPingPongRed_png, BinaryData::RightPingPongRed_pngSize);
+    
+    leftPingPong = leftPingPong.rescaled(80, 80, juce::Graphics::highResamplingQuality);
+    rightPingPong = rightPingPong.rescaled(80, 80, juce::Graphics::highResamplingQuality);
+    leftPingPongRed = leftPingPongRed.rescaled(80, 80, juce::Graphics::highResamplingQuality);
+    rightPingPongRed = rightPingPongRed.rescaled(80, 80, juce::Graphics::highResamplingQuality);
+    
+    baseInitialDrop = juce::ImageCache::getFromMemory(BinaryData::BaseArrowInitialGain_png, BinaryData::BaseArrowInitialGain_pngSize);
+    baseL2RDrop = juce::ImageCache::getFromMemory(BinaryData::BaseArrowL2RGain_png, BinaryData::BaseArrowL2RGain_pngSize);
+    baseR2LDrop = juce::ImageCache::getFromMemory(BinaryData::BaseArrowR2LGain_png, BinaryData::BaseArrowR2LGain_pngSize);
+    baseR2LFinalDrop = juce::ImageCache::getFromMemory(BinaryData::BaseArrowFinalGain_png, BinaryData::BaseArrowFinalGain_pngSize);
+    
+    redInitialDrop = juce::ImageCache::getFromMemory(BinaryData::RedArrowInitialGain_png, BinaryData::RedArrowInitialGain_pngSize);
+    redL2RDrop = juce::ImageCache::getFromMemory(BinaryData::RedArrowL2RGain_png, BinaryData::RedArrowL2RGain_pngSize);
+    redR2LDrop = juce::ImageCache::getFromMemory(BinaryData::RedArrowR2LGain_png, BinaryData::RedArrowR2LGain_pngSize);
+    redR2LFinalDrop = juce::ImageCache::getFromMemory(BinaryData::RedArrowFinalGain_png, BinaryData::RedArrowFinalGain_pngSize);
+    
+    baseInitialDrop = baseInitialDrop.rescaled(192, 96, juce::Graphics::highResamplingQuality);
+    baseL2RDrop = baseL2RDrop.rescaled(320, 192, juce::Graphics::highResamplingQuality);
+    baseR2LDrop = baseR2LDrop.rescaled(320, 192, juce::Graphics::highResamplingQuality);
+    baseR2LFinalDrop = baseR2LFinalDrop.rescaled(320, 192, juce::Graphics::highResamplingQuality);
+    
+    redInitialDrop = redInitialDrop.rescaled(192, 96, juce::Graphics::highResamplingQuality);
+    redL2RDrop = redL2RDrop.rescaled(320, 192, juce::Graphics::highResamplingQuality);
+    redR2LDrop = redR2LDrop.rescaled(320, 192, juce::Graphics::highResamplingQuality);
+    redR2LFinalDrop = redR2LFinalDrop.rescaled(320, 192, juce::Graphics::highResamplingQuality);
 
     
     // Knob images 0 - 9.5 YYY
@@ -448,7 +478,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     
     smoothKnob.addListener(this);
     // Specify location in window (xPos,yPos,width,height)
-//    smoothKnob.setBounds(260,400,160,100);
+    smoothKnob.setBounds(260,400,160,100);
     smoothKnob.setRange(0.f,500.f,0.1); // (min, max, interval)
     smoothKnob.setValue(0.f); // initial value
     smoothKnob.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
@@ -611,25 +641,25 @@ void Coleman_HW2AudioProcessorEditor::paint (juce::Graphics& g)
     g.drawImageAt(bgImage, 0, 0);
     
     if(!bypassOutcome.isValid()) {
-        bypassOutcome = bypassOFFImage.getClippedImage(imageCrop);
+        bypassOutcome = bypassOFFImage;
     }
     if(!syncOutcome.isValid()) {
-        syncOutcome = syncOFFImage.getClippedImage(imageCrop);
+        syncOutcome = syncOFFImage;
     }
     if(!noteOutcome.isValid()) {
         noteOutcome = noteSelector8th;
     }
     if(!tripletOutcome.isValid()) {
-        tripletOutcome = tripletOFFImage.getClippedImage(imageCrop);
+        tripletOutcome = tripletOFFImage;
     }
     if(!dottedOutcome.isValid()) {
-        dottedOutcome = dottedOFFImage.getClippedImage(imageCrop);
+        dottedOutcome = dottedOFFImage;
     }
     if(!leftRightOutcome.isValid()) {
-        leftRightOutcome = leftFirstImage.getClippedImage(imageCrop);
+        leftRightOutcome = leftFirstImage;
     }
     if(!smoothOutcome.isValid()) {
-        smoothOutcome = smoothOFFImage.getClippedImage(imageCrop);
+        smoothOutcome = smoothOFFImage;
     }
     
     g.drawImage(bypassOutcome, 16, 32, 128, 80, 0, 0, 400, 250);
@@ -649,19 +679,73 @@ void Coleman_HW2AudioProcessorEditor::paint (juce::Graphics& g)
     g.drawImage(knobPosition, 680, 190, 100, 100, 0, 0, 1000, 1000);
 
     
-    emptyInitialDrawable.setImage(emptyInitial);
+//    emptyInitialDrawable.setImage(emptyInitial);
+//
+//    emptyInitialDrawable.drawAt(g, 300, 20, emptyBaseOpacity);
     
-    emptyInitialDrawable.drawAt(g, 300, 20, 1.f);
+    baseInitialDropDrawable.setImage(baseInitialDrop);
+    baseInitialDropDrawable.drawAt(g, 240, 32, emptyBaseOpacity);
+    
+    redInitialDropDrawable.setImage(redInitialDrop);
+    redInitialDropDrawable.drawAt(g, 240, 32, redInitialOpacity);
+    
+    
+    baseL2RDropADrawable.setImage(baseL2RDrop);
+    baseL2RDropADrawable.drawAt(g, 240, 112, emptyBaseOpacity);
+    
+    redL2RDropADrawable.setImage(redL2RDrop);
+    redL2RDropADrawable.drawAt(g, 240, 112, redInitialOpacity);
+    
+    
+    baseR2LDropADrawable.setImage(baseR2LDrop);
+    baseR2LDropADrawable.drawAt(g, 240, 256, emptyBaseOpacity);
+    
+    redR2LDropADrawable.setImage(redR2LDrop);
+    redR2LDropADrawable.drawAt(g, 240, 256, redInitialOpacity);
+    
+    
+    baseL2RDropBDrawable.setImage(baseL2RDrop);
+    baseL2RDropBDrawable.drawAt(g, 240, 400, emptyBaseOpacity);
+    
+    redL2RDropBDrawable.setImage(redL2RDrop);
+    redL2RDropBDrawable.drawAt(g, 240, 400, redInitialOpacity);
+    
+    
+    baseR2LDropFinalDrawable.setImage(baseR2LFinalDrop);
+    baseR2LDropFinalDrawable.drawAt(g, 240, 544, emptyBaseOpacity);
+    
+    redR2LDropFinalDrawable.setImage(redR2LFinalDrop);
+    redR2LDropFinalDrawable.drawAt(g, 240, 544, redInitialOpacity);
+    
 
+    leftPingPongA.setImage(leftPingPong);
+    rightPingPongA.setImage(rightPingPong);
+    leftPingPongB.setImage(leftPingPong);
+    rightPingPongB.setImage(rightPingPong);
     
-    orangeInitialDrawable.setImage(orangeInitial);
+    leftPingPongRedA.setImage(leftPingPongRed);
+    rightPingPongRedA.setImage(rightPingPongRed);
+    leftPingPongRedB.setImage(leftPingPongRed);
+    rightPingPongRedB.setImage(rightPingPongRed);
     
-    orangeInitialDrawable.drawAt(g, 300, 20, 1.f);
+    leftPingPongA.drawAt(g, 192, 80, emptyBaseOpacity);
+    rightPingPongA.drawAt(g, 544, 224, 1.f);
+    leftPingPongB.drawAt(g, 192, 368, 1.f);
+    rightPingPongB.drawAt(g, 544, 512, 1.f);
+    
+    leftPingPongRedA.drawAt(g, 192, 80, redInitialOpacity);
+    rightPingPongRedA.drawAt(g, 544, 224, 1.f);
+    leftPingPongRedB.drawAt(g, 192, 368, 0.5f);
+    rightPingPongRedB.drawAt(g, 544, 512, 0.f);
+    
     
 
-    redInitialDrawable.setImage(redInitial);
+//
+//    orangeInitialDrawable.setImage(orangeInitial);
+//
+//    orangeInitialDrawable.drawAt(g, 300, 20, 1.f);
     
-    redInitialDrawable.drawAt(g, 300, 20, redInitialOpacity);
+
     
 
 
@@ -695,18 +779,18 @@ void Coleman_HW2AudioProcessorEditor::buttonClicked(juce::Button *button){
     if (button == &bypassButton){
         bool bypassBool = bypassButton.getToggleState();
         if(bypassBool) {
-            bypassOutcome = bypassONImage.getClippedImage(imageCrop);
+            bypassOutcome = bypassONImage;
         } else {
-            bypassOutcome = bypassOFFImage.getClippedImage(imageCrop);
+            bypassOutcome = bypassOFFImage;
         }
         repaint(16, 32, 128, 64);
     }
     if (button == &syncButton) {
         bool syncBool = syncButton.getToggleState();
         if(syncBool) {
-            syncOutcome = syncONImage.getClippedImage(imageCrop);
+            syncOutcome = syncONImage;
         } else {
-            syncOutcome = syncOFFImage.getClippedImage(imageCrop);
+            syncOutcome = syncOFFImage;
         }
         repaint(16, 144, 128, 64);
     }
@@ -737,41 +821,41 @@ void Coleman_HW2AudioProcessorEditor::buttonClicked(juce::Button *button){
     if (button == &tripletButton){
         bool tripletBool = tripletButton.getToggleState();
         if(tripletBool) {
-            tripletOutcome = tripletONImage.getClippedImage(imageCrop);
+            tripletOutcome = tripletONImage;
         } else {
-            tripletOutcome = tripletOFFImage.getClippedImage(imageCrop);
+            tripletOutcome = tripletOFFImage;
         }
         repaint(16, 480, 128, 64);
     }
     if (button == &dottedButton) {
         bool dottedBool = dottedButton.getToggleState();
         if(dottedBool) {
-            dottedOutcome = dottedONImage.getClippedImage(imageCrop);
+            dottedOutcome = dottedONImage;
         } else {
-            dottedOutcome = dottedOFFImage.getClippedImage(imageCrop);
+            dottedOutcome = dottedOFFImage;
         }
         repaint(16, 544, 128, 64);
     }
     if (button == &leftFirstButton) {
         bool leftSelectedBool = leftFirstButton.getToggleState();
         if(leftSelectedBool) {
-            leftRightOutcome = leftFirstImage.getClippedImage(imageCrop);
+            leftRightOutcome = leftFirstImage;
             repaint(656, 32, 128, 64);
         }
     }
     if (button == &rightFirstButton) {
         bool rightSelectedBool = rightFirstButton.getToggleState();
         if(rightSelectedBool) {
-            leftRightOutcome = rightFirstImage.getClippedImage(imageCrop);
+            leftRightOutcome = rightFirstImage;
             repaint(656, 32, 128, 64);
         }
     }
     if (button == &smoothButton) {
         bool smoothBool = smoothButton.getToggleState();
         if(smoothBool) {
-            smoothOutcome = smoothONImage.getClippedImage(imageCrop);
+            smoothOutcome = smoothONImage;
         } else {
-            smoothOutcome = smoothOFFImage.getClippedImage(imageCrop);
+            smoothOutcome = smoothOFFImage;
         }
         repaint(656, 368, 128, 64);
     }
@@ -912,326 +996,227 @@ void Coleman_HW2AudioProcessorEditor::sliderValueChanged(juce::Slider * slider)
         else if(initialValue < 23.6f) {redInitialOpacity = redOpacity[118];}
         else if(initialValue < 23.8f) {redInitialOpacity = redOpacity[119];}
         else if(initialValue < 24.f)  {redInitialOpacity = redOpacity[120];}
-        else if(initialValue == 24.f) {redInitialOpacity = redOpacity[121];}
+        else if(initialValue >= 24.f) {redInitialOpacity = redOpacity[121];}
         else {redInitialOpacity = redOpacity[0];}
         
         
-        if(initialValue == 0.f) {orangeInitialOpacity = 0.f;}
-        else if(initialValue > -0.2f) {redInitialOpacity = 0.03f;}
-        else if(initialValue > -0.4f) {redInitialOpacity = 0.06f;}
-        else if(initialValue > -0.6f) {redInitialOpacity = 0.09f;}
-        else if(initialValue > -0.8f) {redInitialOpacity = 0.12f;}
-        else if(initialValue > -1.f)  {redInitialOpacity = 0.15f;}
-        else if(initialValue > -1.2f) {redInitialOpacity = 0.18f;}
-        else if(initialValue > -1.4f) {redInitialOpacity = 0.21f;}
-        else if(initialValue > -1.6f) {redInitialOpacity = 0.24f;}
-        else if(initialValue > -1.8f) {redInitialOpacity = 0.27f;}
-        else if(initialValue > -2.f)  {redInitialOpacity = 0.3f;}
-        else if(initialValue > -2.2f) {redInitialOpacity = 0.32f;}
-        else if(initialValue > -2.4f) {redInitialOpacity = 0.34f;}
-        else if(initialValue > -2.6f) {redInitialOpacity = 0.36f;}
-        else if(initialValue > -2.8f) {redInitialOpacity = 0.38f;}
-        else if(initialValue > -3.f)  {redInitialOpacity = 0.4f;}
-        else if(initialValue > -3.2f) {redInitialOpacity = 0.42f;}
-        else if(initialValue > -3.4f) {redInitialOpacity = 0.44f;}
-        else if(initialValue > -3.6f) {redInitialOpacity = 0.46f;}
-        else if(initialValue > -3.8f) {redInitialOpacity = 0.48f;}
-        else if(initialValue > -4.f)  {redInitialOpacity = 0.5f;}
-        else if(initialValue > -4.2f) {redInitialOpacity = 0.52f;}
-        else if(initialValue > -4.4f) {redInitialOpacity = 0.54f;}
-        else if(initialValue > -4.6f) {redInitialOpacity = 0.56f;}
-        else if(initialValue > -4.8f) {redInitialOpacity = 0.58f;}
-        else if(initialValue > -5.f)  {redInitialOpacity = 0.59f;}
-        else if(initialValue > -5.2f) {redInitialOpacity = 0.60f;}
-        else if(initialValue > -5.4f) {redInitialOpacity = 0.61f;}
-        else if(initialValue > -5.6f) {redInitialOpacity = 0.62f;}
-        else if(initialValue > -5.8f) {redInitialOpacity = 0.63f;}
-        else if(initialValue > -6.f)  {redInitialOpacity = 0.64f;}
+        if(initialValue == 0.f) {emptyBaseOpacity = baseOpacity[200];}
+        else if(initialValue > -0.2f) {emptyBaseOpacity = baseOpacity[199];}
+        else if(initialValue > -0.4f) {emptyBaseOpacity = baseOpacity[198];}
+        else if(initialValue > -0.6f) {emptyBaseOpacity = baseOpacity[197];}
+        else if(initialValue > -0.8f) {emptyBaseOpacity = baseOpacity[196];}
+        else if(initialValue > -1.f)  {emptyBaseOpacity = baseOpacity[195];}
+        else if(initialValue > -1.2f) {emptyBaseOpacity = baseOpacity[194];}
+        else if(initialValue > -1.4f) {emptyBaseOpacity = baseOpacity[193];}
+        else if(initialValue > -1.6f) {emptyBaseOpacity = baseOpacity[192];}
+        else if(initialValue > -1.8f) {emptyBaseOpacity = baseOpacity[191];}
+        else if(initialValue > -2.f)  {emptyBaseOpacity = baseOpacity[190];}
+        else if(initialValue > -2.2f) {emptyBaseOpacity = baseOpacity[189];}
+        else if(initialValue > -2.4f) {emptyBaseOpacity = baseOpacity[188];}
+        else if(initialValue > -2.6f) {emptyBaseOpacity = baseOpacity[187];}
+        else if(initialValue > -2.8f) {emptyBaseOpacity = baseOpacity[186];}
+        else if(initialValue > -3.f)  {emptyBaseOpacity = baseOpacity[185];}
+        else if(initialValue > -3.2f) {emptyBaseOpacity = baseOpacity[184];}
+        else if(initialValue > -3.4f) {emptyBaseOpacity = baseOpacity[183];}
+        else if(initialValue > -3.6f) {emptyBaseOpacity = baseOpacity[182];}
+        else if(initialValue > -3.8f) {emptyBaseOpacity = baseOpacity[181];}
+        else if(initialValue > -4.f)  {emptyBaseOpacity = baseOpacity[180];}
+        else if(initialValue > -4.2f) {emptyBaseOpacity = baseOpacity[179];}
+        else if(initialValue > -4.4f) {emptyBaseOpacity = baseOpacity[178];}
+        else if(initialValue > -4.6f) {emptyBaseOpacity = baseOpacity[177];}
+        else if(initialValue > -4.8f) {emptyBaseOpacity = baseOpacity[176];}
+        else if(initialValue > -5.f)  {emptyBaseOpacity = baseOpacity[175];}
+        else if(initialValue > -5.2f) {emptyBaseOpacity = baseOpacity[174];}
+        else if(initialValue > -5.4f) {emptyBaseOpacity = baseOpacity[173];}
+        else if(initialValue > -5.6f) {emptyBaseOpacity = baseOpacity[172];}
+        else if(initialValue > -5.8f) {emptyBaseOpacity = baseOpacity[171];}
+        else if(initialValue > -6.f)  {emptyBaseOpacity = baseOpacity[170];}
 
         // 6 dB <= Red values < 12 dB
-        else if(initialValue > -6.2f) {redInitialOpacity = 0.65f;}
-        else if(initialValue > -6.4f) {redInitialOpacity = 0.66f;}
-        else if(initialValue > -6.6f) {redInitialOpacity = 0.67f;}
-        else if(initialValue > -6.8f) {redInitialOpacity = 0.68f;}
-        else if(initialValue > -7.f) {redInitialOpacity = 0.69f;}
-        else if(initialValue > -7.2f) {redInitialOpacity = 0.70f;}
-        else if(initialValue > -7.4f) {redInitialOpacity = 0.71f;}
-        else if(initialValue > -7.6f) {redInitialOpacity = 0.72f;}
-        else if(initialValue > -7.8f) {redInitialOpacity = 0.73f;}
-        else if(initialValue > -8.f) {redInitialOpacity = 0.74f;}
-        else if(initialValue > -8.2f) {redInitialOpacity = 0.75f;}
-        else if(initialValue > -8.4f) {redInitialOpacity = 0.757f;}
-        else if(initialValue > -8.6f) {redInitialOpacity = 0.764f;}
-        else if(initialValue > -8.8f) {redInitialOpacity = 0.77f;}
-        else if(initialValue > -9.f) {redInitialOpacity = 0.772f;}
-        else if(initialValue > -9.2f) {redInitialOpacity = 0.775f;}
-        else if(initialValue > -9.4f) {redInitialOpacity = 0.778f;}
-        else if(initialValue > -9.6f) {redInitialOpacity = 0.781f;}
-        else if(initialValue > -9.8f) {redInitialOpacity = 0.784f;}
-        else if(initialValue > -10.f) {redInitialOpacity = 0.787f;}
-        else if(initialValue > -10.2f) {redInitialOpacity = 0.79f;}
-        else if(initialValue > -10.4f) {redInitialOpacity = 0.793f;}
-        else if(initialValue > -10.6f) {redInitialOpacity = 0.796f;}
-        else if(initialValue > -10.8f) {redInitialOpacity = 0.799f;}
-        else if(initialValue > -11.f) {redInitialOpacity = 0.802f;}
-        else if(initialValue > -11.2f) {redInitialOpacity = 0.805f;}
-        else if(initialValue > -11.4f) {redInitialOpacity = 0.808f;}
-        else if(initialValue > -11.6f) {redInitialOpacity = 0.811f;}
-        else if(initialValue > -11.8f) {redInitialOpacity = 0.814f;}
-        else if(initialValue > -12.f) {redInitialOpacity = 0.817f;}
+        else if(initialValue > -6.2f) {emptyBaseOpacity = baseOpacity[169];}
+        else if(initialValue > -6.4f) {emptyBaseOpacity = baseOpacity[168];}
+        else if(initialValue > -6.6f) {emptyBaseOpacity = baseOpacity[167];}
+        else if(initialValue > -6.8f) {emptyBaseOpacity = baseOpacity[166];}
+        else if(initialValue > -7.f)  {emptyBaseOpacity = baseOpacity[165];}
+        else if(initialValue > -7.2f) {emptyBaseOpacity = baseOpacity[164];}
+        else if(initialValue > -7.4f) {emptyBaseOpacity = baseOpacity[163];}
+        else if(initialValue > -7.6f) {emptyBaseOpacity = baseOpacity[162];}
+        else if(initialValue > -7.8f) {emptyBaseOpacity = baseOpacity[161];}
+        else if(initialValue > -8.f)  {emptyBaseOpacity = baseOpacity[160];}
+        else if(initialValue > -8.2f) {emptyBaseOpacity = baseOpacity[159];}
+        else if(initialValue > -8.4f) {emptyBaseOpacity = baseOpacity[158];}
+        else if(initialValue > -8.6f) {emptyBaseOpacity = baseOpacity[157];}
+        else if(initialValue > -8.8f) {emptyBaseOpacity = baseOpacity[156];}
+        else if(initialValue > -9.f)  {emptyBaseOpacity = baseOpacity[155];}
+        else if(initialValue > -9.2f) {emptyBaseOpacity = baseOpacity[154];}
+        else if(initialValue > -9.4f) {emptyBaseOpacity = baseOpacity[153];}
+        else if(initialValue > -9.6f) {emptyBaseOpacity = baseOpacity[152];}
+        else if(initialValue > -9.8f) {emptyBaseOpacity = baseOpacity[151];}
+        else if(initialValue > -10.f) {emptyBaseOpacity = baseOpacity[150];}
+        else if(initialValue > -10.2f) {emptyBaseOpacity = baseOpacity[149];}
+        else if(initialValue > -10.4f) {emptyBaseOpacity = baseOpacity[148];}
+        else if(initialValue > -10.6f) {emptyBaseOpacity = baseOpacity[147];}
+        else if(initialValue > -10.8f) {emptyBaseOpacity = baseOpacity[146];}
+        else if(initialValue > -11.f)  {emptyBaseOpacity = baseOpacity[145];}
+        else if(initialValue > -11.2f) {emptyBaseOpacity = baseOpacity[144];}
+        else if(initialValue > -11.4f) {emptyBaseOpacity = baseOpacity[143];}
+        else if(initialValue > -11.6f) {emptyBaseOpacity = baseOpacity[142];}
+        else if(initialValue > -11.8f) {emptyBaseOpacity = baseOpacity[141];}
+        else if(initialValue > -12.f)  {emptyBaseOpacity = baseOpacity[140];}
 
         // 12 dB <= Red values < 18 dB
-        else if(initialValue > -12.2f) {redInitialOpacity = 0.82f;}
-        else if(initialValue > -12.4f) {redInitialOpacity = 0.823f;}
-        else if(initialValue > -12.6f) {redInitialOpacity = 0.826f;}
-        else if(initialValue > -12.8f) {redInitialOpacity = 0.829f;}
-        else if(initialValue > -13.f) {redInitialOpacity = 0.832f;}
-        else if(initialValue > -13.2f) {redInitialOpacity = 0.835f;}
-        else if(initialValue > -13.4f) {redInitialOpacity = 0.838f;}
-        else if(initialValue > -13.6f) {redInitialOpacity = 0.841f;}
-        else if(initialValue > -13.8f) {redInitialOpacity = 0.844f;}
-        else if(initialValue > -14.f) {redInitialOpacity = 0.847f;}
-        else if(initialValue > -14.2f) {redInitialOpacity = 0.85f;}
-        else if(initialValue > -14.4f) {redInitialOpacity = 0.853f;}
-        else if(initialValue > -14.6f) {redInitialOpacity = 0.856f;}
-        else if(initialValue > -14.8f) {redInitialOpacity = 0.859f;}
-        else if(initialValue > -15.f) {redInitialOpacity = 0.862f;}
-        else if(initialValue > -15.2f) {redInitialOpacity = 0.865f;}
-        else if(initialValue > -15.4f) {redInitialOpacity = 0.868f;}
-        else if(initialValue > -15.6f) {redInitialOpacity = 0.871f;}
-        else if(initialValue > -15.8f) {redInitialOpacity = 0.874f;}
-        else if(initialValue > -16.f) {redInitialOpacity = 0.877f;}
-        else if(initialValue > -16.2f) {redInitialOpacity = 0.88f;}
-        else if(initialValue > -16.4f) {redInitialOpacity = 0.883f;}
-        else if(initialValue > -16.6f) {redInitialOpacity = 0.886f;}
-        else if(initialValue > -16.8f) {redInitialOpacity = 0.889f;}
-        else if(initialValue > -17.f) {redInitialOpacity = 0.892f;}
-        else if(initialValue > -17.2f) {redInitialOpacity = 0.895f;}
-        else if(initialValue > -17.4f) {redInitialOpacity = 0.898f;}
-        else if(initialValue > -17.6f) {redInitialOpacity = 0.901f;}
-        else if(initialValue > -17.8f) {redInitialOpacity = 0.904f;}
-        else if(initialValue > -18.f) {redInitialOpacity = 0.907f;}
+        else if(initialValue > -12.2f) {emptyBaseOpacity = baseOpacity[139];}
+        else if(initialValue > -12.4f) {emptyBaseOpacity = baseOpacity[138];}
+        else if(initialValue > -12.6f) {emptyBaseOpacity = baseOpacity[137];}
+        else if(initialValue > -12.8f) {emptyBaseOpacity = baseOpacity[136];}
+        else if(initialValue > -13.f)  {emptyBaseOpacity = baseOpacity[135];}
+        else if(initialValue > -13.2f) {emptyBaseOpacity = baseOpacity[134];}
+        else if(initialValue > -13.4f) {emptyBaseOpacity = baseOpacity[133];}
+        else if(initialValue > -13.6f) {emptyBaseOpacity = baseOpacity[132];}
+        else if(initialValue > -13.8f) {emptyBaseOpacity = baseOpacity[131];}
+        else if(initialValue > -14.f)  {emptyBaseOpacity = baseOpacity[130];}
+        else if(initialValue > -14.2f) {emptyBaseOpacity = baseOpacity[129];}
+        else if(initialValue > -14.4f) {emptyBaseOpacity = baseOpacity[128];}
+        else if(initialValue > -14.6f) {emptyBaseOpacity = baseOpacity[127];}
+        else if(initialValue > -14.8f) {emptyBaseOpacity = baseOpacity[126];}
+        else if(initialValue > -15.f)  {emptyBaseOpacity = baseOpacity[125];}
+        else if(initialValue > -15.2f) {emptyBaseOpacity = baseOpacity[124];}
+        else if(initialValue > -15.4f) {emptyBaseOpacity = baseOpacity[123];}
+        else if(initialValue > -15.6f) {emptyBaseOpacity = baseOpacity[122];}
+        else if(initialValue > -15.8f) {emptyBaseOpacity = baseOpacity[121];}
+        else if(initialValue > -16.f)  {emptyBaseOpacity = baseOpacity[120];}
+        else if(initialValue > -16.2f) {emptyBaseOpacity = baseOpacity[119];}
+        else if(initialValue > -16.4f) {emptyBaseOpacity = baseOpacity[118];}
+        else if(initialValue > -16.6f) {emptyBaseOpacity = baseOpacity[117];}
+        else if(initialValue > -16.8f) {emptyBaseOpacity = baseOpacity[116];}
+        else if(initialValue > -17.f)  {emptyBaseOpacity = baseOpacity[115];}
+        else if(initialValue > -17.2f) {emptyBaseOpacity = baseOpacity[114];}
+        else if(initialValue > -17.4f) {emptyBaseOpacity = baseOpacity[113];}
+        else if(initialValue > -17.6f) {emptyBaseOpacity = baseOpacity[112];}
+        else if(initialValue > -17.8f) {emptyBaseOpacity = baseOpacity[111];}
+        else if(initialValue > -18.f)  {emptyBaseOpacity = baseOpacity[110];}
 
         // 18 dB <= Red values <= 24 dB
-        else if(initialValue > -18.2f) {redInitialOpacity = 0.91f;}
-        else if(initialValue > -18.4f) {redInitialOpacity = 0.913f;}
-        else if(initialValue > -18.6f) {redInitialOpacity = 0.916f;}
-        else if(initialValue > -18.8f) {redInitialOpacity = 0.919f;}
-        else if(initialValue > -19.f) {redInitialOpacity = 0.922f;}
-        else if(initialValue > -19.2f) {redInitialOpacity = 0.925f;}
-        else if(initialValue > -19.4f) {redInitialOpacity = 0.928f;}
-        else if(initialValue > -19.6f) {redInitialOpacity = 0.931f;}
-        else if(initialValue > -19.8f) {redInitialOpacity = 0.934f;}
-        else if(initialValue > -20.f) {redInitialOpacity = 0.937f;}
-        else if(initialValue > -20.2f) {redInitialOpacity = 0.940f;}
-        else if(initialValue > -20.4f) {redInitialOpacity = 0.943f;}
-        else if(initialValue > -20.6f) {redInitialOpacity = 0.946f;}
-        else if(initialValue > -20.8f) {redInitialOpacity = 0.949f;}
-        else if(initialValue > -21.f) {redInitialOpacity = 0.952f;}
-        else if(initialValue > -21.2f) {redInitialOpacity = 0.955f;}
-        else if(initialValue > -21.4f) {redInitialOpacity = 0.958f;}
-        else if(initialValue > -21.6f) {redInitialOpacity = 0.961f;}
-        else if(initialValue > -21.8f) {redInitialOpacity = 0.964f;}
-        else if(initialValue > -22.f) {redInitialOpacity = 0.967f;}
-        else if(initialValue > -22.2f) {redInitialOpacity = 0.97f;}
-        else if(initialValue > -22.4f) {redInitialOpacity = 0.973f;}
-        else if(initialValue > -22.6f) {redInitialOpacity = 0.976f;}
-        else if(initialValue > -22.8f) {redInitialOpacity = 0.979f;}
-        else if(initialValue > -23.f) {redInitialOpacity = 0.982f;}
-        else if(initialValue > -23.2f) {redInitialOpacity = 0.985f;}
-        else if(initialValue > -23.4f) {redInitialOpacity = 0.988f;}
-        else if(initialValue > -23.6f) {redInitialOpacity = 0.991f;}
-        else if(initialValue > -23.8f) {redInitialOpacity = 0.994f;}
-        else if(initialValue > -24.f) {redInitialOpacity = 0.997f;}
+        else if(initialValue > -18.2f) {emptyBaseOpacity = baseOpacity[109];}
+        else if(initialValue > -18.4f) {emptyBaseOpacity = baseOpacity[108];}
+        else if(initialValue > -18.6f) {emptyBaseOpacity = baseOpacity[107];}
+        else if(initialValue > -18.8f) {emptyBaseOpacity = baseOpacity[106];}
+        else if(initialValue > -19.f)  {emptyBaseOpacity = baseOpacity[105];}
+        else if(initialValue > -19.2f) {emptyBaseOpacity = baseOpacity[104];}
+        else if(initialValue > -19.4f) {emptyBaseOpacity = baseOpacity[103];}
+        else if(initialValue > -19.6f) {emptyBaseOpacity = baseOpacity[102];}
+        else if(initialValue > -19.8f) {emptyBaseOpacity = baseOpacity[101];}
+        else if(initialValue > -20.f)  {emptyBaseOpacity = baseOpacity[100];}
+        else if(initialValue > -20.2f) {emptyBaseOpacity = baseOpacity[99];}
+        else if(initialValue > -20.4f) {emptyBaseOpacity = baseOpacity[98];}
+        else if(initialValue > -20.6f) {emptyBaseOpacity = baseOpacity[97];}
+        else if(initialValue > -20.8f) {emptyBaseOpacity = baseOpacity[96];}
+        else if(initialValue > -21.f)  {emptyBaseOpacity = baseOpacity[95];}
+        else if(initialValue > -21.2f) {emptyBaseOpacity = baseOpacity[94];}
+        else if(initialValue > -21.4f) {emptyBaseOpacity = baseOpacity[93];}
+        else if(initialValue > -21.6f) {emptyBaseOpacity = baseOpacity[92];}
+        else if(initialValue > -21.8f) {emptyBaseOpacity = baseOpacity[91];}
+        else if(initialValue > -22.f)  {emptyBaseOpacity = baseOpacity[90];}
+        else if(initialValue > -22.2f) {emptyBaseOpacity = baseOpacity[89];}
+        else if(initialValue > -22.4f) {emptyBaseOpacity = baseOpacity[88];}
+        else if(initialValue > -22.6f) {emptyBaseOpacity = baseOpacity[87];}
+        else if(initialValue > -22.8f) {emptyBaseOpacity = baseOpacity[86];}
+        else if(initialValue > -23.f)  {emptyBaseOpacity = baseOpacity[85];}
+        else if(initialValue > -23.2f) {emptyBaseOpacity = baseOpacity[84];}
+        else if(initialValue > -23.4f) {emptyBaseOpacity = baseOpacity[83];}
+        else if(initialValue > -23.6f) {emptyBaseOpacity = baseOpacity[82];}
+        else if(initialValue > -23.8f) {emptyBaseOpacity = baseOpacity[81];}
+        else if(initialValue > -24.f)  {emptyBaseOpacity = baseOpacity[80];}
 
         // 18 dB <= Red values <= 24 dB
-        else if(initialValue > -24.2f) {redInitialOpacity = 0.91f;}
-        else if(initialValue > -24.4f) {redInitialOpacity = 0.913f;}
-        else if(initialValue > -24.6f) {redInitialOpacity = 0.916f;}
-        else if(initialValue > -24.8f) {redInitialOpacity = 0.919f;}
-        else if(initialValue > -25.f) {redInitialOpacity = 0.922f;}
-        else if(initialValue > -25.2f) {redInitialOpacity = 0.925f;}
-        else if(initialValue > -25.4f) {redInitialOpacity = 0.928f;}
-        else if(initialValue > -25.6f) {redInitialOpacity = 0.931f;}
-        else if(initialValue > -25.8f) {redInitialOpacity = 0.934f;}
-        else if(initialValue > -26.f) {redInitialOpacity = 0.937f;}
-        else if(initialValue > -26.2f) {redInitialOpacity = 0.940f;}
-        else if(initialValue > -26.4f) {redInitialOpacity = 0.943f;}
-        else if(initialValue > -26.6f) {redInitialOpacity = 0.946f;}
-        else if(initialValue > -26.8f) {redInitialOpacity = 0.949f;}
-        else if(initialValue > -27.f) {redInitialOpacity = 0.952f;}
-        else if(initialValue > -27.2f) {redInitialOpacity = 0.955f;}
-        else if(initialValue > -27.4f) {redInitialOpacity = 0.958f;}
-        else if(initialValue > -27.6f) {redInitialOpacity = 0.961f;}
-        else if(initialValue > -27.8f) {redInitialOpacity = 0.964f;}
-        else if(initialValue > -28.f) {redInitialOpacity = 0.967f;}
-        else if(initialValue > -28.2f) {redInitialOpacity = 0.97f;}
-        else if(initialValue > -28.4f) {redInitialOpacity = 0.973f;}
-        else if(initialValue > -28.6f) {redInitialOpacity = 0.976f;}
-        else if(initialValue > -28.8f) {redInitialOpacity = 0.979f;}
-        else if(initialValue > -29.f) {redInitialOpacity = 0.982f;}
-        else if(initialValue > -29.2f) {redInitialOpacity = 0.985f;}
-        else if(initialValue > -29.4f) {redInitialOpacity = 0.988f;}
-        else if(initialValue > -29.6f) {redInitialOpacity = 0.991f;}
-        else if(initialValue > -29.8f) {redInitialOpacity = 0.994f;}
-        else if(initialValue > -30.f) {redInitialOpacity = 0.997f;}
+        else if(initialValue > -24.3f) {emptyBaseOpacity = baseOpacity[79];}
+        else if(initialValue > -24.6f) {emptyBaseOpacity = baseOpacity[78];}
+        else if(initialValue > -24.9f) {emptyBaseOpacity = baseOpacity[77];}
+        else if(initialValue > -25.2f) {emptyBaseOpacity = baseOpacity[76];}
+        else if(initialValue > -25.5f) {emptyBaseOpacity = baseOpacity[75];}
+        else if(initialValue > -25.8f) {emptyBaseOpacity = baseOpacity[74];}
+        else if(initialValue > -26.1f) {emptyBaseOpacity = baseOpacity[73];}
+        else if(initialValue > -26.4f) {emptyBaseOpacity = baseOpacity[72];}
+        else if(initialValue > -26.7f) {emptyBaseOpacity = baseOpacity[71];}
+        else if(initialValue > -27.f)  {emptyBaseOpacity = baseOpacity[70];}
+        else if(initialValue > -27.3f) {emptyBaseOpacity = baseOpacity[69];}
+        else if(initialValue > -27.6f) {emptyBaseOpacity = baseOpacity[68];}
+        else if(initialValue > -27.9f) {emptyBaseOpacity = baseOpacity[67];}
+        else if(initialValue > -28.2f) {emptyBaseOpacity = baseOpacity[66];}
+        else if(initialValue > -28.5f) {emptyBaseOpacity = baseOpacity[65];}
+        else if(initialValue > -28.8f) {emptyBaseOpacity = baseOpacity[64];}
+        else if(initialValue > -29.1f) {emptyBaseOpacity = baseOpacity[63];}
+        else if(initialValue > -29.4f) {emptyBaseOpacity = baseOpacity[62];}
+        else if(initialValue > -29.7f) {emptyBaseOpacity = baseOpacity[61];}
+        else if(initialValue > -30.f)  {emptyBaseOpacity = baseOpacity[60];}
         
-        else if(initialValue > -30.2f) {redInitialOpacity = 0.03f;}
-        else if(initialValue > -30.4f) {redInitialOpacity = 0.06f;}
-        else if(initialValue > -30.6f) {redInitialOpacity = 0.09f;}
-        else if(initialValue > -30.8f) {redInitialOpacity = 0.12f;}
-        else if(initialValue > -31.f)  {redInitialOpacity = 0.15f;}
-        else if(initialValue > -31.2f) {redInitialOpacity = 0.18f;}
-        else if(initialValue > -31.4f) {redInitialOpacity = 0.21f;}
-        else if(initialValue > -31.6f) {redInitialOpacity = 0.24f;}
-        else if(initialValue > -31.8f) {redInitialOpacity = 0.27f;}
-        else if(initialValue > -32.f)  {redInitialOpacity = 0.3f;}
-        else if(initialValue > -32.2f) {redInitialOpacity = 0.32f;}
-        else if(initialValue > -32.4f) {redInitialOpacity = 0.34f;}
-        else if(initialValue > -32.6f) {redInitialOpacity = 0.36f;}
-        else if(initialValue > -32.8f) {redInitialOpacity = 0.38f;}
-        else if(initialValue > -33.f)  {redInitialOpacity = 0.4f;}
-        else if(initialValue > -33.2f) {redInitialOpacity = 0.42f;}
-        else if(initialValue > -33.4f) {redInitialOpacity = 0.44f;}
-        else if(initialValue > -33.6f) {redInitialOpacity = 0.46f;}
-        else if(initialValue > -33.8f) {redInitialOpacity = 0.48f;}
-        else if(initialValue > -34.f)  {redInitialOpacity = 0.5f;}
-        else if(initialValue > -34.2f) {redInitialOpacity = 0.52f;}
-        else if(initialValue > -34.4f) {redInitialOpacity = 0.54f;}
-        else if(initialValue > -34.6f) {redInitialOpacity = 0.56f;}
-        else if(initialValue > -34.8f) {redInitialOpacity = 0.58f;}
-        else if(initialValue > -35.f)  {redInitialOpacity = 0.59f;}
-        else if(initialValue > -35.2f) {redInitialOpacity = 0.60f;}
-        else if(initialValue > -35.4f) {redInitialOpacity = 0.61f;}
-        else if(initialValue > -35.6f) {redInitialOpacity = 0.62f;}
-        else if(initialValue > -35.8f) {redInitialOpacity = 0.63f;}
-        else if(initialValue > -36.f)  {redInitialOpacity = 0.64f;}
+        else if(initialValue > -30.3f) {emptyBaseOpacity = baseOpacity[59];}
+        else if(initialValue > -30.6f) {emptyBaseOpacity = baseOpacity[58];}
+        else if(initialValue > -30.9f) {emptyBaseOpacity = baseOpacity[57];}
+        else if(initialValue > -31.2f) {emptyBaseOpacity = baseOpacity[56];}
+        else if(initialValue > -31.5f) {emptyBaseOpacity = baseOpacity[55];}
+        else if(initialValue > -31.8f) {emptyBaseOpacity = baseOpacity[54];}
+        else if(initialValue > -32.1f) {emptyBaseOpacity = baseOpacity[53];}
+        else if(initialValue > -32.4f) {emptyBaseOpacity = baseOpacity[52];}
+        else if(initialValue > -32.7f) {emptyBaseOpacity = baseOpacity[51];}
+        else if(initialValue > -33.f)  {emptyBaseOpacity = baseOpacity[50];}
+        else if(initialValue > -33.3f) {emptyBaseOpacity = baseOpacity[49];}
+        else if(initialValue > -33.6f) {emptyBaseOpacity = baseOpacity[48];}
+        else if(initialValue > -33.9f) {emptyBaseOpacity = baseOpacity[47];}
+        else if(initialValue > -34.2f) {emptyBaseOpacity = baseOpacity[46];}
+        else if(initialValue > -34.5f) {emptyBaseOpacity = baseOpacity[45];}
+        else if(initialValue > -34.8f) {emptyBaseOpacity = baseOpacity[44];}
+        else if(initialValue > -35.1f) {emptyBaseOpacity = baseOpacity[43];}
+        else if(initialValue > -35.4f) {emptyBaseOpacity = baseOpacity[42];}
+        else if(initialValue > -35.7f) {emptyBaseOpacity = baseOpacity[41];}
+        else if(initialValue > -36.f)  {emptyBaseOpacity = baseOpacity[40];}
         
-        else if(initialValue > -36.2f) {redInitialOpacity = 0.65f;}
-        else if(initialValue > -36.4f) {redInitialOpacity = 0.66f;}
-        else if(initialValue > -36.6f) {redInitialOpacity = 0.67f;}
-        else if(initialValue > -36.8f) {redInitialOpacity = 0.68f;}
-        else if(initialValue > -37.f) {redInitialOpacity = 0.69f;}
-        else if(initialValue > -37.2f) {redInitialOpacity = 0.70f;}
-        else if(initialValue > -37.4f) {redInitialOpacity = 0.71f;}
-        else if(initialValue > -37.6f) {redInitialOpacity = 0.72f;}
-        else if(initialValue > -37.8f) {redInitialOpacity = 0.73f;}
-        else if(initialValue > -38.f) {redInitialOpacity = 0.74f;}
-        else if(initialValue > -38.2f) {redInitialOpacity = 0.75f;}
-        else if(initialValue > -38.4f) {redInitialOpacity = 0.757f;}
-        else if(initialValue > -38.6f) {redInitialOpacity = 0.764f;}
-        else if(initialValue > -38.8f) {redInitialOpacity = 0.77f;}
-        else if(initialValue > -39.f) {redInitialOpacity = 0.772f;}
-        else if(initialValue > -39.2f) {redInitialOpacity = 0.775f;}
-        else if(initialValue > -39.4f) {redInitialOpacity = 0.778f;}
-        else if(initialValue > -39.6f) {redInitialOpacity = 0.781f;}
-        else if(initialValue > -39.8f) {redInitialOpacity = 0.784f;}
-        else if(initialValue > -40.f) {redInitialOpacity = 0.787f;}
-        else if(initialValue > -40.2f) {redInitialOpacity = 0.79f;}
-        else if(initialValue > -40.4f) {redInitialOpacity = 0.793f;}
-        else if(initialValue > -40.6f) {redInitialOpacity = 0.796f;}
-        else if(initialValue > -40.8f) {redInitialOpacity = 0.799f;}
-        else if(initialValue > -41.f) {redInitialOpacity = 0.802f;}
-        else if(initialValue > -41.2f) {redInitialOpacity = 0.805f;}
-        else if(initialValue > -41.4f) {redInitialOpacity = 0.808f;}
-        else if(initialValue > -41.6f) {redInitialOpacity = 0.811f;}
-        else if(initialValue > -41.8f) {redInitialOpacity = 0.814f;}
-        else if(initialValue > -42.f) {redInitialOpacity = 0.817f;}
         
-        else if(initialValue > -42.2f) {redInitialOpacity = 0.82f;}
-        else if(initialValue > -42.4f) {redInitialOpacity = 0.823f;}
-        else if(initialValue > -42.6f) {redInitialOpacity = 0.826f;}
-        else if(initialValue > -42.8f) {redInitialOpacity = 0.829f;}
-        else if(initialValue > -43.f) {redInitialOpacity = 0.832f;}
-        else if(initialValue > -43.2f) {redInitialOpacity = 0.835f;}
-        else if(initialValue > -43.4f) {redInitialOpacity = 0.838f;}
-        else if(initialValue > -43.6f) {redInitialOpacity = 0.841f;}
-        else if(initialValue > -43.8f) {redInitialOpacity = 0.844f;}
-        else if(initialValue > -44.f) {redInitialOpacity = 0.847f;}
-        else if(initialValue > -44.2f) {redInitialOpacity = 0.85f;}
-        else if(initialValue > -44.4f) {redInitialOpacity = 0.853f;}
-        else if(initialValue > -44.6f) {redInitialOpacity = 0.856f;}
-        else if(initialValue > -44.8f) {redInitialOpacity = 0.859f;}
-        else if(initialValue > -45.f) {redInitialOpacity = 0.862f;}
-        else if(initialValue > -45.2f) {redInitialOpacity = 0.865f;}
-        else if(initialValue > -45.4f) {redInitialOpacity = 0.868f;}
-        else if(initialValue > -45.6f) {redInitialOpacity = 0.871f;}
-        else if(initialValue > -45.8f) {redInitialOpacity = 0.874f;}
-        else if(initialValue > -46.f) {redInitialOpacity = 0.877f;}
-        else if(initialValue > -46.2f) {redInitialOpacity = 0.88f;}
-        else if(initialValue > -46.4f) {redInitialOpacity = 0.883f;}
-        else if(initialValue > -46.6f) {redInitialOpacity = 0.886f;}
-        else if(initialValue > -46.8f) {redInitialOpacity = 0.889f;}
-        else if(initialValue > -47.f) {redInitialOpacity = 0.892f;}
-        else if(initialValue > -47.2f) {redInitialOpacity = 0.895f;}
-        else if(initialValue > -47.4f) {redInitialOpacity = 0.898f;}
-        else if(initialValue > -47.6f) {redInitialOpacity = 0.901f;}
-        else if(initialValue > -47.8f) {redInitialOpacity = 0.904f;}
-        else if(initialValue > -48.f) {redInitialOpacity = 0.907f;}
+        else if(initialValue > -36.6f) {emptyBaseOpacity = baseOpacity[39];}
+        else if(initialValue > -37.2f) {emptyBaseOpacity = baseOpacity[38];}
+        else if(initialValue > -37.8f) {emptyBaseOpacity = baseOpacity[37];}
+        else if(initialValue > -38.4f) {emptyBaseOpacity = baseOpacity[36];}
+        else if(initialValue > -39.f)  {emptyBaseOpacity = baseOpacity[35];}
+        else if(initialValue > -39.6f) {emptyBaseOpacity = baseOpacity[34];}
+        else if(initialValue > -40.2f) {emptyBaseOpacity = baseOpacity[33];}
+        else if(initialValue > -40.8f) {emptyBaseOpacity = baseOpacity[32];}
+        else if(initialValue > -41.4f) {emptyBaseOpacity = baseOpacity[31];}
+        else if(initialValue > -42.f)  {emptyBaseOpacity = baseOpacity[30];}
         
-        else if(initialValue > -48.2f) {redInitialOpacity = 0.91f;}
-        else if(initialValue > -48.4f) {redInitialOpacity = 0.913f;}
-        else if(initialValue > -48.6f) {redInitialOpacity = 0.916f;}
-        else if(initialValue > -48.8f) {redInitialOpacity = 0.919f;}
-        else if(initialValue > -49.f) {redInitialOpacity = 0.922f;}
-        else if(initialValue > -49.2f) {redInitialOpacity = 0.925f;}
-        else if(initialValue > -49.4f) {redInitialOpacity = 0.928f;}
-        else if(initialValue > -49.6f) {redInitialOpacity = 0.931f;}
-        else if(initialValue > -49.8f) {redInitialOpacity = 0.934f;}
-        else if(initialValue > -50.f) {redInitialOpacity = 0.937f;}
-        else if(initialValue > -50.2f) {redInitialOpacity = 0.940f;}
-        else if(initialValue > -50.4f) {redInitialOpacity = 0.943f;}
-        else if(initialValue > -50.6f) {redInitialOpacity = 0.946f;}
-        else if(initialValue > -50.8f) {redInitialOpacity = 0.949f;}
-        else if(initialValue > -51.f) {redInitialOpacity = 0.952f;}
-        else if(initialValue > -51.2f) {redInitialOpacity = 0.955f;}
-        else if(initialValue > -51.4f) {redInitialOpacity = 0.958f;}
-        else if(initialValue > -51.6f) {redInitialOpacity = 0.961f;}
-        else if(initialValue > -51.8f) {redInitialOpacity = 0.964f;}
-        else if(initialValue > -52.f) {redInitialOpacity = 0.967f;}
-        else if(initialValue > -52.2f) {redInitialOpacity = 0.97f;}
-        else if(initialValue > -52.4f) {redInitialOpacity = 0.973f;}
-        else if(initialValue > -52.6f) {redInitialOpacity = 0.976f;}
-        else if(initialValue > -52.8f) {redInitialOpacity = 0.979f;}
-        else if(initialValue > -53.f) {redInitialOpacity = 0.982f;}
-        else if(initialValue > -53.2f) {redInitialOpacity = 0.985f;}
-        else if(initialValue > -53.4f) {redInitialOpacity = 0.988f;}
-        else if(initialValue > -53.6f) {redInitialOpacity = 0.991f;}
-        else if(initialValue > -53.8f) {redInitialOpacity = 0.994f;}
-        else if(initialValue > -54.f) {redInitialOpacity = 0.997f;}
+        else if(initialValue > -42.6f) {emptyBaseOpacity = baseOpacity[29];}
+        else if(initialValue > -43.2f) {emptyBaseOpacity = baseOpacity[28];}
+        else if(initialValue > -43.8f) {emptyBaseOpacity = baseOpacity[27];}
+        else if(initialValue > -44.4f) {emptyBaseOpacity = baseOpacity[26];}
+        else if(initialValue > -45.f)  {emptyBaseOpacity = baseOpacity[25];}
+        else if(initialValue > -45.6f) {emptyBaseOpacity = baseOpacity[24];}
+        else if(initialValue > -46.2f) {emptyBaseOpacity = baseOpacity[23];}
+        else if(initialValue > -46.8f) {emptyBaseOpacity = baseOpacity[22];}
+        else if(initialValue > -47.4f) {emptyBaseOpacity = baseOpacity[21];}
+        else if(initialValue > -48.f)  {emptyBaseOpacity = baseOpacity[20];}
         
-        else if(initialValue > -54.2f) {redInitialOpacity = 0.91f;}
-        else if(initialValue > -54.4f) {redInitialOpacity = 0.913f;}
-        else if(initialValue > -54.6f) {redInitialOpacity = 0.916f;}
-        else if(initialValue > -54.8f) {redInitialOpacity = 0.919f;}
-        else if(initialValue > -55.f) {redInitialOpacity = 0.922f;}
-        else if(initialValue > -55.2f) {redInitialOpacity = 0.925f;}
-        else if(initialValue > -55.4f) {redInitialOpacity = 0.928f;}
-        else if(initialValue > -55.6f) {redInitialOpacity = 0.931f;}
-        else if(initialValue > -55.8f) {redInitialOpacity = 0.934f;}
-        else if(initialValue > -56.f) {redInitialOpacity = 0.937f;}
-        else if(initialValue > -56.2f) {redInitialOpacity = 0.940f;}
-        else if(initialValue > -56.4f) {redInitialOpacity = 0.943f;}
-        else if(initialValue > -56.6f) {redInitialOpacity = 0.946f;}
-        else if(initialValue > -56.8f) {redInitialOpacity = 0.949f;}
-        else if(initialValue > -57.f) {redInitialOpacity = 0.952f;}
-        else if(initialValue > -57.2f) {redInitialOpacity = 0.955f;}
-        else if(initialValue > -57.4f) {redInitialOpacity = 0.958f;}
-        else if(initialValue > -57.6f) {redInitialOpacity = 0.961f;}
-        else if(initialValue > -57.8f) {redInitialOpacity = 0.964f;}
-        else if(initialValue > -58.f) {redInitialOpacity = 0.967f;}
-        else if(initialValue > -58.2f) {redInitialOpacity = 0.97f;}
-        else if(initialValue > -58.4f) {redInitialOpacity = 0.973f;}
-        else if(initialValue > -58.6f) {redInitialOpacity = 0.976f;}
-        else if(initialValue > -58.8f) {redInitialOpacity = 0.979f;}
-        else if(initialValue > -59.f) {redInitialOpacity = 0.982f;}
-        else if(initialValue > -59.2f) {redInitialOpacity = 0.985f;}
-        else if(initialValue > -59.4f) {redInitialOpacity = 0.988f;}
-        else if(initialValue > -59.6f) {redInitialOpacity = 0.991f;}
-        else if(initialValue > -59.8f) {redInitialOpacity = 0.994f;}
-        else if(initialValue > -60.f) {redInitialOpacity = 0.997f;}
-        else if(initialValue == -60.f) {redInitialOpacity = redOpacity[121];}
-        else {redInitialOpacity = redOpacity[0];}
+        else if(initialValue > -48.6f) {emptyBaseOpacity = baseOpacity[19];}
+        else if(initialValue > -49.2f) {emptyBaseOpacity = baseOpacity[18];}
+        else if(initialValue > -49.8f) {emptyBaseOpacity = baseOpacity[17];}
+        else if(initialValue > -50.4f) {emptyBaseOpacity = baseOpacity[16];}
+        else if(initialValue > -51.f)  {emptyBaseOpacity = baseOpacity[15];}
+        else if(initialValue > -51.6f) {emptyBaseOpacity = baseOpacity[14];}
+        else if(initialValue > -52.2f) {emptyBaseOpacity = baseOpacity[13];}
+        else if(initialValue > -52.8f) {emptyBaseOpacity = baseOpacity[12];}
+        else if(initialValue > -53.4f) {emptyBaseOpacity = baseOpacity[11];}
+        else if(initialValue > -54.f)  {emptyBaseOpacity = baseOpacity[10];}
+        
+        else if(initialValue > -54.6f) {emptyBaseOpacity = baseOpacity[9];}
+        else if(initialValue > -55.2f) {emptyBaseOpacity = baseOpacity[8];}
+        else if(initialValue > -55.8f) {emptyBaseOpacity = baseOpacity[7];}
+        else if(initialValue > -56.4f) {emptyBaseOpacity = baseOpacity[6];}
+        else if(initialValue > -57.f)  {emptyBaseOpacity = baseOpacity[5];}
+        else if(initialValue > -57.6f) {emptyBaseOpacity = baseOpacity[4];}
+        else if(initialValue > -58.2f) {emptyBaseOpacity = baseOpacity[3];}
+        else if(initialValue > -58.8f) {emptyBaseOpacity = baseOpacity[2];}
+        else if(initialValue > -59.4f) {emptyBaseOpacity = baseOpacity[1];}
+        else if(initialValue > -60.f)  {emptyBaseOpacity = baseOpacity[0];}
+        else if(initialValue <= -60.f) {emptyBaseOpacity = baseOpacity[0];}
+        else {emptyBaseOpacity = baseOpacity[0];}
         
         repaint();
             

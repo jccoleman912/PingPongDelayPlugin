@@ -8,6 +8,42 @@
 
 namespace BinaryData
 {
+    extern const char*   RedArrowFinalGain_png;
+    const int            RedArrowFinalGain_pngSize = 31801;
+
+    extern const char*   BaseArrowFinalGain_png;
+    const int            BaseArrowFinalGain_pngSize = 27272;
+
+    extern const char*   RedArrowR2LGain_png;
+    const int            RedArrowR2LGain_pngSize = 52365;
+
+    extern const char*   BaseArrowR2LGain_png;
+    const int            BaseArrowR2LGain_pngSize = 45263;
+
+    extern const char*   RedArrowL2RGain_png;
+    const int            RedArrowL2RGain_pngSize = 47492;
+
+    extern const char*   BaseArrowL2RGain_png;
+    const int            BaseArrowL2RGain_pngSize = 26803;
+
+    extern const char*   RedArrowInitialGain_png;
+    const int            RedArrowInitialGain_pngSize = 17935;
+
+    extern const char*   BaseArrowInitialGain_png;
+    const int            BaseArrowInitialGain_pngSize = 17603;
+
+    extern const char*   RightPingPong_png;
+    const int            RightPingPong_pngSize = 21425;
+
+    extern const char*   RightPingPongRed_png;
+    const int            RightPingPongRed_pngSize = 17283;
+
+    extern const char*   LeftPingPong_png;
+    const int            LeftPingPong_pngSize = 21423;
+
+    extern const char*   LeftPingPongRed_png;
+    const int            LeftPingPongRed_pngSize = 17287;
+
     extern const char*   PingPongDelayUI_jpg;
     const int            PingPongDelayUI_jpgSize = 308159;
 
@@ -15,52 +51,52 @@ namespace BinaryData
     const int            QuarterNoteSelected_jpgSize = 47082;
 
     extern const char*   RightSelected_jpg;
-    const int            RightSelected_jpgSize = 32567;
+    const int            RightSelected_jpgSize = 32130;
 
     extern const char*   SixteenthNoteSelected_jpg;
     const int            SixteenthNoteSelected_jpgSize = 47434;
 
     extern const char*   SmoothOFF_jpg;
-    const int            SmoothOFF_jpgSize = 30290;
+    const int            SmoothOFF_jpgSize = 30138;
 
     extern const char*   SmoothON_jpg;
-    const int            SmoothON_jpgSize = 42723;
+    const int            SmoothON_jpgSize = 42496;
 
     extern const char*   SyncOFF_jpg;
-    const int            SyncOFF_jpgSize = 26996;
+    const int            SyncOFF_jpgSize = 26844;
 
     extern const char*   SyncON_jpg;
-    const int            SyncON_jpgSize = 34862;
+    const int            SyncON_jpgSize = 34635;
 
     extern const char*   ThirtysecondNoteSelected_jpg;
     const int            ThirtysecondNoteSelected_jpgSize = 47944;
 
     extern const char*   TripletOFF_jpg;
-    const int            TripletOFF_jpgSize = 26422;
+    const int            TripletOFF_jpgSize = 26270;
 
     extern const char*   TripletON_jpg;
-    const int            TripletON_jpgSize = 32144;
+    const int            TripletON_jpgSize = 31943;
 
     extern const char*   WholeNoteSelected_jpg;
     const int            WholeNoteSelected_jpgSize = 47483;
 
     extern const char*   LeftSelected_jpg;
-    const int            LeftSelected_jpgSize = 30566;
+    const int            LeftSelected_jpgSize = 30114;
 
     extern const char*   HalfNoteSelected_jpg;
     const int            HalfNoteSelected_jpgSize = 47341;
 
     extern const char*   BypassOFF_jpg;
-    const int            BypassOFF_jpgSize = 31093;
+    const int            BypassOFF_jpgSize = 30905;
 
     extern const char*   BypassON_jpg;
-    const int            BypassON_jpgSize = 42131;
+    const int            BypassON_jpgSize = 41904;
 
     extern const char*   DottedOFF_jpg;
-    const int            DottedOFF_jpgSize = 28615;
+    const int            DottedOFF_jpgSize = 28463;
 
     extern const char*   DottedON_jpg;
-    const int            DottedON_jpgSize = 36915;
+    const int            DottedON_jpgSize = 36688;
 
     extern const char*   EighthNoteSelected_jpg;
     const int            EighthNoteSelected_jpgSize = 47416;
@@ -717,7 +753,7 @@ namespace BinaryData
     const int            FullScalePingpongDelayUI2500_jpgSize = 875273;
 
     // Number of elements in the namedResourceList and originalFileNames arrays.
-    const int namedResourceListSize = 236;
+    const int namedResourceListSize = 248;
 
     // Points to the start of a list of resource names.
     extern const char* namedResourceList[];

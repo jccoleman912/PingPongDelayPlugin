@@ -15,6 +15,30 @@
             file="Source/PluginEditor.cpp"/>
       <FILE id="SS0wG8" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
       <GROUP id="{171362BA-BC12-F66F-6F89-D48AACD70E2C}" name="Binary Data">
+        <FILE id="VbkTP7" name="RedArrowFinalGain.png" compile="0" resource="1"
+              file="../Documents/GainElementsPingPong/RedArrowFinalGain.png"/>
+        <FILE id="FsiVwA" name="BaseArrowFinalGain.png" compile="0" resource="1"
+              file="../Documents/GainElementsPingPong/BaseArrowFinalGain.png"/>
+        <FILE id="mg12HJ" name="RedArrowR2LGain.png" compile="0" resource="1"
+              file="../Documents/GainElementsPingPong/RedArrowR2LGain.png"/>
+        <FILE id="MVb4rQ" name="BaseArrowR2LGain.png" compile="0" resource="1"
+              file="../Documents/GainElementsPingPong/BaseArrowR2LGain.png"/>
+        <FILE id="vszTtT" name="RedArrowL2RGain.png" compile="0" resource="1"
+              file="../Documents/GainElementsPingPong/RedArrowL2RGain.png"/>
+        <FILE id="xPqiEr" name="BaseArrowL2RGain.png" compile="0" resource="1"
+              file="../Documents/GainElementsPingPong/BaseArrowL2RGain.png"/>
+        <FILE id="KccNsB" name="RedArrowInitialGain.png" compile="0" resource="1"
+              file="../Documents/GainElementsPingPong/RedArrowInitialGain.png"/>
+        <FILE id="ZjrqvY" name="BaseArrowInitialGain.png" compile="0" resource="1"
+              file="../Documents/GainElementsPingPong/BaseArrowInitialGain.png"/>
+        <FILE id="svVhgt" name="RightPingPong.png" compile="0" resource="1"
+              file="Source/Binary Data/RightPingPong.png"/>
+        <FILE id="wJeA0y" name="RightPingPongRed.png" compile="0" resource="1"
+              file="Source/Binary Data/RightPingPongRed.png"/>
+        <FILE id="sjvm0U" name="LeftPingPong.png" compile="0" resource="1"
+              file="Source/Binary Data/LeftPingPong.png"/>
+        <FILE id="nwN2fh" name="LeftPingPongRed.png" compile="0" resource="1"
+              file="Source/Binary Data/LeftPingPongRed.png"/>
         <FILE id="CaKlYa" name="PingPongDelayUI.jpg" compile="0" resource="1"
               file="Source/Binary Data/PingPongDelayUI.jpg"/>
         <FILE id="ZdFf9Z" name="QuarterNoteSelected.jpg" compile="0" resource="1"
