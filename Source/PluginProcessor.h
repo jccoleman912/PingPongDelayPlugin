@@ -74,11 +74,16 @@ public:
     float noteMultiplier = 1.f;
     float delayMS = 500.f;
     float trDelay = 0.f;
+    
+    float finalTempo = 120.f;
 
 private:
     
     PingPongDelay pingPongDelay;
-
+    
+    juce::AudioPlayHead* playHead;
+    
+    juce::AudioPlayHead::CurrentPositionInfo positionInfo;
     
 public:
     

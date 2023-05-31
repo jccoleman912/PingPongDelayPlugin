@@ -303,10 +303,21 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
         
     };
     
+    if(boolSyncValue) {
+        playHead = this->getPlayHead();
+        playHead->getCurrentPosition(positionInfo);
+        finalTempo = positionInfo.bpm;
+
+    } else {
+        finalTempo = tempoValue;
+    }
+    
+    
+    
     pingPongDelay.setLeftOrRight(boolLeftFirstValue);
     
     
-    delayMS = 1000.f * noteMultiplier * (60.f / tempoValue);
+    delayMS = 1000.f * noteMultiplier * (60.f / finalTempo);
     
     
     if(boolTripletValue) {

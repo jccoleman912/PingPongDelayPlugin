@@ -14,6 +14,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
 
+    setResizable(false, false);
     setSize (800, 640);
     
 
@@ -639,6 +640,8 @@ Coleman_HW2AudioProcessorEditor::~Coleman_HW2AudioProcessorEditor()
 void Coleman_HW2AudioProcessorEditor::paint (juce::Graphics& g)
 {
     g.drawImageAt(bgImage, 0, 0);
+
+    
     
     if(!bypassOutcome.isValid()) {
         bypassOutcome = bypassOFFImage;
@@ -683,39 +686,41 @@ void Coleman_HW2AudioProcessorEditor::paint (juce::Graphics& g)
 //
 //    emptyInitialDrawable.drawAt(g, 300, 20, emptyBaseOpacity);
     
+    
+    
     baseInitialDropDrawable.setImage(baseInitialDrop);
-    baseInitialDropDrawable.drawAt(g, 240, 32, emptyBaseOpacity);
+    baseInitialDropDrawable.drawAt(g, 240, 32, baseInitialOpacity);
     
     redInitialDropDrawable.setImage(redInitialDrop);
     redInitialDropDrawable.drawAt(g, 240, 32, redInitialOpacity);
     
     
     baseL2RDropADrawable.setImage(baseL2RDrop);
-    baseL2RDropADrawable.drawAt(g, 240, 112, emptyBaseOpacity);
+    baseL2RDropADrawable.drawAt(g, 240, 112, baseL2RAOpacity);
     
     redL2RDropADrawable.setImage(redL2RDrop);
-    redL2RDropADrawable.drawAt(g, 240, 112, redInitialOpacity);
+    redL2RDropADrawable.drawAt(g, 240, 112, redL2RAOpacity);
     
     
     baseR2LDropADrawable.setImage(baseR2LDrop);
-    baseR2LDropADrawable.drawAt(g, 240, 256, emptyBaseOpacity);
+    baseR2LDropADrawable.drawAt(g, 240, 256, baseR2LOpacity);
     
     redR2LDropADrawable.setImage(redR2LDrop);
-    redR2LDropADrawable.drawAt(g, 240, 256, redInitialOpacity);
+    redR2LDropADrawable.drawAt(g, 240, 256, redR2LOpacity);
     
     
     baseL2RDropBDrawable.setImage(baseL2RDrop);
-    baseL2RDropBDrawable.drawAt(g, 240, 400, emptyBaseOpacity);
+    baseL2RDropBDrawable.drawAt(g, 240, 400, baseL2RBOpacity);
     
     redL2RDropBDrawable.setImage(redL2RDrop);
-    redL2RDropBDrawable.drawAt(g, 240, 400, redInitialOpacity);
+    redL2RDropBDrawable.drawAt(g, 240, 400, redL2RBOpacity);
     
     
     baseR2LDropFinalDrawable.setImage(baseR2LFinalDrop);
-    baseR2LDropFinalDrawable.drawAt(g, 240, 544, emptyBaseOpacity);
+    baseR2LDropFinalDrawable.drawAt(g, 240, 544, baseFinalOpacity);
     
     redR2LDropFinalDrawable.setImage(redR2LFinalDrop);
-    redR2LDropFinalDrawable.drawAt(g, 240, 544, redInitialOpacity);
+    redR2LDropFinalDrawable.drawAt(g, 240, 544, redFinalOpacity);
     
 
     leftPingPongA.setImage(leftPingPong);
@@ -728,15 +733,15 @@ void Coleman_HW2AudioProcessorEditor::paint (juce::Graphics& g)
     leftPingPongRedB.setImage(leftPingPongRed);
     rightPingPongRedB.setImage(rightPingPongRed);
     
-    leftPingPongA.drawAt(g, 192, 80, emptyBaseOpacity);
-    rightPingPongA.drawAt(g, 544, 224, 1.f);
-    leftPingPongB.drawAt(g, 192, 368, 1.f);
-    rightPingPongB.drawAt(g, 544, 512, 1.f);
+    leftPingPongA.drawAt(g, 192, 80, baseInitialOpacity);
+    rightPingPongA.drawAt(g, 544, 224, baseL2RAOpacity);
+    leftPingPongB.drawAt(g, 192, 368, baseR2LOpacity);
+    rightPingPongB.drawAt(g, 544, 512, baseL2RBOpacity);
     
     leftPingPongRedA.drawAt(g, 192, 80, redInitialOpacity);
-    rightPingPongRedA.drawAt(g, 544, 224, 1.f);
-    leftPingPongRedB.drawAt(g, 192, 368, 0.5f);
-    rightPingPongRedB.drawAt(g, 544, 512, 0.f);
+    rightPingPongRedA.drawAt(g, 544, 224, redL2RAOpacity);
+    leftPingPongRedB.drawAt(g, 192, 368, redR2LOpacity);
+    rightPingPongRedB.drawAt(g, 544, 512, redL2RBOpacity);
     
     
 
@@ -864,9 +869,15 @@ void Coleman_HW2AudioProcessorEditor::buttonClicked(juce::Button *button){
 void Coleman_HW2AudioProcessorEditor::sliderValueChanged(juce::Slider * slider)
 {
     // This is how we check which slider was moved
-    if (slider == &initialGainKnob){
+    if (slider == &initialGainKnob || slider == &l2RGainKnob || slider == &r2LGainKnob){
         
-        float initialValue = slider->getValue();
+        float initialValue = (&initialGainKnob)->getValue();
+        float l2RValueRaw = (&l2RGainKnob)->getValue();
+        float r2LValueRaw = (&r2LGainKnob)->getValue();
+        float l2RAValue = initialValue + l2RValueRaw;
+        float r2LValue = r2LValueRaw + initialValue + l2RValueRaw;
+        float l2RBValue = l2RValueRaw + r2LValueRaw + initialValue + l2RValueRaw;
+        float finalValue = r2LValueRaw + l2RValueRaw + r2LValueRaw + initialValue + l2RValueRaw;
         
         // Red values < 6 dB
         if(initialValue <= 0.f) {redInitialOpacity = redOpacity[0];}
@@ -1000,233 +1011,1646 @@ void Coleman_HW2AudioProcessorEditor::sliderValueChanged(juce::Slider * slider)
         else {redInitialOpacity = redOpacity[0];}
         
         
-        if(initialValue == 0.f) {emptyBaseOpacity = baseOpacity[200];}
-        else if(initialValue > -0.2f) {emptyBaseOpacity = baseOpacity[199];}
-        else if(initialValue > -0.4f) {emptyBaseOpacity = baseOpacity[198];}
-        else if(initialValue > -0.6f) {emptyBaseOpacity = baseOpacity[197];}
-        else if(initialValue > -0.8f) {emptyBaseOpacity = baseOpacity[196];}
-        else if(initialValue > -1.f)  {emptyBaseOpacity = baseOpacity[195];}
-        else if(initialValue > -1.2f) {emptyBaseOpacity = baseOpacity[194];}
-        else if(initialValue > -1.4f) {emptyBaseOpacity = baseOpacity[193];}
-        else if(initialValue > -1.6f) {emptyBaseOpacity = baseOpacity[192];}
-        else if(initialValue > -1.8f) {emptyBaseOpacity = baseOpacity[191];}
-        else if(initialValue > -2.f)  {emptyBaseOpacity = baseOpacity[190];}
-        else if(initialValue > -2.2f) {emptyBaseOpacity = baseOpacity[189];}
-        else if(initialValue > -2.4f) {emptyBaseOpacity = baseOpacity[188];}
-        else if(initialValue > -2.6f) {emptyBaseOpacity = baseOpacity[187];}
-        else if(initialValue > -2.8f) {emptyBaseOpacity = baseOpacity[186];}
-        else if(initialValue > -3.f)  {emptyBaseOpacity = baseOpacity[185];}
-        else if(initialValue > -3.2f) {emptyBaseOpacity = baseOpacity[184];}
-        else if(initialValue > -3.4f) {emptyBaseOpacity = baseOpacity[183];}
-        else if(initialValue > -3.6f) {emptyBaseOpacity = baseOpacity[182];}
-        else if(initialValue > -3.8f) {emptyBaseOpacity = baseOpacity[181];}
-        else if(initialValue > -4.f)  {emptyBaseOpacity = baseOpacity[180];}
-        else if(initialValue > -4.2f) {emptyBaseOpacity = baseOpacity[179];}
-        else if(initialValue > -4.4f) {emptyBaseOpacity = baseOpacity[178];}
-        else if(initialValue > -4.6f) {emptyBaseOpacity = baseOpacity[177];}
-        else if(initialValue > -4.8f) {emptyBaseOpacity = baseOpacity[176];}
-        else if(initialValue > -5.f)  {emptyBaseOpacity = baseOpacity[175];}
-        else if(initialValue > -5.2f) {emptyBaseOpacity = baseOpacity[174];}
-        else if(initialValue > -5.4f) {emptyBaseOpacity = baseOpacity[173];}
-        else if(initialValue > -5.6f) {emptyBaseOpacity = baseOpacity[172];}
-        else if(initialValue > -5.8f) {emptyBaseOpacity = baseOpacity[171];}
-        else if(initialValue > -6.f)  {emptyBaseOpacity = baseOpacity[170];}
+        if(initialValue == 0.f) {baseInitialOpacity = baseOpacity[200];}
+        else if(initialValue > -0.2f) {baseInitialOpacity = baseOpacity[199];}
+        else if(initialValue > -0.4f) {baseInitialOpacity = baseOpacity[198];}
+        else if(initialValue > -0.6f) {baseInitialOpacity = baseOpacity[197];}
+        else if(initialValue > -0.8f) {baseInitialOpacity = baseOpacity[196];}
+        else if(initialValue > -1.f)  {baseInitialOpacity = baseOpacity[195];}
+        else if(initialValue > -1.2f) {baseInitialOpacity = baseOpacity[194];}
+        else if(initialValue > -1.4f) {baseInitialOpacity = baseOpacity[193];}
+        else if(initialValue > -1.6f) {baseInitialOpacity = baseOpacity[192];}
+        else if(initialValue > -1.8f) {baseInitialOpacity = baseOpacity[191];}
+        else if(initialValue > -2.f)  {baseInitialOpacity = baseOpacity[190];}
+        else if(initialValue > -2.2f) {baseInitialOpacity = baseOpacity[189];}
+        else if(initialValue > -2.4f) {baseInitialOpacity = baseOpacity[188];}
+        else if(initialValue > -2.6f) {baseInitialOpacity = baseOpacity[187];}
+        else if(initialValue > -2.8f) {baseInitialOpacity = baseOpacity[186];}
+        else if(initialValue > -3.f)  {baseInitialOpacity = baseOpacity[185];}
+        else if(initialValue > -3.2f) {baseInitialOpacity = baseOpacity[184];}
+        else if(initialValue > -3.4f) {baseInitialOpacity = baseOpacity[183];}
+        else if(initialValue > -3.6f) {baseInitialOpacity = baseOpacity[182];}
+        else if(initialValue > -3.8f) {baseInitialOpacity = baseOpacity[181];}
+        else if(initialValue > -4.f)  {baseInitialOpacity = baseOpacity[180];}
+        else if(initialValue > -4.2f) {baseInitialOpacity = baseOpacity[179];}
+        else if(initialValue > -4.4f) {baseInitialOpacity = baseOpacity[178];}
+        else if(initialValue > -4.6f) {baseInitialOpacity = baseOpacity[177];}
+        else if(initialValue > -4.8f) {baseInitialOpacity = baseOpacity[176];}
+        else if(initialValue > -5.f)  {baseInitialOpacity = baseOpacity[175];}
+        else if(initialValue > -5.2f) {baseInitialOpacity = baseOpacity[174];}
+        else if(initialValue > -5.4f) {baseInitialOpacity = baseOpacity[173];}
+        else if(initialValue > -5.6f) {baseInitialOpacity = baseOpacity[172];}
+        else if(initialValue > -5.8f) {baseInitialOpacity = baseOpacity[171];}
+        else if(initialValue > -6.f)  {baseInitialOpacity = baseOpacity[170];}
 
         // 6 dB <= Red values < 12 dB
-        else if(initialValue > -6.2f) {emptyBaseOpacity = baseOpacity[169];}
-        else if(initialValue > -6.4f) {emptyBaseOpacity = baseOpacity[168];}
-        else if(initialValue > -6.6f) {emptyBaseOpacity = baseOpacity[167];}
-        else if(initialValue > -6.8f) {emptyBaseOpacity = baseOpacity[166];}
-        else if(initialValue > -7.f)  {emptyBaseOpacity = baseOpacity[165];}
-        else if(initialValue > -7.2f) {emptyBaseOpacity = baseOpacity[164];}
-        else if(initialValue > -7.4f) {emptyBaseOpacity = baseOpacity[163];}
-        else if(initialValue > -7.6f) {emptyBaseOpacity = baseOpacity[162];}
-        else if(initialValue > -7.8f) {emptyBaseOpacity = baseOpacity[161];}
-        else if(initialValue > -8.f)  {emptyBaseOpacity = baseOpacity[160];}
-        else if(initialValue > -8.2f) {emptyBaseOpacity = baseOpacity[159];}
-        else if(initialValue > -8.4f) {emptyBaseOpacity = baseOpacity[158];}
-        else if(initialValue > -8.6f) {emptyBaseOpacity = baseOpacity[157];}
-        else if(initialValue > -8.8f) {emptyBaseOpacity = baseOpacity[156];}
-        else if(initialValue > -9.f)  {emptyBaseOpacity = baseOpacity[155];}
-        else if(initialValue > -9.2f) {emptyBaseOpacity = baseOpacity[154];}
-        else if(initialValue > -9.4f) {emptyBaseOpacity = baseOpacity[153];}
-        else if(initialValue > -9.6f) {emptyBaseOpacity = baseOpacity[152];}
-        else if(initialValue > -9.8f) {emptyBaseOpacity = baseOpacity[151];}
-        else if(initialValue > -10.f) {emptyBaseOpacity = baseOpacity[150];}
-        else if(initialValue > -10.2f) {emptyBaseOpacity = baseOpacity[149];}
-        else if(initialValue > -10.4f) {emptyBaseOpacity = baseOpacity[148];}
-        else if(initialValue > -10.6f) {emptyBaseOpacity = baseOpacity[147];}
-        else if(initialValue > -10.8f) {emptyBaseOpacity = baseOpacity[146];}
-        else if(initialValue > -11.f)  {emptyBaseOpacity = baseOpacity[145];}
-        else if(initialValue > -11.2f) {emptyBaseOpacity = baseOpacity[144];}
-        else if(initialValue > -11.4f) {emptyBaseOpacity = baseOpacity[143];}
-        else if(initialValue > -11.6f) {emptyBaseOpacity = baseOpacity[142];}
-        else if(initialValue > -11.8f) {emptyBaseOpacity = baseOpacity[141];}
-        else if(initialValue > -12.f)  {emptyBaseOpacity = baseOpacity[140];}
+        else if(initialValue > -6.2f) {baseInitialOpacity = baseOpacity[169];}
+        else if(initialValue > -6.4f) {baseInitialOpacity = baseOpacity[168];}
+        else if(initialValue > -6.6f) {baseInitialOpacity = baseOpacity[167];}
+        else if(initialValue > -6.8f) {baseInitialOpacity = baseOpacity[166];}
+        else if(initialValue > -7.f)  {baseInitialOpacity = baseOpacity[165];}
+        else if(initialValue > -7.2f) {baseInitialOpacity = baseOpacity[164];}
+        else if(initialValue > -7.4f) {baseInitialOpacity = baseOpacity[163];}
+        else if(initialValue > -7.6f) {baseInitialOpacity = baseOpacity[162];}
+        else if(initialValue > -7.8f) {baseInitialOpacity = baseOpacity[161];}
+        else if(initialValue > -8.f)  {baseInitialOpacity = baseOpacity[160];}
+        else if(initialValue > -8.2f) {baseInitialOpacity = baseOpacity[159];}
+        else if(initialValue > -8.4f) {baseInitialOpacity = baseOpacity[158];}
+        else if(initialValue > -8.6f) {baseInitialOpacity = baseOpacity[157];}
+        else if(initialValue > -8.8f) {baseInitialOpacity = baseOpacity[156];}
+        else if(initialValue > -9.f)  {baseInitialOpacity = baseOpacity[155];}
+        else if(initialValue > -9.2f) {baseInitialOpacity = baseOpacity[154];}
+        else if(initialValue > -9.4f) {baseInitialOpacity = baseOpacity[153];}
+        else if(initialValue > -9.6f) {baseInitialOpacity = baseOpacity[152];}
+        else if(initialValue > -9.8f) {baseInitialOpacity = baseOpacity[151];}
+        else if(initialValue > -10.f) {baseInitialOpacity = baseOpacity[150];}
+        else if(initialValue > -10.2f) {baseInitialOpacity = baseOpacity[149];}
+        else if(initialValue > -10.4f) {baseInitialOpacity = baseOpacity[148];}
+        else if(initialValue > -10.6f) {baseInitialOpacity = baseOpacity[147];}
+        else if(initialValue > -10.8f) {baseInitialOpacity = baseOpacity[146];}
+        else if(initialValue > -11.f)  {baseInitialOpacity = baseOpacity[145];}
+        else if(initialValue > -11.2f) {baseInitialOpacity = baseOpacity[144];}
+        else if(initialValue > -11.4f) {baseInitialOpacity = baseOpacity[143];}
+        else if(initialValue > -11.6f) {baseInitialOpacity = baseOpacity[142];}
+        else if(initialValue > -11.8f) {baseInitialOpacity = baseOpacity[141];}
+        else if(initialValue > -12.f)  {baseInitialOpacity = baseOpacity[140];}
 
         // 12 dB <= Red values < 18 dB
-        else if(initialValue > -12.2f) {emptyBaseOpacity = baseOpacity[139];}
-        else if(initialValue > -12.4f) {emptyBaseOpacity = baseOpacity[138];}
-        else if(initialValue > -12.6f) {emptyBaseOpacity = baseOpacity[137];}
-        else if(initialValue > -12.8f) {emptyBaseOpacity = baseOpacity[136];}
-        else if(initialValue > -13.f)  {emptyBaseOpacity = baseOpacity[135];}
-        else if(initialValue > -13.2f) {emptyBaseOpacity = baseOpacity[134];}
-        else if(initialValue > -13.4f) {emptyBaseOpacity = baseOpacity[133];}
-        else if(initialValue > -13.6f) {emptyBaseOpacity = baseOpacity[132];}
-        else if(initialValue > -13.8f) {emptyBaseOpacity = baseOpacity[131];}
-        else if(initialValue > -14.f)  {emptyBaseOpacity = baseOpacity[130];}
-        else if(initialValue > -14.2f) {emptyBaseOpacity = baseOpacity[129];}
-        else if(initialValue > -14.4f) {emptyBaseOpacity = baseOpacity[128];}
-        else if(initialValue > -14.6f) {emptyBaseOpacity = baseOpacity[127];}
-        else if(initialValue > -14.8f) {emptyBaseOpacity = baseOpacity[126];}
-        else if(initialValue > -15.f)  {emptyBaseOpacity = baseOpacity[125];}
-        else if(initialValue > -15.2f) {emptyBaseOpacity = baseOpacity[124];}
-        else if(initialValue > -15.4f) {emptyBaseOpacity = baseOpacity[123];}
-        else if(initialValue > -15.6f) {emptyBaseOpacity = baseOpacity[122];}
-        else if(initialValue > -15.8f) {emptyBaseOpacity = baseOpacity[121];}
-        else if(initialValue > -16.f)  {emptyBaseOpacity = baseOpacity[120];}
-        else if(initialValue > -16.2f) {emptyBaseOpacity = baseOpacity[119];}
-        else if(initialValue > -16.4f) {emptyBaseOpacity = baseOpacity[118];}
-        else if(initialValue > -16.6f) {emptyBaseOpacity = baseOpacity[117];}
-        else if(initialValue > -16.8f) {emptyBaseOpacity = baseOpacity[116];}
-        else if(initialValue > -17.f)  {emptyBaseOpacity = baseOpacity[115];}
-        else if(initialValue > -17.2f) {emptyBaseOpacity = baseOpacity[114];}
-        else if(initialValue > -17.4f) {emptyBaseOpacity = baseOpacity[113];}
-        else if(initialValue > -17.6f) {emptyBaseOpacity = baseOpacity[112];}
-        else if(initialValue > -17.8f) {emptyBaseOpacity = baseOpacity[111];}
-        else if(initialValue > -18.f)  {emptyBaseOpacity = baseOpacity[110];}
+        else if(initialValue > -12.2f) {baseInitialOpacity = baseOpacity[139];}
+        else if(initialValue > -12.4f) {baseInitialOpacity = baseOpacity[138];}
+        else if(initialValue > -12.6f) {baseInitialOpacity = baseOpacity[137];}
+        else if(initialValue > -12.8f) {baseInitialOpacity = baseOpacity[136];}
+        else if(initialValue > -13.f)  {baseInitialOpacity = baseOpacity[135];}
+        else if(initialValue > -13.2f) {baseInitialOpacity = baseOpacity[134];}
+        else if(initialValue > -13.4f) {baseInitialOpacity = baseOpacity[133];}
+        else if(initialValue > -13.6f) {baseInitialOpacity = baseOpacity[132];}
+        else if(initialValue > -13.8f) {baseInitialOpacity = baseOpacity[131];}
+        else if(initialValue > -14.f)  {baseInitialOpacity = baseOpacity[130];}
+        else if(initialValue > -14.2f) {baseInitialOpacity = baseOpacity[129];}
+        else if(initialValue > -14.4f) {baseInitialOpacity = baseOpacity[128];}
+        else if(initialValue > -14.6f) {baseInitialOpacity = baseOpacity[127];}
+        else if(initialValue > -14.8f) {baseInitialOpacity = baseOpacity[126];}
+        else if(initialValue > -15.f)  {baseInitialOpacity = baseOpacity[125];}
+        else if(initialValue > -15.2f) {baseInitialOpacity = baseOpacity[124];}
+        else if(initialValue > -15.4f) {baseInitialOpacity = baseOpacity[123];}
+        else if(initialValue > -15.6f) {baseInitialOpacity = baseOpacity[122];}
+        else if(initialValue > -15.8f) {baseInitialOpacity = baseOpacity[121];}
+        else if(initialValue > -16.f)  {baseInitialOpacity = baseOpacity[120];}
+        else if(initialValue > -16.2f) {baseInitialOpacity = baseOpacity[119];}
+        else if(initialValue > -16.4f) {baseInitialOpacity = baseOpacity[118];}
+        else if(initialValue > -16.6f) {baseInitialOpacity = baseOpacity[117];}
+        else if(initialValue > -16.8f) {baseInitialOpacity = baseOpacity[116];}
+        else if(initialValue > -17.f)  {baseInitialOpacity = baseOpacity[115];}
+        else if(initialValue > -17.2f) {baseInitialOpacity = baseOpacity[114];}
+        else if(initialValue > -17.4f) {baseInitialOpacity = baseOpacity[113];}
+        else if(initialValue > -17.6f) {baseInitialOpacity = baseOpacity[112];}
+        else if(initialValue > -17.8f) {baseInitialOpacity = baseOpacity[111];}
+        else if(initialValue > -18.f)  {baseInitialOpacity = baseOpacity[110];}
 
         // 18 dB <= Red values <= 24 dB
-        else if(initialValue > -18.2f) {emptyBaseOpacity = baseOpacity[109];}
-        else if(initialValue > -18.4f) {emptyBaseOpacity = baseOpacity[108];}
-        else if(initialValue > -18.6f) {emptyBaseOpacity = baseOpacity[107];}
-        else if(initialValue > -18.8f) {emptyBaseOpacity = baseOpacity[106];}
-        else if(initialValue > -19.f)  {emptyBaseOpacity = baseOpacity[105];}
-        else if(initialValue > -19.2f) {emptyBaseOpacity = baseOpacity[104];}
-        else if(initialValue > -19.4f) {emptyBaseOpacity = baseOpacity[103];}
-        else if(initialValue > -19.6f) {emptyBaseOpacity = baseOpacity[102];}
-        else if(initialValue > -19.8f) {emptyBaseOpacity = baseOpacity[101];}
-        else if(initialValue > -20.f)  {emptyBaseOpacity = baseOpacity[100];}
-        else if(initialValue > -20.2f) {emptyBaseOpacity = baseOpacity[99];}
-        else if(initialValue > -20.4f) {emptyBaseOpacity = baseOpacity[98];}
-        else if(initialValue > -20.6f) {emptyBaseOpacity = baseOpacity[97];}
-        else if(initialValue > -20.8f) {emptyBaseOpacity = baseOpacity[96];}
-        else if(initialValue > -21.f)  {emptyBaseOpacity = baseOpacity[95];}
-        else if(initialValue > -21.2f) {emptyBaseOpacity = baseOpacity[94];}
-        else if(initialValue > -21.4f) {emptyBaseOpacity = baseOpacity[93];}
-        else if(initialValue > -21.6f) {emptyBaseOpacity = baseOpacity[92];}
-        else if(initialValue > -21.8f) {emptyBaseOpacity = baseOpacity[91];}
-        else if(initialValue > -22.f)  {emptyBaseOpacity = baseOpacity[90];}
-        else if(initialValue > -22.2f) {emptyBaseOpacity = baseOpacity[89];}
-        else if(initialValue > -22.4f) {emptyBaseOpacity = baseOpacity[88];}
-        else if(initialValue > -22.6f) {emptyBaseOpacity = baseOpacity[87];}
-        else if(initialValue > -22.8f) {emptyBaseOpacity = baseOpacity[86];}
-        else if(initialValue > -23.f)  {emptyBaseOpacity = baseOpacity[85];}
-        else if(initialValue > -23.2f) {emptyBaseOpacity = baseOpacity[84];}
-        else if(initialValue > -23.4f) {emptyBaseOpacity = baseOpacity[83];}
-        else if(initialValue > -23.6f) {emptyBaseOpacity = baseOpacity[82];}
-        else if(initialValue > -23.8f) {emptyBaseOpacity = baseOpacity[81];}
-        else if(initialValue > -24.f)  {emptyBaseOpacity = baseOpacity[80];}
+        else if(initialValue > -18.2f) {baseInitialOpacity = baseOpacity[109];}
+        else if(initialValue > -18.4f) {baseInitialOpacity = baseOpacity[108];}
+        else if(initialValue > -18.6f) {baseInitialOpacity = baseOpacity[107];}
+        else if(initialValue > -18.8f) {baseInitialOpacity = baseOpacity[106];}
+        else if(initialValue > -19.f)  {baseInitialOpacity = baseOpacity[105];}
+        else if(initialValue > -19.2f) {baseInitialOpacity = baseOpacity[104];}
+        else if(initialValue > -19.4f) {baseInitialOpacity = baseOpacity[103];}
+        else if(initialValue > -19.6f) {baseInitialOpacity = baseOpacity[102];}
+        else if(initialValue > -19.8f) {baseInitialOpacity = baseOpacity[101];}
+        else if(initialValue > -20.f)  {baseInitialOpacity = baseOpacity[100];}
+        else if(initialValue > -20.2f) {baseInitialOpacity = baseOpacity[99];}
+        else if(initialValue > -20.4f) {baseInitialOpacity = baseOpacity[98];}
+        else if(initialValue > -20.6f) {baseInitialOpacity = baseOpacity[97];}
+        else if(initialValue > -20.8f) {baseInitialOpacity = baseOpacity[96];}
+        else if(initialValue > -21.f)  {baseInitialOpacity = baseOpacity[95];}
+        else if(initialValue > -21.2f) {baseInitialOpacity = baseOpacity[94];}
+        else if(initialValue > -21.4f) {baseInitialOpacity = baseOpacity[93];}
+        else if(initialValue > -21.6f) {baseInitialOpacity = baseOpacity[92];}
+        else if(initialValue > -21.8f) {baseInitialOpacity = baseOpacity[91];}
+        else if(initialValue > -22.f)  {baseInitialOpacity = baseOpacity[90];}
+        else if(initialValue > -22.2f) {baseInitialOpacity = baseOpacity[89];}
+        else if(initialValue > -22.4f) {baseInitialOpacity = baseOpacity[88];}
+        else if(initialValue > -22.6f) {baseInitialOpacity = baseOpacity[87];}
+        else if(initialValue > -22.8f) {baseInitialOpacity = baseOpacity[86];}
+        else if(initialValue > -23.f)  {baseInitialOpacity = baseOpacity[85];}
+        else if(initialValue > -23.2f) {baseInitialOpacity = baseOpacity[84];}
+        else if(initialValue > -23.4f) {baseInitialOpacity = baseOpacity[83];}
+        else if(initialValue > -23.6f) {baseInitialOpacity = baseOpacity[82];}
+        else if(initialValue > -23.8f) {baseInitialOpacity = baseOpacity[81];}
+        else if(initialValue > -24.f)  {baseInitialOpacity = baseOpacity[80];}
 
         // 18 dB <= Red values <= 24 dB
-        else if(initialValue > -24.3f) {emptyBaseOpacity = baseOpacity[79];}
-        else if(initialValue > -24.6f) {emptyBaseOpacity = baseOpacity[78];}
-        else if(initialValue > -24.9f) {emptyBaseOpacity = baseOpacity[77];}
-        else if(initialValue > -25.2f) {emptyBaseOpacity = baseOpacity[76];}
-        else if(initialValue > -25.5f) {emptyBaseOpacity = baseOpacity[75];}
-        else if(initialValue > -25.8f) {emptyBaseOpacity = baseOpacity[74];}
-        else if(initialValue > -26.1f) {emptyBaseOpacity = baseOpacity[73];}
-        else if(initialValue > -26.4f) {emptyBaseOpacity = baseOpacity[72];}
-        else if(initialValue > -26.7f) {emptyBaseOpacity = baseOpacity[71];}
-        else if(initialValue > -27.f)  {emptyBaseOpacity = baseOpacity[70];}
-        else if(initialValue > -27.3f) {emptyBaseOpacity = baseOpacity[69];}
-        else if(initialValue > -27.6f) {emptyBaseOpacity = baseOpacity[68];}
-        else if(initialValue > -27.9f) {emptyBaseOpacity = baseOpacity[67];}
-        else if(initialValue > -28.2f) {emptyBaseOpacity = baseOpacity[66];}
-        else if(initialValue > -28.5f) {emptyBaseOpacity = baseOpacity[65];}
-        else if(initialValue > -28.8f) {emptyBaseOpacity = baseOpacity[64];}
-        else if(initialValue > -29.1f) {emptyBaseOpacity = baseOpacity[63];}
-        else if(initialValue > -29.4f) {emptyBaseOpacity = baseOpacity[62];}
-        else if(initialValue > -29.7f) {emptyBaseOpacity = baseOpacity[61];}
-        else if(initialValue > -30.f)  {emptyBaseOpacity = baseOpacity[60];}
+        else if(initialValue > -24.3f) {baseInitialOpacity = baseOpacity[79];}
+        else if(initialValue > -24.6f) {baseInitialOpacity = baseOpacity[78];}
+        else if(initialValue > -24.9f) {baseInitialOpacity = baseOpacity[77];}
+        else if(initialValue > -25.2f) {baseInitialOpacity = baseOpacity[76];}
+        else if(initialValue > -25.5f) {baseInitialOpacity = baseOpacity[75];}
+        else if(initialValue > -25.8f) {baseInitialOpacity = baseOpacity[74];}
+        else if(initialValue > -26.1f) {baseInitialOpacity = baseOpacity[73];}
+        else if(initialValue > -26.4f) {baseInitialOpacity = baseOpacity[72];}
+        else if(initialValue > -26.7f) {baseInitialOpacity = baseOpacity[71];}
+        else if(initialValue > -27.f)  {baseInitialOpacity = baseOpacity[70];}
+        else if(initialValue > -27.3f) {baseInitialOpacity = baseOpacity[69];}
+        else if(initialValue > -27.6f) {baseInitialOpacity = baseOpacity[68];}
+        else if(initialValue > -27.9f) {baseInitialOpacity = baseOpacity[67];}
+        else if(initialValue > -28.2f) {baseInitialOpacity = baseOpacity[66];}
+        else if(initialValue > -28.5f) {baseInitialOpacity = baseOpacity[65];}
+        else if(initialValue > -28.8f) {baseInitialOpacity = baseOpacity[64];}
+        else if(initialValue > -29.1f) {baseInitialOpacity = baseOpacity[63];}
+        else if(initialValue > -29.4f) {baseInitialOpacity = baseOpacity[62];}
+        else if(initialValue > -29.7f) {baseInitialOpacity = baseOpacity[61];}
+        else if(initialValue > -30.f)  {baseInitialOpacity = baseOpacity[60];}
         
-        else if(initialValue > -30.3f) {emptyBaseOpacity = baseOpacity[59];}
-        else if(initialValue > -30.6f) {emptyBaseOpacity = baseOpacity[58];}
-        else if(initialValue > -30.9f) {emptyBaseOpacity = baseOpacity[57];}
-        else if(initialValue > -31.2f) {emptyBaseOpacity = baseOpacity[56];}
-        else if(initialValue > -31.5f) {emptyBaseOpacity = baseOpacity[55];}
-        else if(initialValue > -31.8f) {emptyBaseOpacity = baseOpacity[54];}
-        else if(initialValue > -32.1f) {emptyBaseOpacity = baseOpacity[53];}
-        else if(initialValue > -32.4f) {emptyBaseOpacity = baseOpacity[52];}
-        else if(initialValue > -32.7f) {emptyBaseOpacity = baseOpacity[51];}
-        else if(initialValue > -33.f)  {emptyBaseOpacity = baseOpacity[50];}
-        else if(initialValue > -33.3f) {emptyBaseOpacity = baseOpacity[49];}
-        else if(initialValue > -33.6f) {emptyBaseOpacity = baseOpacity[48];}
-        else if(initialValue > -33.9f) {emptyBaseOpacity = baseOpacity[47];}
-        else if(initialValue > -34.2f) {emptyBaseOpacity = baseOpacity[46];}
-        else if(initialValue > -34.5f) {emptyBaseOpacity = baseOpacity[45];}
-        else if(initialValue > -34.8f) {emptyBaseOpacity = baseOpacity[44];}
-        else if(initialValue > -35.1f) {emptyBaseOpacity = baseOpacity[43];}
-        else if(initialValue > -35.4f) {emptyBaseOpacity = baseOpacity[42];}
-        else if(initialValue > -35.7f) {emptyBaseOpacity = baseOpacity[41];}
-        else if(initialValue > -36.f)  {emptyBaseOpacity = baseOpacity[40];}
+        else if(initialValue > -30.3f) {baseInitialOpacity = baseOpacity[59];}
+        else if(initialValue > -30.6f) {baseInitialOpacity = baseOpacity[58];}
+        else if(initialValue > -30.9f) {baseInitialOpacity = baseOpacity[57];}
+        else if(initialValue > -31.2f) {baseInitialOpacity = baseOpacity[56];}
+        else if(initialValue > -31.5f) {baseInitialOpacity = baseOpacity[55];}
+        else if(initialValue > -31.8f) {baseInitialOpacity = baseOpacity[54];}
+        else if(initialValue > -32.1f) {baseInitialOpacity = baseOpacity[53];}
+        else if(initialValue > -32.4f) {baseInitialOpacity = baseOpacity[52];}
+        else if(initialValue > -32.7f) {baseInitialOpacity = baseOpacity[51];}
+        else if(initialValue > -33.f)  {baseInitialOpacity = baseOpacity[50];}
+        else if(initialValue > -33.3f) {baseInitialOpacity = baseOpacity[49];}
+        else if(initialValue > -33.6f) {baseInitialOpacity = baseOpacity[48];}
+        else if(initialValue > -33.9f) {baseInitialOpacity = baseOpacity[47];}
+        else if(initialValue > -34.2f) {baseInitialOpacity = baseOpacity[46];}
+        else if(initialValue > -34.5f) {baseInitialOpacity = baseOpacity[45];}
+        else if(initialValue > -34.8f) {baseInitialOpacity = baseOpacity[44];}
+        else if(initialValue > -35.1f) {baseInitialOpacity = baseOpacity[43];}
+        else if(initialValue > -35.4f) {baseInitialOpacity = baseOpacity[42];}
+        else if(initialValue > -35.7f) {baseInitialOpacity = baseOpacity[41];}
+        else if(initialValue > -36.f)  {baseInitialOpacity = baseOpacity[40];}
         
         
-        else if(initialValue > -36.6f) {emptyBaseOpacity = baseOpacity[39];}
-        else if(initialValue > -37.2f) {emptyBaseOpacity = baseOpacity[38];}
-        else if(initialValue > -37.8f) {emptyBaseOpacity = baseOpacity[37];}
-        else if(initialValue > -38.4f) {emptyBaseOpacity = baseOpacity[36];}
-        else if(initialValue > -39.f)  {emptyBaseOpacity = baseOpacity[35];}
-        else if(initialValue > -39.6f) {emptyBaseOpacity = baseOpacity[34];}
-        else if(initialValue > -40.2f) {emptyBaseOpacity = baseOpacity[33];}
-        else if(initialValue > -40.8f) {emptyBaseOpacity = baseOpacity[32];}
-        else if(initialValue > -41.4f) {emptyBaseOpacity = baseOpacity[31];}
-        else if(initialValue > -42.f)  {emptyBaseOpacity = baseOpacity[30];}
+        else if(initialValue > -36.6f) {baseInitialOpacity = baseOpacity[39];}
+        else if(initialValue > -37.2f) {baseInitialOpacity = baseOpacity[38];}
+        else if(initialValue > -37.8f) {baseInitialOpacity = baseOpacity[37];}
+        else if(initialValue > -38.4f) {baseInitialOpacity = baseOpacity[36];}
+        else if(initialValue > -39.f)  {baseInitialOpacity = baseOpacity[35];}
+        else if(initialValue > -39.6f) {baseInitialOpacity = baseOpacity[34];}
+        else if(initialValue > -40.2f) {baseInitialOpacity = baseOpacity[33];}
+        else if(initialValue > -40.8f) {baseInitialOpacity = baseOpacity[32];}
+        else if(initialValue > -41.4f) {baseInitialOpacity = baseOpacity[31];}
+        else if(initialValue > -42.f)  {baseInitialOpacity = baseOpacity[30];}
         
-        else if(initialValue > -42.6f) {emptyBaseOpacity = baseOpacity[29];}
-        else if(initialValue > -43.2f) {emptyBaseOpacity = baseOpacity[28];}
-        else if(initialValue > -43.8f) {emptyBaseOpacity = baseOpacity[27];}
-        else if(initialValue > -44.4f) {emptyBaseOpacity = baseOpacity[26];}
-        else if(initialValue > -45.f)  {emptyBaseOpacity = baseOpacity[25];}
-        else if(initialValue > -45.6f) {emptyBaseOpacity = baseOpacity[24];}
-        else if(initialValue > -46.2f) {emptyBaseOpacity = baseOpacity[23];}
-        else if(initialValue > -46.8f) {emptyBaseOpacity = baseOpacity[22];}
-        else if(initialValue > -47.4f) {emptyBaseOpacity = baseOpacity[21];}
-        else if(initialValue > -48.f)  {emptyBaseOpacity = baseOpacity[20];}
+        else if(initialValue > -42.6f) {baseInitialOpacity = baseOpacity[29];}
+        else if(initialValue > -43.2f) {baseInitialOpacity = baseOpacity[28];}
+        else if(initialValue > -43.8f) {baseInitialOpacity = baseOpacity[27];}
+        else if(initialValue > -44.4f) {baseInitialOpacity = baseOpacity[26];}
+        else if(initialValue > -45.f)  {baseInitialOpacity = baseOpacity[25];}
+        else if(initialValue > -45.6f) {baseInitialOpacity = baseOpacity[24];}
+        else if(initialValue > -46.2f) {baseInitialOpacity = baseOpacity[23];}
+        else if(initialValue > -46.8f) {baseInitialOpacity = baseOpacity[22];}
+        else if(initialValue > -47.4f) {baseInitialOpacity = baseOpacity[21];}
+        else if(initialValue > -48.f)  {baseInitialOpacity = baseOpacity[20];}
         
-        else if(initialValue > -48.6f) {emptyBaseOpacity = baseOpacity[19];}
-        else if(initialValue > -49.2f) {emptyBaseOpacity = baseOpacity[18];}
-        else if(initialValue > -49.8f) {emptyBaseOpacity = baseOpacity[17];}
-        else if(initialValue > -50.4f) {emptyBaseOpacity = baseOpacity[16];}
-        else if(initialValue > -51.f)  {emptyBaseOpacity = baseOpacity[15];}
-        else if(initialValue > -51.6f) {emptyBaseOpacity = baseOpacity[14];}
-        else if(initialValue > -52.2f) {emptyBaseOpacity = baseOpacity[13];}
-        else if(initialValue > -52.8f) {emptyBaseOpacity = baseOpacity[12];}
-        else if(initialValue > -53.4f) {emptyBaseOpacity = baseOpacity[11];}
-        else if(initialValue > -54.f)  {emptyBaseOpacity = baseOpacity[10];}
+        else if(initialValue > -48.6f) {baseInitialOpacity = baseOpacity[19];}
+        else if(initialValue > -49.2f) {baseInitialOpacity = baseOpacity[18];}
+        else if(initialValue > -49.8f) {baseInitialOpacity = baseOpacity[17];}
+        else if(initialValue > -50.4f) {baseInitialOpacity = baseOpacity[16];}
+        else if(initialValue > -51.f)  {baseInitialOpacity = baseOpacity[15];}
+        else if(initialValue > -51.6f) {baseInitialOpacity = baseOpacity[14];}
+        else if(initialValue > -52.2f) {baseInitialOpacity = baseOpacity[13];}
+        else if(initialValue > -52.8f) {baseInitialOpacity = baseOpacity[12];}
+        else if(initialValue > -53.4f) {baseInitialOpacity = baseOpacity[11];}
+        else if(initialValue > -54.f)  {baseInitialOpacity = baseOpacity[10];}
         
-        else if(initialValue > -54.6f) {emptyBaseOpacity = baseOpacity[9];}
-        else if(initialValue > -55.2f) {emptyBaseOpacity = baseOpacity[8];}
-        else if(initialValue > -55.8f) {emptyBaseOpacity = baseOpacity[7];}
-        else if(initialValue > -56.4f) {emptyBaseOpacity = baseOpacity[6];}
-        else if(initialValue > -57.f)  {emptyBaseOpacity = baseOpacity[5];}
-        else if(initialValue > -57.6f) {emptyBaseOpacity = baseOpacity[4];}
-        else if(initialValue > -58.2f) {emptyBaseOpacity = baseOpacity[3];}
-        else if(initialValue > -58.8f) {emptyBaseOpacity = baseOpacity[2];}
-        else if(initialValue > -59.4f) {emptyBaseOpacity = baseOpacity[1];}
-        else if(initialValue > -60.f)  {emptyBaseOpacity = baseOpacity[0];}
-        else if(initialValue <= -60.f) {emptyBaseOpacity = baseOpacity[0];}
-        else {emptyBaseOpacity = baseOpacity[0];}
+        else if(initialValue > -54.6f) {baseInitialOpacity = baseOpacity[9];}
+        else if(initialValue > -55.2f) {baseInitialOpacity = baseOpacity[8];}
+        else if(initialValue > -55.8f) {baseInitialOpacity = baseOpacity[7];}
+        else if(initialValue > -56.4f) {baseInitialOpacity = baseOpacity[6];}
+        else if(initialValue > -57.f)  {baseInitialOpacity = baseOpacity[5];}
+        else if(initialValue > -57.6f) {baseInitialOpacity = baseOpacity[4];}
+        else if(initialValue > -58.2f) {baseInitialOpacity = baseOpacity[3];}
+        else if(initialValue > -58.8f) {baseInitialOpacity = baseOpacity[2];}
+        else if(initialValue > -59.4f) {baseInitialOpacity = baseOpacity[1];}
+        else if(initialValue > -60.f)  {baseInitialOpacity = baseOpacity[0];}
+        else if(initialValue <= -60.f) {baseInitialOpacity = baseOpacity[0];}
+        else {baseInitialOpacity = baseOpacity[0];}
+        
+    // L2RA
+        
+        if(l2RAValue <= 0.f) {redL2RAOpacity = redOpacity[0];}
+        else if(l2RAValue < 0.2f) {redL2RAOpacity = redOpacity[1];}
+        else if(l2RAValue < 0.4f) {redL2RAOpacity = redOpacity[2];}
+        else if(l2RAValue < 0.6f) {redL2RAOpacity = redOpacity[3];}
+        else if(l2RAValue < 0.8f) {redL2RAOpacity = redOpacity[4];}
+        else if(l2RAValue < 1.f)  {redL2RAOpacity = redOpacity[5];}
+        else if(l2RAValue < 1.2f) {redL2RAOpacity = redOpacity[6];}
+        else if(l2RAValue < 1.4f) {redL2RAOpacity = redOpacity[7];}
+        else if(l2RAValue < 1.6f) {redL2RAOpacity = redOpacity[8];}
+        else if(l2RAValue < 1.8f) {redL2RAOpacity = redOpacity[9];}
+        else if(l2RAValue < 2.f)  {redL2RAOpacity = redOpacity[10];}
+        else if(l2RAValue < 2.2f) {redL2RAOpacity = redOpacity[11];}
+        else if(l2RAValue < 2.4f) {redL2RAOpacity = redOpacity[12];}
+        else if(l2RAValue < 2.6f) {redL2RAOpacity = redOpacity[13];}
+        else if(l2RAValue < 2.8f) {redL2RAOpacity = redOpacity[14];}
+        else if(l2RAValue < 3.f)  {redL2RAOpacity = redOpacity[15];}
+        else if(l2RAValue < 3.2f) {redL2RAOpacity = redOpacity[16];}
+        else if(l2RAValue < 3.4f) {redL2RAOpacity = redOpacity[17];}
+        else if(l2RAValue < 3.6f) {redL2RAOpacity = redOpacity[18];}
+        else if(l2RAValue < 3.8f) {redL2RAOpacity = redOpacity[19];}
+        else if(l2RAValue < 4.f)  {redL2RAOpacity = redOpacity[20];}
+        else if(l2RAValue < 4.2f) {redL2RAOpacity = redOpacity[21];}
+        else if(l2RAValue < 4.4f) {redL2RAOpacity = redOpacity[22];}
+        else if(l2RAValue < 4.6f) {redL2RAOpacity = redOpacity[23];}
+        else if(l2RAValue < 4.8f) {redL2RAOpacity = redOpacity[24];}
+        else if(l2RAValue < 5.f)  {redL2RAOpacity = redOpacity[25];}
+        else if(l2RAValue < 5.2f) {redL2RAOpacity = redOpacity[26];}
+        else if(l2RAValue < 5.4f) {redL2RAOpacity = redOpacity[27];}
+        else if(l2RAValue < 5.6f) {redL2RAOpacity = redOpacity[28];}
+        else if(l2RAValue < 5.8f) {redL2RAOpacity = redOpacity[29];}
+        else if(l2RAValue < 6.f)  {redL2RAOpacity = redOpacity[30];}
+
+        // 6 dB <= Red values < 12 dB
+        else if(l2RAValue < 6.2f) {redL2RAOpacity = redOpacity[31];}
+        else if(l2RAValue < 6.4f) {redL2RAOpacity = redOpacity[32];}
+        else if(l2RAValue < 6.6f) {redL2RAOpacity = redOpacity[33];}
+        else if(l2RAValue < 6.8f) {redL2RAOpacity = redOpacity[34];}
+        else if(l2RAValue < 7.f)  {redL2RAOpacity = redOpacity[35];}
+        else if(l2RAValue < 7.2f) {redL2RAOpacity = redOpacity[36];}
+        else if(l2RAValue < 7.4f) {redL2RAOpacity = redOpacity[37];}
+        else if(l2RAValue < 7.6f) {redL2RAOpacity = redOpacity[38];}
+        else if(l2RAValue < 7.8f) {redL2RAOpacity = redOpacity[39];}
+        else if(l2RAValue < 8.f)  {redL2RAOpacity = redOpacity[40];}
+        else if(l2RAValue < 8.2f) {redL2RAOpacity = redOpacity[41];}
+        else if(l2RAValue < 8.4f) {redL2RAOpacity = redOpacity[42];}
+        else if(l2RAValue < 8.6f) {redL2RAOpacity = redOpacity[43];}
+        else if(l2RAValue < 8.8f) {redL2RAOpacity = redOpacity[44];}
+        else if(l2RAValue < 9.f)  {redL2RAOpacity = redOpacity[45];}
+        else if(l2RAValue < 9.2f) {redL2RAOpacity = redOpacity[46];}
+        else if(l2RAValue < 9.4f) {redL2RAOpacity = redOpacity[47];}
+        else if(l2RAValue < 9.6f) {redL2RAOpacity = redOpacity[48];}
+        else if(l2RAValue < 9.8f) {redL2RAOpacity = redOpacity[49];}
+        else if(l2RAValue < 10.f) {redL2RAOpacity = redOpacity[50];}
+        else if(l2RAValue < 10.2f) {redL2RAOpacity = redOpacity[51];}
+        else if(l2RAValue < 10.4f) {redL2RAOpacity = redOpacity[52];}
+        else if(l2RAValue < 10.6f) {redL2RAOpacity = redOpacity[53];}
+        else if(l2RAValue < 10.8f) {redL2RAOpacity = redOpacity[54];}
+        else if(l2RAValue < 11.f)  {redL2RAOpacity = redOpacity[55];}
+        else if(l2RAValue < 11.2f) {redL2RAOpacity = redOpacity[56];}
+        else if(l2RAValue < 11.4f) {redL2RAOpacity = redOpacity[57];}
+        else if(l2RAValue < 11.6f) {redL2RAOpacity = redOpacity[58];}
+        else if(l2RAValue < 11.8f) {redL2RAOpacity = redOpacity[59];}
+        else if(l2RAValue < 12.f)  {redL2RAOpacity = redOpacity[60];}
+
+        // 12 dB <= Red values < 18 dB
+        else if(l2RAValue < 12.2f) {redL2RAOpacity = redOpacity[61];}
+        else if(l2RAValue < 12.4f) {redL2RAOpacity = redOpacity[62];}
+        else if(l2RAValue < 12.6f) {redL2RAOpacity = redOpacity[63];}
+        else if(l2RAValue < 12.8f) {redL2RAOpacity = redOpacity[64];}
+        else if(l2RAValue < 13.f)  {redL2RAOpacity = redOpacity[65];}
+        else if(l2RAValue < 13.2f) {redL2RAOpacity = redOpacity[66];}
+        else if(l2RAValue < 13.4f) {redL2RAOpacity = redOpacity[67];}
+        else if(l2RAValue < 13.6f) {redL2RAOpacity = redOpacity[68];}
+        else if(l2RAValue < 13.8f) {redL2RAOpacity = redOpacity[69];}
+        else if(l2RAValue < 14.f)  {redL2RAOpacity = redOpacity[70];}
+        else if(l2RAValue < 14.2f) {redL2RAOpacity = redOpacity[71];}
+        else if(l2RAValue < 14.4f) {redL2RAOpacity = redOpacity[72];}
+        else if(l2RAValue < 14.6f) {redL2RAOpacity = redOpacity[73];}
+        else if(l2RAValue < 14.8f) {redL2RAOpacity = redOpacity[74];}
+        else if(l2RAValue < 15.f)  {redL2RAOpacity = redOpacity[75];}
+        else if(l2RAValue < 15.2f) {redL2RAOpacity = redOpacity[76];}
+        else if(l2RAValue < 15.4f) {redL2RAOpacity = redOpacity[77];}
+        else if(l2RAValue < 15.6f) {redL2RAOpacity = redOpacity[78];}
+        else if(l2RAValue < 15.8f) {redL2RAOpacity = redOpacity[79];}
+        else if(l2RAValue < 16.f)  {redL2RAOpacity = redOpacity[80];}
+        else if(l2RAValue < 16.2f) {redL2RAOpacity = redOpacity[81];}
+        else if(l2RAValue < 16.4f) {redL2RAOpacity = redOpacity[82];}
+        else if(l2RAValue < 16.6f) {redL2RAOpacity = redOpacity[83];}
+        else if(l2RAValue < 16.8f) {redL2RAOpacity = redOpacity[84];}
+        else if(l2RAValue < 17.f)  {redL2RAOpacity = redOpacity[85];}
+        else if(l2RAValue < 17.2f) {redL2RAOpacity = redOpacity[86];}
+        else if(l2RAValue < 17.4f) {redL2RAOpacity = redOpacity[87];}
+        else if(l2RAValue < 17.6f) {redL2RAOpacity = redOpacity[88];}
+        else if(l2RAValue < 17.8f) {redL2RAOpacity = redOpacity[89];}
+        else if(l2RAValue < 18.f)  {redL2RAOpacity = redOpacity[90];}
+
+        // 18 dB <= Red values <= 24 dB
+        else if(l2RAValue < 18.2f) {redL2RAOpacity = redOpacity[91];}
+        else if(l2RAValue < 18.4f) {redL2RAOpacity = redOpacity[92];}
+        else if(l2RAValue < 18.6f) {redL2RAOpacity = redOpacity[93];}
+        else if(l2RAValue < 18.8f) {redL2RAOpacity = redOpacity[94];}
+        else if(l2RAValue < 19.f)  {redL2RAOpacity = redOpacity[95];}
+        else if(l2RAValue < 19.2f) {redL2RAOpacity = redOpacity[96];}
+        else if(l2RAValue < 19.4f) {redL2RAOpacity = redOpacity[97];}
+        else if(l2RAValue < 19.6f) {redL2RAOpacity = redOpacity[98];}
+        else if(l2RAValue < 19.8f) {redL2RAOpacity = redOpacity[99];}
+        else if(l2RAValue < 20.f)  {redL2RAOpacity = redOpacity[100];}
+        else if(l2RAValue < 20.2f) {redL2RAOpacity = redOpacity[101];}
+        else if(l2RAValue < 20.4f) {redL2RAOpacity = redOpacity[102];}
+        else if(l2RAValue < 20.6f) {redL2RAOpacity = redOpacity[103];}
+        else if(l2RAValue < 20.8f) {redL2RAOpacity = redOpacity[104];}
+        else if(l2RAValue < 21.f)  {redL2RAOpacity = redOpacity[105];}
+        else if(l2RAValue < 21.2f) {redL2RAOpacity = redOpacity[106];}
+        else if(l2RAValue < 21.4f) {redL2RAOpacity = redOpacity[107];}
+        else if(l2RAValue < 21.6f) {redL2RAOpacity = redOpacity[108];}
+        else if(l2RAValue < 21.8f) {redL2RAOpacity = redOpacity[109];}
+        else if(l2RAValue < 22.f)  {redL2RAOpacity = redOpacity[110];}
+        else if(l2RAValue < 22.2f) {redL2RAOpacity = redOpacity[111];}
+        else if(l2RAValue < 22.4f) {redL2RAOpacity = redOpacity[112];}
+        else if(l2RAValue < 22.6f) {redL2RAOpacity = redOpacity[113];}
+        else if(l2RAValue < 22.8f) {redL2RAOpacity = redOpacity[114];}
+        else if(l2RAValue < 23.f)  {redL2RAOpacity = redOpacity[115];}
+        else if(l2RAValue < 23.2f) {redL2RAOpacity = redOpacity[116];}
+        else if(l2RAValue < 23.4f) {redL2RAOpacity = redOpacity[117];}
+        else if(l2RAValue < 23.6f) {redL2RAOpacity = redOpacity[118];}
+        else if(l2RAValue < 23.8f) {redL2RAOpacity = redOpacity[119];}
+        else if(l2RAValue < 24.f)  {redL2RAOpacity = redOpacity[120];}
+        else if(l2RAValue >= 24.f) {redL2RAOpacity = redOpacity[121];}
+        else {redL2RAOpacity = redOpacity[0];}
+
+
+        if(l2RAValue == 0.f) {baseL2RAOpacity = baseOpacity[200];}
+        else if(l2RAValue > -0.2f) {baseL2RAOpacity = baseOpacity[199];}
+        else if(l2RAValue > -0.4f) {baseL2RAOpacity = baseOpacity[198];}
+        else if(l2RAValue > -0.6f) {baseL2RAOpacity = baseOpacity[197];}
+        else if(l2RAValue > -0.8f) {baseL2RAOpacity = baseOpacity[196];}
+        else if(l2RAValue > -1.f)  {baseL2RAOpacity = baseOpacity[195];}
+        else if(l2RAValue > -1.2f) {baseL2RAOpacity = baseOpacity[194];}
+        else if(l2RAValue > -1.4f) {baseL2RAOpacity = baseOpacity[193];}
+        else if(l2RAValue > -1.6f) {baseL2RAOpacity = baseOpacity[192];}
+        else if(l2RAValue > -1.8f) {baseL2RAOpacity = baseOpacity[191];}
+        else if(l2RAValue > -2.f)  {baseL2RAOpacity = baseOpacity[190];}
+        else if(l2RAValue > -2.2f) {baseL2RAOpacity = baseOpacity[189];}
+        else if(l2RAValue > -2.4f) {baseL2RAOpacity = baseOpacity[188];}
+        else if(l2RAValue > -2.6f) {baseL2RAOpacity = baseOpacity[187];}
+        else if(l2RAValue > -2.8f) {baseL2RAOpacity = baseOpacity[186];}
+        else if(l2RAValue > -3.f)  {baseL2RAOpacity = baseOpacity[185];}
+        else if(l2RAValue > -3.2f) {baseL2RAOpacity = baseOpacity[184];}
+        else if(l2RAValue > -3.4f) {baseL2RAOpacity = baseOpacity[183];}
+        else if(l2RAValue > -3.6f) {baseL2RAOpacity = baseOpacity[182];}
+        else if(l2RAValue > -3.8f) {baseL2RAOpacity = baseOpacity[181];}
+        else if(l2RAValue > -4.f)  {baseL2RAOpacity = baseOpacity[180];}
+        else if(l2RAValue > -4.2f) {baseL2RAOpacity = baseOpacity[179];}
+        else if(l2RAValue > -4.4f) {baseL2RAOpacity = baseOpacity[178];}
+        else if(l2RAValue > -4.6f) {baseL2RAOpacity = baseOpacity[177];}
+        else if(l2RAValue > -4.8f) {baseL2RAOpacity = baseOpacity[176];}
+        else if(l2RAValue > -5.f)  {baseL2RAOpacity = baseOpacity[175];}
+        else if(l2RAValue > -5.2f) {baseL2RAOpacity = baseOpacity[174];}
+        else if(l2RAValue > -5.4f) {baseL2RAOpacity = baseOpacity[173];}
+        else if(l2RAValue > -5.6f) {baseL2RAOpacity = baseOpacity[172];}
+        else if(l2RAValue > -5.8f) {baseL2RAOpacity = baseOpacity[171];}
+        else if(l2RAValue > -6.f)  {baseL2RAOpacity = baseOpacity[170];}
+
+        // 6 dB <= Red values < 12 dB
+        else if(l2RAValue > -6.2f) {baseL2RAOpacity = baseOpacity[169];}
+        else if(l2RAValue > -6.4f) {baseL2RAOpacity = baseOpacity[168];}
+        else if(l2RAValue > -6.6f) {baseL2RAOpacity = baseOpacity[167];}
+        else if(l2RAValue > -6.8f) {baseL2RAOpacity = baseOpacity[166];}
+        else if(l2RAValue > -7.f)  {baseL2RAOpacity = baseOpacity[165];}
+        else if(l2RAValue > -7.2f) {baseL2RAOpacity = baseOpacity[164];}
+        else if(l2RAValue > -7.4f) {baseL2RAOpacity = baseOpacity[163];}
+        else if(l2RAValue > -7.6f) {baseL2RAOpacity = baseOpacity[162];}
+        else if(l2RAValue > -7.8f) {baseL2RAOpacity = baseOpacity[161];}
+        else if(l2RAValue > -8.f)  {baseL2RAOpacity = baseOpacity[160];}
+        else if(l2RAValue > -8.2f) {baseL2RAOpacity = baseOpacity[159];}
+        else if(l2RAValue > -8.4f) {baseL2RAOpacity = baseOpacity[158];}
+        else if(l2RAValue > -8.6f) {baseL2RAOpacity = baseOpacity[157];}
+        else if(l2RAValue > -8.8f) {baseL2RAOpacity = baseOpacity[156];}
+        else if(l2RAValue > -9.f)  {baseL2RAOpacity = baseOpacity[155];}
+        else if(l2RAValue > -9.2f) {baseL2RAOpacity = baseOpacity[154];}
+        else if(l2RAValue > -9.4f) {baseL2RAOpacity = baseOpacity[153];}
+        else if(l2RAValue > -9.6f) {baseL2RAOpacity = baseOpacity[152];}
+        else if(l2RAValue > -9.8f) {baseL2RAOpacity = baseOpacity[151];}
+        else if(l2RAValue > -10.f) {baseL2RAOpacity = baseOpacity[150];}
+        else if(l2RAValue > -10.2f) {baseL2RAOpacity = baseOpacity[149];}
+        else if(l2RAValue > -10.4f) {baseL2RAOpacity = baseOpacity[148];}
+        else if(l2RAValue > -10.6f) {baseL2RAOpacity = baseOpacity[147];}
+        else if(l2RAValue > -10.8f) {baseL2RAOpacity = baseOpacity[146];}
+        else if(l2RAValue > -11.f)  {baseL2RAOpacity = baseOpacity[145];}
+        else if(l2RAValue > -11.2f) {baseL2RAOpacity = baseOpacity[144];}
+        else if(l2RAValue > -11.4f) {baseL2RAOpacity = baseOpacity[143];}
+        else if(l2RAValue > -11.6f) {baseL2RAOpacity = baseOpacity[142];}
+        else if(l2RAValue > -11.8f) {baseL2RAOpacity = baseOpacity[141];}
+        else if(l2RAValue > -12.f)  {baseL2RAOpacity = baseOpacity[140];}
+
+        // 12 dB <= Red values < 18 dB
+        else if(l2RAValue > -12.2f) {baseL2RAOpacity = baseOpacity[139];}
+        else if(l2RAValue > -12.4f) {baseL2RAOpacity = baseOpacity[138];}
+        else if(l2RAValue > -12.6f) {baseL2RAOpacity = baseOpacity[137];}
+        else if(l2RAValue > -12.8f) {baseL2RAOpacity = baseOpacity[136];}
+        else if(l2RAValue > -13.f)  {baseL2RAOpacity = baseOpacity[135];}
+        else if(l2RAValue > -13.2f) {baseL2RAOpacity = baseOpacity[134];}
+        else if(l2RAValue > -13.4f) {baseL2RAOpacity = baseOpacity[133];}
+        else if(l2RAValue > -13.6f) {baseL2RAOpacity = baseOpacity[132];}
+        else if(l2RAValue > -13.8f) {baseL2RAOpacity = baseOpacity[131];}
+        else if(l2RAValue > -14.f)  {baseL2RAOpacity = baseOpacity[130];}
+        else if(l2RAValue > -14.2f) {baseL2RAOpacity = baseOpacity[129];}
+        else if(l2RAValue > -14.4f) {baseL2RAOpacity = baseOpacity[128];}
+        else if(l2RAValue > -14.6f) {baseL2RAOpacity = baseOpacity[127];}
+        else if(l2RAValue > -14.8f) {baseL2RAOpacity = baseOpacity[126];}
+        else if(l2RAValue > -15.f)  {baseL2RAOpacity = baseOpacity[125];}
+        else if(l2RAValue > -15.2f) {baseL2RAOpacity = baseOpacity[124];}
+        else if(l2RAValue > -15.4f) {baseL2RAOpacity = baseOpacity[123];}
+        else if(l2RAValue > -15.6f) {baseL2RAOpacity = baseOpacity[122];}
+        else if(l2RAValue > -15.8f) {baseL2RAOpacity = baseOpacity[121];}
+        else if(l2RAValue > -16.f)  {baseL2RAOpacity = baseOpacity[120];}
+        else if(l2RAValue > -16.2f) {baseL2RAOpacity = baseOpacity[119];}
+        else if(l2RAValue > -16.4f) {baseL2RAOpacity = baseOpacity[118];}
+        else if(l2RAValue > -16.6f) {baseL2RAOpacity = baseOpacity[117];}
+        else if(l2RAValue > -16.8f) {baseL2RAOpacity = baseOpacity[116];}
+        else if(l2RAValue > -17.f)  {baseL2RAOpacity = baseOpacity[115];}
+        else if(l2RAValue > -17.2f) {baseL2RAOpacity = baseOpacity[114];}
+        else if(l2RAValue > -17.4f) {baseL2RAOpacity = baseOpacity[113];}
+        else if(l2RAValue > -17.6f) {baseL2RAOpacity = baseOpacity[112];}
+        else if(l2RAValue > -17.8f) {baseL2RAOpacity = baseOpacity[111];}
+        else if(l2RAValue > -18.f)  {baseL2RAOpacity = baseOpacity[110];}
+
+        // 18 dB <= Red values <= 24 dB
+        else if(l2RAValue > -18.2f) {baseL2RAOpacity = baseOpacity[109];}
+        else if(l2RAValue > -18.4f) {baseL2RAOpacity = baseOpacity[108];}
+        else if(l2RAValue > -18.6f) {baseL2RAOpacity = baseOpacity[107];}
+        else if(l2RAValue > -18.8f) {baseL2RAOpacity = baseOpacity[106];}
+        else if(l2RAValue > -19.f)  {baseL2RAOpacity = baseOpacity[105];}
+        else if(l2RAValue > -19.2f) {baseL2RAOpacity = baseOpacity[104];}
+        else if(l2RAValue > -19.4f) {baseL2RAOpacity = baseOpacity[103];}
+        else if(l2RAValue > -19.6f) {baseL2RAOpacity = baseOpacity[102];}
+        else if(l2RAValue > -19.8f) {baseL2RAOpacity = baseOpacity[101];}
+        else if(l2RAValue > -20.f)  {baseL2RAOpacity = baseOpacity[100];}
+        else if(l2RAValue > -20.2f) {baseL2RAOpacity = baseOpacity[99];}
+        else if(l2RAValue > -20.4f) {baseL2RAOpacity = baseOpacity[98];}
+        else if(l2RAValue > -20.6f) {baseL2RAOpacity = baseOpacity[97];}
+        else if(l2RAValue > -20.8f) {baseL2RAOpacity = baseOpacity[96];}
+        else if(l2RAValue > -21.f)  {baseL2RAOpacity = baseOpacity[95];}
+        else if(l2RAValue > -21.2f) {baseL2RAOpacity = baseOpacity[94];}
+        else if(l2RAValue > -21.4f) {baseL2RAOpacity = baseOpacity[93];}
+        else if(l2RAValue > -21.6f) {baseL2RAOpacity = baseOpacity[92];}
+        else if(l2RAValue > -21.8f) {baseL2RAOpacity = baseOpacity[91];}
+        else if(l2RAValue > -22.f)  {baseL2RAOpacity = baseOpacity[90];}
+        else if(l2RAValue > -22.2f) {baseL2RAOpacity = baseOpacity[89];}
+        else if(l2RAValue > -22.4f) {baseL2RAOpacity = baseOpacity[88];}
+        else if(l2RAValue > -22.6f) {baseL2RAOpacity = baseOpacity[87];}
+        else if(l2RAValue > -22.8f) {baseL2RAOpacity = baseOpacity[86];}
+        else if(l2RAValue > -23.f)  {baseL2RAOpacity = baseOpacity[85];}
+        else if(l2RAValue > -23.2f) {baseL2RAOpacity = baseOpacity[84];}
+        else if(l2RAValue > -23.4f) {baseL2RAOpacity = baseOpacity[83];}
+        else if(l2RAValue > -23.6f) {baseL2RAOpacity = baseOpacity[82];}
+        else if(l2RAValue > -23.8f) {baseL2RAOpacity = baseOpacity[81];}
+        else if(l2RAValue > -24.f)  {baseL2RAOpacity = baseOpacity[80];}
+
+        // 18 dB <= Red values <= 24 dB
+        else if(l2RAValue > -24.3f) {baseL2RAOpacity = baseOpacity[79];}
+        else if(l2RAValue > -24.6f) {baseL2RAOpacity = baseOpacity[78];}
+        else if(l2RAValue > -24.9f) {baseL2RAOpacity = baseOpacity[77];}
+        else if(l2RAValue > -25.2f) {baseL2RAOpacity = baseOpacity[76];}
+        else if(l2RAValue > -25.5f) {baseL2RAOpacity = baseOpacity[75];}
+        else if(l2RAValue > -25.8f) {baseL2RAOpacity = baseOpacity[74];}
+        else if(l2RAValue > -26.1f) {baseL2RAOpacity = baseOpacity[73];}
+        else if(l2RAValue > -26.4f) {baseL2RAOpacity = baseOpacity[72];}
+        else if(l2RAValue > -26.7f) {baseL2RAOpacity = baseOpacity[71];}
+        else if(l2RAValue > -27.f)  {baseL2RAOpacity = baseOpacity[70];}
+        else if(l2RAValue > -27.3f) {baseL2RAOpacity = baseOpacity[69];}
+        else if(l2RAValue > -27.6f) {baseL2RAOpacity = baseOpacity[68];}
+        else if(l2RAValue > -27.9f) {baseL2RAOpacity = baseOpacity[67];}
+        else if(l2RAValue > -28.2f) {baseL2RAOpacity = baseOpacity[66];}
+        else if(l2RAValue > -28.5f) {baseL2RAOpacity = baseOpacity[65];}
+        else if(l2RAValue > -28.8f) {baseL2RAOpacity = baseOpacity[64];}
+        else if(l2RAValue > -29.1f) {baseL2RAOpacity = baseOpacity[63];}
+        else if(l2RAValue > -29.4f) {baseL2RAOpacity = baseOpacity[62];}
+        else if(l2RAValue > -29.7f) {baseL2RAOpacity = baseOpacity[61];}
+        else if(l2RAValue > -30.f)  {baseL2RAOpacity = baseOpacity[60];}
+
+        else if(l2RAValue > -30.3f) {baseL2RAOpacity = baseOpacity[59];}
+        else if(l2RAValue > -30.6f) {baseL2RAOpacity = baseOpacity[58];}
+        else if(l2RAValue > -30.9f) {baseL2RAOpacity = baseOpacity[57];}
+        else if(l2RAValue > -31.2f) {baseL2RAOpacity = baseOpacity[56];}
+        else if(l2RAValue > -31.5f) {baseL2RAOpacity = baseOpacity[55];}
+        else if(l2RAValue > -31.8f) {baseL2RAOpacity = baseOpacity[54];}
+        else if(l2RAValue > -32.1f) {baseL2RAOpacity = baseOpacity[53];}
+        else if(l2RAValue > -32.4f) {baseL2RAOpacity = baseOpacity[52];}
+        else if(l2RAValue > -32.7f) {baseL2RAOpacity = baseOpacity[51];}
+        else if(l2RAValue > -33.f)  {baseL2RAOpacity = baseOpacity[50];}
+        else if(l2RAValue > -33.3f) {baseL2RAOpacity = baseOpacity[49];}
+        else if(l2RAValue > -33.6f) {baseL2RAOpacity = baseOpacity[48];}
+        else if(l2RAValue > -33.9f) {baseL2RAOpacity = baseOpacity[47];}
+        else if(l2RAValue > -34.2f) {baseL2RAOpacity = baseOpacity[46];}
+        else if(l2RAValue > -34.5f) {baseL2RAOpacity = baseOpacity[45];}
+        else if(l2RAValue > -34.8f) {baseL2RAOpacity = baseOpacity[44];}
+        else if(l2RAValue > -35.1f) {baseL2RAOpacity = baseOpacity[43];}
+        else if(l2RAValue > -35.4f) {baseL2RAOpacity = baseOpacity[42];}
+        else if(l2RAValue > -35.7f) {baseL2RAOpacity = baseOpacity[41];}
+        else if(l2RAValue > -36.f)  {baseL2RAOpacity = baseOpacity[40];}
+
+
+        else if(l2RAValue > -36.6f) {baseL2RAOpacity = baseOpacity[39];}
+        else if(l2RAValue > -37.2f) {baseL2RAOpacity = baseOpacity[38];}
+        else if(l2RAValue > -37.8f) {baseL2RAOpacity = baseOpacity[37];}
+        else if(l2RAValue > -38.4f) {baseL2RAOpacity = baseOpacity[36];}
+        else if(l2RAValue > -39.f)  {baseL2RAOpacity = baseOpacity[35];}
+        else if(l2RAValue > -39.6f) {baseL2RAOpacity = baseOpacity[34];}
+        else if(l2RAValue > -40.2f) {baseL2RAOpacity = baseOpacity[33];}
+        else if(l2RAValue > -40.8f) {baseL2RAOpacity = baseOpacity[32];}
+        else if(l2RAValue > -41.4f) {baseL2RAOpacity = baseOpacity[31];}
+        else if(l2RAValue > -42.f)  {baseL2RAOpacity = baseOpacity[30];}
+
+        else if(l2RAValue > -42.6f) {baseL2RAOpacity = baseOpacity[29];}
+        else if(l2RAValue > -43.2f) {baseL2RAOpacity = baseOpacity[28];}
+        else if(l2RAValue > -43.8f) {baseL2RAOpacity = baseOpacity[27];}
+        else if(l2RAValue > -44.4f) {baseL2RAOpacity = baseOpacity[26];}
+        else if(l2RAValue > -45.f)  {baseL2RAOpacity = baseOpacity[25];}
+        else if(l2RAValue > -45.6f) {baseL2RAOpacity = baseOpacity[24];}
+        else if(l2RAValue > -46.2f) {baseL2RAOpacity = baseOpacity[23];}
+        else if(l2RAValue > -46.8f) {baseL2RAOpacity = baseOpacity[22];}
+        else if(l2RAValue > -47.4f) {baseL2RAOpacity = baseOpacity[21];}
+        else if(l2RAValue > -48.f)  {baseL2RAOpacity = baseOpacity[20];}
+
+        else if(l2RAValue > -48.6f) {baseL2RAOpacity = baseOpacity[19];}
+        else if(l2RAValue > -49.2f) {baseL2RAOpacity = baseOpacity[18];}
+        else if(l2RAValue > -49.8f) {baseL2RAOpacity = baseOpacity[17];}
+        else if(l2RAValue > -50.4f) {baseL2RAOpacity = baseOpacity[16];}
+        else if(l2RAValue > -51.f)  {baseL2RAOpacity = baseOpacity[15];}
+        else if(l2RAValue > -51.6f) {baseL2RAOpacity = baseOpacity[14];}
+        else if(l2RAValue > -52.2f) {baseL2RAOpacity = baseOpacity[13];}
+        else if(l2RAValue > -52.8f) {baseL2RAOpacity = baseOpacity[12];}
+        else if(l2RAValue > -53.4f) {baseL2RAOpacity = baseOpacity[11];}
+        else if(l2RAValue > -54.f)  {baseL2RAOpacity = baseOpacity[10];}
+
+        else if(l2RAValue > -54.6f) {baseL2RAOpacity = baseOpacity[9];}
+        else if(l2RAValue > -55.2f) {baseL2RAOpacity = baseOpacity[8];}
+        else if(l2RAValue > -55.8f) {baseL2RAOpacity = baseOpacity[7];}
+        else if(l2RAValue > -56.4f) {baseL2RAOpacity = baseOpacity[6];}
+        else if(l2RAValue > -57.f)  {baseL2RAOpacity = baseOpacity[5];}
+        else if(l2RAValue > -57.6f) {baseL2RAOpacity = baseOpacity[4];}
+        else if(l2RAValue > -58.2f) {baseL2RAOpacity = baseOpacity[3];}
+        else if(l2RAValue > -58.8f) {baseL2RAOpacity = baseOpacity[2];}
+        else if(l2RAValue > -59.4f) {baseL2RAOpacity = baseOpacity[1];}
+        else if(l2RAValue > -60.f)  {baseL2RAOpacity = baseOpacity[0];}
+        else if(l2RAValue <= -60.f) {baseL2RAOpacity = baseOpacity[0];}
+        else {baseL2RAOpacity = baseOpacity[0];}
+        
+    // R2L
+        
+        if(r2LValue <= 0.f) {redR2LOpacity = redOpacity[0];}
+        else if(r2LValue < 0.2f) {redR2LOpacity = redOpacity[1];}
+        else if(r2LValue < 0.4f) {redR2LOpacity = redOpacity[2];}
+        else if(r2LValue < 0.6f) {redR2LOpacity = redOpacity[3];}
+        else if(r2LValue < 0.8f) {redR2LOpacity = redOpacity[4];}
+        else if(r2LValue < 1.f)  {redR2LOpacity = redOpacity[5];}
+        else if(r2LValue < 1.2f) {redR2LOpacity = redOpacity[6];}
+        else if(r2LValue < 1.4f) {redR2LOpacity = redOpacity[7];}
+        else if(r2LValue < 1.6f) {redR2LOpacity = redOpacity[8];}
+        else if(r2LValue < 1.8f) {redR2LOpacity = redOpacity[9];}
+        else if(r2LValue < 2.f)  {redR2LOpacity = redOpacity[10];}
+        else if(r2LValue < 2.2f) {redR2LOpacity = redOpacity[11];}
+        else if(r2LValue < 2.4f) {redR2LOpacity = redOpacity[12];}
+        else if(r2LValue < 2.6f) {redR2LOpacity = redOpacity[13];}
+        else if(r2LValue < 2.8f) {redR2LOpacity = redOpacity[14];}
+        else if(r2LValue < 3.f)  {redR2LOpacity = redOpacity[15];}
+        else if(r2LValue < 3.2f) {redR2LOpacity = redOpacity[16];}
+        else if(r2LValue < 3.4f) {redR2LOpacity = redOpacity[17];}
+        else if(r2LValue < 3.6f) {redR2LOpacity = redOpacity[18];}
+        else if(r2LValue < 3.8f) {redR2LOpacity = redOpacity[19];}
+        else if(r2LValue < 4.f)  {redR2LOpacity = redOpacity[20];}
+        else if(r2LValue < 4.2f) {redR2LOpacity = redOpacity[21];}
+        else if(r2LValue < 4.4f) {redR2LOpacity = redOpacity[22];}
+        else if(r2LValue < 4.6f) {redR2LOpacity = redOpacity[23];}
+        else if(r2LValue < 4.8f) {redR2LOpacity = redOpacity[24];}
+        else if(r2LValue < 5.f)  {redR2LOpacity = redOpacity[25];}
+        else if(r2LValue < 5.2f) {redR2LOpacity = redOpacity[26];}
+        else if(r2LValue < 5.4f) {redR2LOpacity = redOpacity[27];}
+        else if(r2LValue < 5.6f) {redR2LOpacity = redOpacity[28];}
+        else if(r2LValue < 5.8f) {redR2LOpacity = redOpacity[29];}
+        else if(r2LValue < 6.f)  {redR2LOpacity = redOpacity[30];}
+
+        // 6 dB <= Red values < 12 dB
+        else if(r2LValue < 6.2f) {redR2LOpacity = redOpacity[31];}
+        else if(r2LValue < 6.4f) {redR2LOpacity = redOpacity[32];}
+        else if(r2LValue < 6.6f) {redR2LOpacity = redOpacity[33];}
+        else if(r2LValue < 6.8f) {redR2LOpacity = redOpacity[34];}
+        else if(r2LValue < 7.f)  {redR2LOpacity = redOpacity[35];}
+        else if(r2LValue < 7.2f) {redR2LOpacity = redOpacity[36];}
+        else if(r2LValue < 7.4f) {redR2LOpacity = redOpacity[37];}
+        else if(r2LValue < 7.6f) {redR2LOpacity = redOpacity[38];}
+        else if(r2LValue < 7.8f) {redR2LOpacity = redOpacity[39];}
+        else if(r2LValue < 8.f)  {redR2LOpacity = redOpacity[40];}
+        else if(r2LValue < 8.2f) {redR2LOpacity = redOpacity[41];}
+        else if(r2LValue < 8.4f) {redR2LOpacity = redOpacity[42];}
+        else if(r2LValue < 8.6f) {redR2LOpacity = redOpacity[43];}
+        else if(r2LValue < 8.8f) {redR2LOpacity = redOpacity[44];}
+        else if(r2LValue < 9.f)  {redR2LOpacity = redOpacity[45];}
+        else if(r2LValue < 9.2f) {redR2LOpacity = redOpacity[46];}
+        else if(r2LValue < 9.4f) {redR2LOpacity = redOpacity[47];}
+        else if(r2LValue < 9.6f) {redR2LOpacity = redOpacity[48];}
+        else if(r2LValue < 9.8f) {redR2LOpacity = redOpacity[49];}
+        else if(r2LValue < 10.f) {redR2LOpacity = redOpacity[50];}
+        else if(r2LValue < 10.2f) {redR2LOpacity = redOpacity[51];}
+        else if(r2LValue < 10.4f) {redR2LOpacity = redOpacity[52];}
+        else if(r2LValue < 10.6f) {redR2LOpacity = redOpacity[53];}
+        else if(r2LValue < 10.8f) {redR2LOpacity = redOpacity[54];}
+        else if(r2LValue < 11.f)  {redR2LOpacity = redOpacity[55];}
+        else if(r2LValue < 11.2f) {redR2LOpacity = redOpacity[56];}
+        else if(r2LValue < 11.4f) {redR2LOpacity = redOpacity[57];}
+        else if(r2LValue < 11.6f) {redR2LOpacity = redOpacity[58];}
+        else if(r2LValue < 11.8f) {redR2LOpacity = redOpacity[59];}
+        else if(r2LValue < 12.f)  {redR2LOpacity = redOpacity[60];}
+
+        // 12 dB <= Red values < 18 dB
+        else if(r2LValue < 12.2f) {redR2LOpacity = redOpacity[61];}
+        else if(r2LValue < 12.4f) {redR2LOpacity = redOpacity[62];}
+        else if(r2LValue < 12.6f) {redR2LOpacity = redOpacity[63];}
+        else if(r2LValue < 12.8f) {redR2LOpacity = redOpacity[64];}
+        else if(r2LValue < 13.f)  {redR2LOpacity = redOpacity[65];}
+        else if(r2LValue < 13.2f) {redR2LOpacity = redOpacity[66];}
+        else if(r2LValue < 13.4f) {redR2LOpacity = redOpacity[67];}
+        else if(r2LValue < 13.6f) {redR2LOpacity = redOpacity[68];}
+        else if(r2LValue < 13.8f) {redR2LOpacity = redOpacity[69];}
+        else if(r2LValue < 14.f)  {redR2LOpacity = redOpacity[70];}
+        else if(r2LValue < 14.2f) {redR2LOpacity = redOpacity[71];}
+        else if(r2LValue < 14.4f) {redR2LOpacity = redOpacity[72];}
+        else if(r2LValue < 14.6f) {redR2LOpacity = redOpacity[73];}
+        else if(r2LValue < 14.8f) {redR2LOpacity = redOpacity[74];}
+        else if(r2LValue < 15.f)  {redR2LOpacity = redOpacity[75];}
+        else if(r2LValue < 15.2f) {redR2LOpacity = redOpacity[76];}
+        else if(r2LValue < 15.4f) {redR2LOpacity = redOpacity[77];}
+        else if(r2LValue < 15.6f) {redR2LOpacity = redOpacity[78];}
+        else if(r2LValue < 15.8f) {redR2LOpacity = redOpacity[79];}
+        else if(r2LValue < 16.f)  {redR2LOpacity = redOpacity[80];}
+        else if(r2LValue < 16.2f) {redR2LOpacity = redOpacity[81];}
+        else if(r2LValue < 16.4f) {redR2LOpacity = redOpacity[82];}
+        else if(r2LValue < 16.6f) {redR2LOpacity = redOpacity[83];}
+        else if(r2LValue < 16.8f) {redR2LOpacity = redOpacity[84];}
+        else if(r2LValue < 17.f)  {redR2LOpacity = redOpacity[85];}
+        else if(r2LValue < 17.2f) {redR2LOpacity = redOpacity[86];}
+        else if(r2LValue < 17.4f) {redR2LOpacity = redOpacity[87];}
+        else if(r2LValue < 17.6f) {redR2LOpacity = redOpacity[88];}
+        else if(r2LValue < 17.8f) {redR2LOpacity = redOpacity[89];}
+        else if(r2LValue < 18.f)  {redR2LOpacity = redOpacity[90];}
+
+        // 18 dB <= Red values <= 24 dB
+        else if(r2LValue < 18.2f) {redR2LOpacity = redOpacity[91];}
+        else if(r2LValue < 18.4f) {redR2LOpacity = redOpacity[92];}
+        else if(r2LValue < 18.6f) {redR2LOpacity = redOpacity[93];}
+        else if(r2LValue < 18.8f) {redR2LOpacity = redOpacity[94];}
+        else if(r2LValue < 19.f)  {redR2LOpacity = redOpacity[95];}
+        else if(r2LValue < 19.2f) {redR2LOpacity = redOpacity[96];}
+        else if(r2LValue < 19.4f) {redR2LOpacity = redOpacity[97];}
+        else if(r2LValue < 19.6f) {redR2LOpacity = redOpacity[98];}
+        else if(r2LValue < 19.8f) {redR2LOpacity = redOpacity[99];}
+        else if(r2LValue < 20.f)  {redR2LOpacity = redOpacity[100];}
+        else if(r2LValue < 20.2f) {redR2LOpacity = redOpacity[101];}
+        else if(r2LValue < 20.4f) {redR2LOpacity = redOpacity[102];}
+        else if(r2LValue < 20.6f) {redR2LOpacity = redOpacity[103];}
+        else if(r2LValue < 20.8f) {redR2LOpacity = redOpacity[104];}
+        else if(r2LValue < 21.f)  {redR2LOpacity = redOpacity[105];}
+        else if(r2LValue < 21.2f) {redR2LOpacity = redOpacity[106];}
+        else if(r2LValue < 21.4f) {redR2LOpacity = redOpacity[107];}
+        else if(r2LValue < 21.6f) {redR2LOpacity = redOpacity[108];}
+        else if(r2LValue < 21.8f) {redR2LOpacity = redOpacity[109];}
+        else if(r2LValue < 22.f)  {redR2LOpacity = redOpacity[110];}
+        else if(r2LValue < 22.2f) {redR2LOpacity = redOpacity[111];}
+        else if(r2LValue < 22.4f) {redR2LOpacity = redOpacity[112];}
+        else if(r2LValue < 22.6f) {redR2LOpacity = redOpacity[113];}
+        else if(r2LValue < 22.8f) {redR2LOpacity = redOpacity[114];}
+        else if(r2LValue < 23.f)  {redR2LOpacity = redOpacity[115];}
+        else if(r2LValue < 23.2f) {redR2LOpacity = redOpacity[116];}
+        else if(r2LValue < 23.4f) {redR2LOpacity = redOpacity[117];}
+        else if(r2LValue < 23.6f) {redR2LOpacity = redOpacity[118];}
+        else if(r2LValue < 23.8f) {redR2LOpacity = redOpacity[119];}
+        else if(r2LValue < 24.f)  {redR2LOpacity = redOpacity[120];}
+        else if(r2LValue >= 24.f) {redR2LOpacity = redOpacity[121];}
+        else {redR2LOpacity = redOpacity[0];}
+
+
+        if(r2LValue == 0.f) {baseR2LOpacity = baseOpacity[200];}
+        else if(r2LValue > -0.2f) {baseR2LOpacity = baseOpacity[199];}
+        else if(r2LValue > -0.4f) {baseR2LOpacity = baseOpacity[198];}
+        else if(r2LValue > -0.6f) {baseR2LOpacity = baseOpacity[197];}
+        else if(r2LValue > -0.8f) {baseR2LOpacity = baseOpacity[196];}
+        else if(r2LValue > -1.f)  {baseR2LOpacity = baseOpacity[195];}
+        else if(r2LValue > -1.2f) {baseR2LOpacity = baseOpacity[194];}
+        else if(r2LValue > -1.4f) {baseR2LOpacity = baseOpacity[193];}
+        else if(r2LValue > -1.6f) {baseR2LOpacity = baseOpacity[192];}
+        else if(r2LValue > -1.8f) {baseR2LOpacity = baseOpacity[191];}
+        else if(r2LValue > -2.f)  {baseR2LOpacity = baseOpacity[190];}
+        else if(r2LValue > -2.2f) {baseR2LOpacity = baseOpacity[189];}
+        else if(r2LValue > -2.4f) {baseR2LOpacity = baseOpacity[188];}
+        else if(r2LValue > -2.6f) {baseR2LOpacity = baseOpacity[187];}
+        else if(r2LValue > -2.8f) {baseR2LOpacity = baseOpacity[186];}
+        else if(r2LValue > -3.f)  {baseR2LOpacity = baseOpacity[185];}
+        else if(r2LValue > -3.2f) {baseR2LOpacity = baseOpacity[184];}
+        else if(r2LValue > -3.4f) {baseR2LOpacity = baseOpacity[183];}
+        else if(r2LValue > -3.6f) {baseR2LOpacity = baseOpacity[182];}
+        else if(r2LValue > -3.8f) {baseR2LOpacity = baseOpacity[181];}
+        else if(r2LValue > -4.f)  {baseR2LOpacity = baseOpacity[180];}
+        else if(r2LValue > -4.2f) {baseR2LOpacity = baseOpacity[179];}
+        else if(r2LValue > -4.4f) {baseR2LOpacity = baseOpacity[178];}
+        else if(r2LValue > -4.6f) {baseR2LOpacity = baseOpacity[177];}
+        else if(r2LValue > -4.8f) {baseR2LOpacity = baseOpacity[176];}
+        else if(r2LValue > -5.f)  {baseR2LOpacity = baseOpacity[175];}
+        else if(r2LValue > -5.2f) {baseR2LOpacity = baseOpacity[174];}
+        else if(r2LValue > -5.4f) {baseR2LOpacity = baseOpacity[173];}
+        else if(r2LValue > -5.6f) {baseR2LOpacity = baseOpacity[172];}
+        else if(r2LValue > -5.8f) {baseR2LOpacity = baseOpacity[171];}
+        else if(r2LValue > -6.f)  {baseR2LOpacity = baseOpacity[170];}
+
+        // 6 dB <= Red values < 12 dB
+        else if(r2LValue > -6.2f) {baseR2LOpacity = baseOpacity[169];}
+        else if(r2LValue > -6.4f) {baseR2LOpacity = baseOpacity[168];}
+        else if(r2LValue > -6.6f) {baseR2LOpacity = baseOpacity[167];}
+        else if(r2LValue > -6.8f) {baseR2LOpacity = baseOpacity[166];}
+        else if(r2LValue > -7.f)  {baseR2LOpacity = baseOpacity[165];}
+        else if(r2LValue > -7.2f) {baseR2LOpacity = baseOpacity[164];}
+        else if(r2LValue > -7.4f) {baseR2LOpacity = baseOpacity[163];}
+        else if(r2LValue > -7.6f) {baseR2LOpacity = baseOpacity[162];}
+        else if(r2LValue > -7.8f) {baseR2LOpacity = baseOpacity[161];}
+        else if(r2LValue > -8.f)  {baseR2LOpacity = baseOpacity[160];}
+        else if(r2LValue > -8.2f) {baseR2LOpacity = baseOpacity[159];}
+        else if(r2LValue > -8.4f) {baseR2LOpacity = baseOpacity[158];}
+        else if(r2LValue > -8.6f) {baseR2LOpacity = baseOpacity[157];}
+        else if(r2LValue > -8.8f) {baseR2LOpacity = baseOpacity[156];}
+        else if(r2LValue > -9.f)  {baseR2LOpacity = baseOpacity[155];}
+        else if(r2LValue > -9.2f) {baseR2LOpacity = baseOpacity[154];}
+        else if(r2LValue > -9.4f) {baseR2LOpacity = baseOpacity[153];}
+        else if(r2LValue > -9.6f) {baseR2LOpacity = baseOpacity[152];}
+        else if(r2LValue > -9.8f) {baseR2LOpacity = baseOpacity[151];}
+        else if(r2LValue > -10.f) {baseR2LOpacity = baseOpacity[150];}
+        else if(r2LValue > -10.2f) {baseR2LOpacity = baseOpacity[149];}
+        else if(r2LValue > -10.4f) {baseR2LOpacity = baseOpacity[148];}
+        else if(r2LValue > -10.6f) {baseR2LOpacity = baseOpacity[147];}
+        else if(r2LValue > -10.8f) {baseR2LOpacity = baseOpacity[146];}
+        else if(r2LValue > -11.f)  {baseR2LOpacity = baseOpacity[145];}
+        else if(r2LValue > -11.2f) {baseR2LOpacity = baseOpacity[144];}
+        else if(r2LValue > -11.4f) {baseR2LOpacity = baseOpacity[143];}
+        else if(r2LValue > -11.6f) {baseR2LOpacity = baseOpacity[142];}
+        else if(r2LValue > -11.8f) {baseR2LOpacity = baseOpacity[141];}
+        else if(r2LValue > -12.f)  {baseR2LOpacity = baseOpacity[140];}
+
+        // 12 dB <= Red values < 18 dB
+        else if(r2LValue > -12.2f) {baseR2LOpacity = baseOpacity[139];}
+        else if(r2LValue > -12.4f) {baseR2LOpacity = baseOpacity[138];}
+        else if(r2LValue > -12.6f) {baseR2LOpacity = baseOpacity[137];}
+        else if(r2LValue > -12.8f) {baseR2LOpacity = baseOpacity[136];}
+        else if(r2LValue > -13.f)  {baseR2LOpacity = baseOpacity[135];}
+        else if(r2LValue > -13.2f) {baseR2LOpacity = baseOpacity[134];}
+        else if(r2LValue > -13.4f) {baseR2LOpacity = baseOpacity[133];}
+        else if(r2LValue > -13.6f) {baseR2LOpacity = baseOpacity[132];}
+        else if(r2LValue > -13.8f) {baseR2LOpacity = baseOpacity[131];}
+        else if(r2LValue > -14.f)  {baseR2LOpacity = baseOpacity[130];}
+        else if(r2LValue > -14.2f) {baseR2LOpacity = baseOpacity[129];}
+        else if(r2LValue > -14.4f) {baseR2LOpacity = baseOpacity[128];}
+        else if(r2LValue > -14.6f) {baseR2LOpacity = baseOpacity[127];}
+        else if(r2LValue > -14.8f) {baseR2LOpacity = baseOpacity[126];}
+        else if(r2LValue > -15.f)  {baseR2LOpacity = baseOpacity[125];}
+        else if(r2LValue > -15.2f) {baseR2LOpacity = baseOpacity[124];}
+        else if(r2LValue > -15.4f) {baseR2LOpacity = baseOpacity[123];}
+        else if(r2LValue > -15.6f) {baseR2LOpacity = baseOpacity[122];}
+        else if(r2LValue > -15.8f) {baseR2LOpacity = baseOpacity[121];}
+        else if(r2LValue > -16.f)  {baseR2LOpacity = baseOpacity[120];}
+        else if(r2LValue > -16.2f) {baseR2LOpacity = baseOpacity[119];}
+        else if(r2LValue > -16.4f) {baseR2LOpacity = baseOpacity[118];}
+        else if(r2LValue > -16.6f) {baseR2LOpacity = baseOpacity[117];}
+        else if(r2LValue > -16.8f) {baseR2LOpacity = baseOpacity[116];}
+        else if(r2LValue > -17.f)  {baseR2LOpacity = baseOpacity[115];}
+        else if(r2LValue > -17.2f) {baseR2LOpacity = baseOpacity[114];}
+        else if(r2LValue > -17.4f) {baseR2LOpacity = baseOpacity[113];}
+        else if(r2LValue > -17.6f) {baseR2LOpacity = baseOpacity[112];}
+        else if(r2LValue > -17.8f) {baseR2LOpacity = baseOpacity[111];}
+        else if(r2LValue > -18.f)  {baseR2LOpacity = baseOpacity[110];}
+
+        // 18 dB <= Red values <= 24 dB
+        else if(r2LValue > -18.2f) {baseR2LOpacity = baseOpacity[109];}
+        else if(r2LValue > -18.4f) {baseR2LOpacity = baseOpacity[108];}
+        else if(r2LValue > -18.6f) {baseR2LOpacity = baseOpacity[107];}
+        else if(r2LValue > -18.8f) {baseR2LOpacity = baseOpacity[106];}
+        else if(r2LValue > -19.f)  {baseR2LOpacity = baseOpacity[105];}
+        else if(r2LValue > -19.2f) {baseR2LOpacity = baseOpacity[104];}
+        else if(r2LValue > -19.4f) {baseR2LOpacity = baseOpacity[103];}
+        else if(r2LValue > -19.6f) {baseR2LOpacity = baseOpacity[102];}
+        else if(r2LValue > -19.8f) {baseR2LOpacity = baseOpacity[101];}
+        else if(r2LValue > -20.f)  {baseR2LOpacity = baseOpacity[100];}
+        else if(r2LValue > -20.2f) {baseR2LOpacity = baseOpacity[99];}
+        else if(r2LValue > -20.4f) {baseR2LOpacity = baseOpacity[98];}
+        else if(r2LValue > -20.6f) {baseR2LOpacity = baseOpacity[97];}
+        else if(r2LValue > -20.8f) {baseR2LOpacity = baseOpacity[96];}
+        else if(r2LValue > -21.f)  {baseR2LOpacity = baseOpacity[95];}
+        else if(r2LValue > -21.2f) {baseR2LOpacity = baseOpacity[94];}
+        else if(r2LValue > -21.4f) {baseR2LOpacity = baseOpacity[93];}
+        else if(r2LValue > -21.6f) {baseR2LOpacity = baseOpacity[92];}
+        else if(r2LValue > -21.8f) {baseR2LOpacity = baseOpacity[91];}
+        else if(r2LValue > -22.f)  {baseR2LOpacity = baseOpacity[90];}
+        else if(r2LValue > -22.2f) {baseR2LOpacity = baseOpacity[89];}
+        else if(r2LValue > -22.4f) {baseR2LOpacity = baseOpacity[88];}
+        else if(r2LValue > -22.6f) {baseR2LOpacity = baseOpacity[87];}
+        else if(r2LValue > -22.8f) {baseR2LOpacity = baseOpacity[86];}
+        else if(r2LValue > -23.f)  {baseR2LOpacity = baseOpacity[85];}
+        else if(r2LValue > -23.2f) {baseR2LOpacity = baseOpacity[84];}
+        else if(r2LValue > -23.4f) {baseR2LOpacity = baseOpacity[83];}
+        else if(r2LValue > -23.6f) {baseR2LOpacity = baseOpacity[82];}
+        else if(r2LValue > -23.8f) {baseR2LOpacity = baseOpacity[81];}
+        else if(r2LValue > -24.f)  {baseR2LOpacity = baseOpacity[80];}
+
+        // 18 dB <= Red values <= 24 dB
+        else if(r2LValue > -24.3f) {baseR2LOpacity = baseOpacity[79];}
+        else if(r2LValue > -24.6f) {baseR2LOpacity = baseOpacity[78];}
+        else if(r2LValue > -24.9f) {baseR2LOpacity = baseOpacity[77];}
+        else if(r2LValue > -25.2f) {baseR2LOpacity = baseOpacity[76];}
+        else if(r2LValue > -25.5f) {baseR2LOpacity = baseOpacity[75];}
+        else if(r2LValue > -25.8f) {baseR2LOpacity = baseOpacity[74];}
+        else if(r2LValue > -26.1f) {baseR2LOpacity = baseOpacity[73];}
+        else if(r2LValue > -26.4f) {baseR2LOpacity = baseOpacity[72];}
+        else if(r2LValue > -26.7f) {baseR2LOpacity = baseOpacity[71];}
+        else if(r2LValue > -27.f)  {baseR2LOpacity = baseOpacity[70];}
+        else if(r2LValue > -27.3f) {baseR2LOpacity = baseOpacity[69];}
+        else if(r2LValue > -27.6f) {baseR2LOpacity = baseOpacity[68];}
+        else if(r2LValue > -27.9f) {baseR2LOpacity = baseOpacity[67];}
+        else if(r2LValue > -28.2f) {baseR2LOpacity = baseOpacity[66];}
+        else if(r2LValue > -28.5f) {baseR2LOpacity = baseOpacity[65];}
+        else if(r2LValue > -28.8f) {baseR2LOpacity = baseOpacity[64];}
+        else if(r2LValue > -29.1f) {baseR2LOpacity = baseOpacity[63];}
+        else if(r2LValue > -29.4f) {baseR2LOpacity = baseOpacity[62];}
+        else if(r2LValue > -29.7f) {baseR2LOpacity = baseOpacity[61];}
+        else if(r2LValue > -30.f)  {baseR2LOpacity = baseOpacity[60];}
+
+        else if(r2LValue > -30.3f) {baseR2LOpacity = baseOpacity[59];}
+        else if(r2LValue > -30.6f) {baseR2LOpacity = baseOpacity[58];}
+        else if(r2LValue > -30.9f) {baseR2LOpacity = baseOpacity[57];}
+        else if(r2LValue > -31.2f) {baseR2LOpacity = baseOpacity[56];}
+        else if(r2LValue > -31.5f) {baseR2LOpacity = baseOpacity[55];}
+        else if(r2LValue > -31.8f) {baseR2LOpacity = baseOpacity[54];}
+        else if(r2LValue > -32.1f) {baseR2LOpacity = baseOpacity[53];}
+        else if(r2LValue > -32.4f) {baseR2LOpacity = baseOpacity[52];}
+        else if(r2LValue > -32.7f) {baseR2LOpacity = baseOpacity[51];}
+        else if(r2LValue > -33.f)  {baseR2LOpacity = baseOpacity[50];}
+        else if(r2LValue > -33.3f) {baseR2LOpacity = baseOpacity[49];}
+        else if(r2LValue > -33.6f) {baseR2LOpacity = baseOpacity[48];}
+        else if(r2LValue > -33.9f) {baseR2LOpacity = baseOpacity[47];}
+        else if(r2LValue > -34.2f) {baseR2LOpacity = baseOpacity[46];}
+        else if(r2LValue > -34.5f) {baseR2LOpacity = baseOpacity[45];}
+        else if(r2LValue > -34.8f) {baseR2LOpacity = baseOpacity[44];}
+        else if(r2LValue > -35.1f) {baseR2LOpacity = baseOpacity[43];}
+        else if(r2LValue > -35.4f) {baseR2LOpacity = baseOpacity[42];}
+        else if(r2LValue > -35.7f) {baseR2LOpacity = baseOpacity[41];}
+        else if(r2LValue > -36.f)  {baseR2LOpacity = baseOpacity[40];}
+
+
+        else if(r2LValue > -36.6f) {baseR2LOpacity = baseOpacity[39];}
+        else if(r2LValue > -37.2f) {baseR2LOpacity = baseOpacity[38];}
+        else if(r2LValue > -37.8f) {baseR2LOpacity = baseOpacity[37];}
+        else if(r2LValue > -38.4f) {baseR2LOpacity = baseOpacity[36];}
+        else if(r2LValue > -39.f)  {baseR2LOpacity = baseOpacity[35];}
+        else if(r2LValue > -39.6f) {baseR2LOpacity = baseOpacity[34];}
+        else if(r2LValue > -40.2f) {baseR2LOpacity = baseOpacity[33];}
+        else if(r2LValue > -40.8f) {baseR2LOpacity = baseOpacity[32];}
+        else if(r2LValue > -41.4f) {baseR2LOpacity = baseOpacity[31];}
+        else if(r2LValue > -42.f)  {baseR2LOpacity = baseOpacity[30];}
+
+        else if(r2LValue > -42.6f) {baseR2LOpacity = baseOpacity[29];}
+        else if(r2LValue > -43.2f) {baseR2LOpacity = baseOpacity[28];}
+        else if(r2LValue > -43.8f) {baseR2LOpacity = baseOpacity[27];}
+        else if(r2LValue > -44.4f) {baseR2LOpacity = baseOpacity[26];}
+        else if(r2LValue > -45.f)  {baseR2LOpacity = baseOpacity[25];}
+        else if(r2LValue > -45.6f) {baseR2LOpacity = baseOpacity[24];}
+        else if(r2LValue > -46.2f) {baseR2LOpacity = baseOpacity[23];}
+        else if(r2LValue > -46.8f) {baseR2LOpacity = baseOpacity[22];}
+        else if(r2LValue > -47.4f) {baseR2LOpacity = baseOpacity[21];}
+        else if(r2LValue > -48.f)  {baseR2LOpacity = baseOpacity[20];}
+
+        else if(r2LValue > -48.6f) {baseR2LOpacity = baseOpacity[19];}
+        else if(r2LValue > -49.2f) {baseR2LOpacity = baseOpacity[18];}
+        else if(r2LValue > -49.8f) {baseR2LOpacity = baseOpacity[17];}
+        else if(r2LValue > -50.4f) {baseR2LOpacity = baseOpacity[16];}
+        else if(r2LValue > -51.f)  {baseR2LOpacity = baseOpacity[15];}
+        else if(r2LValue > -51.6f) {baseR2LOpacity = baseOpacity[14];}
+        else if(r2LValue > -52.2f) {baseR2LOpacity = baseOpacity[13];}
+        else if(r2LValue > -52.8f) {baseR2LOpacity = baseOpacity[12];}
+        else if(r2LValue > -53.4f) {baseR2LOpacity = baseOpacity[11];}
+        else if(r2LValue > -54.f)  {baseR2LOpacity = baseOpacity[10];}
+
+        else if(r2LValue > -54.6f) {baseR2LOpacity = baseOpacity[9];}
+        else if(r2LValue > -55.2f) {baseR2LOpacity = baseOpacity[8];}
+        else if(r2LValue > -55.8f) {baseR2LOpacity = baseOpacity[7];}
+        else if(r2LValue > -56.4f) {baseR2LOpacity = baseOpacity[6];}
+        else if(r2LValue > -57.f)  {baseR2LOpacity = baseOpacity[5];}
+        else if(r2LValue > -57.6f) {baseR2LOpacity = baseOpacity[4];}
+        else if(r2LValue > -58.2f) {baseR2LOpacity = baseOpacity[3];}
+        else if(r2LValue > -58.8f) {baseR2LOpacity = baseOpacity[2];}
+        else if(r2LValue > -59.4f) {baseR2LOpacity = baseOpacity[1];}
+        else if(r2LValue > -60.f)  {baseR2LOpacity = baseOpacity[0];}
+        else if(r2LValue <= -60.f) {baseR2LOpacity = baseOpacity[0];}
+        else {baseR2LOpacity = baseOpacity[0];}
+        
+        
+    // L2RB
+        
+        if(l2RBValue <= 0.f) {redL2RBOpacity = redOpacity[0];}
+        else if(l2RBValue < 0.2f) {redL2RBOpacity = redOpacity[1];}
+        else if(l2RBValue < 0.4f) {redL2RBOpacity = redOpacity[2];}
+        else if(l2RBValue < 0.6f) {redL2RBOpacity = redOpacity[3];}
+        else if(l2RBValue < 0.8f) {redL2RBOpacity = redOpacity[4];}
+        else if(l2RBValue < 1.f)  {redL2RBOpacity = redOpacity[5];}
+        else if(l2RBValue < 1.2f) {redL2RBOpacity = redOpacity[6];}
+        else if(l2RBValue < 1.4f) {redL2RBOpacity = redOpacity[7];}
+        else if(l2RBValue < 1.6f) {redL2RBOpacity = redOpacity[8];}
+        else if(l2RBValue < 1.8f) {redL2RBOpacity = redOpacity[9];}
+        else if(l2RBValue < 2.f)  {redL2RBOpacity = redOpacity[10];}
+        else if(l2RBValue < 2.2f) {redL2RBOpacity = redOpacity[11];}
+        else if(l2RBValue < 2.4f) {redL2RBOpacity = redOpacity[12];}
+        else if(l2RBValue < 2.6f) {redL2RBOpacity = redOpacity[13];}
+        else if(l2RBValue < 2.8f) {redL2RBOpacity = redOpacity[14];}
+        else if(l2RBValue < 3.f)  {redL2RBOpacity = redOpacity[15];}
+        else if(l2RBValue < 3.2f) {redL2RBOpacity = redOpacity[16];}
+        else if(l2RBValue < 3.4f) {redL2RBOpacity = redOpacity[17];}
+        else if(l2RBValue < 3.6f) {redL2RBOpacity = redOpacity[18];}
+        else if(l2RBValue < 3.8f) {redL2RBOpacity = redOpacity[19];}
+        else if(l2RBValue < 4.f)  {redL2RBOpacity = redOpacity[20];}
+        else if(l2RBValue < 4.2f) {redL2RBOpacity = redOpacity[21];}
+        else if(l2RBValue < 4.4f) {redL2RBOpacity = redOpacity[22];}
+        else if(l2RBValue < 4.6f) {redL2RBOpacity = redOpacity[23];}
+        else if(l2RBValue < 4.8f) {redL2RBOpacity = redOpacity[24];}
+        else if(l2RBValue < 5.f)  {redL2RBOpacity = redOpacity[25];}
+        else if(l2RBValue < 5.2f) {redL2RBOpacity = redOpacity[26];}
+        else if(l2RBValue < 5.4f) {redL2RBOpacity = redOpacity[27];}
+        else if(l2RBValue < 5.6f) {redL2RBOpacity = redOpacity[28];}
+        else if(l2RBValue < 5.8f) {redL2RBOpacity = redOpacity[29];}
+        else if(l2RBValue < 6.f)  {redL2RBOpacity = redOpacity[30];}
+
+        // 6 dB <= Red values < 12 dB
+        else if(l2RBValue < 6.2f) {redL2RBOpacity = redOpacity[31];}
+        else if(l2RBValue < 6.4f) {redL2RBOpacity = redOpacity[32];}
+        else if(l2RBValue < 6.6f) {redL2RBOpacity = redOpacity[33];}
+        else if(l2RBValue < 6.8f) {redL2RBOpacity = redOpacity[34];}
+        else if(l2RBValue < 7.f)  {redL2RBOpacity = redOpacity[35];}
+        else if(l2RBValue < 7.2f) {redL2RBOpacity = redOpacity[36];}
+        else if(l2RBValue < 7.4f) {redL2RBOpacity = redOpacity[37];}
+        else if(l2RBValue < 7.6f) {redL2RBOpacity = redOpacity[38];}
+        else if(l2RBValue < 7.8f) {redL2RBOpacity = redOpacity[39];}
+        else if(l2RBValue < 8.f)  {redL2RBOpacity = redOpacity[40];}
+        else if(l2RBValue < 8.2f) {redL2RBOpacity = redOpacity[41];}
+        else if(l2RBValue < 8.4f) {redL2RBOpacity = redOpacity[42];}
+        else if(l2RBValue < 8.6f) {redL2RBOpacity = redOpacity[43];}
+        else if(l2RBValue < 8.8f) {redL2RBOpacity = redOpacity[44];}
+        else if(l2RBValue < 9.f)  {redL2RBOpacity = redOpacity[45];}
+        else if(l2RBValue < 9.2f) {redL2RBOpacity = redOpacity[46];}
+        else if(l2RBValue < 9.4f) {redL2RBOpacity = redOpacity[47];}
+        else if(l2RBValue < 9.6f) {redL2RBOpacity = redOpacity[48];}
+        else if(l2RBValue < 9.8f) {redL2RBOpacity = redOpacity[49];}
+        else if(l2RBValue < 10.f) {redL2RBOpacity = redOpacity[50];}
+        else if(l2RBValue < 10.2f) {redL2RBOpacity = redOpacity[51];}
+        else if(l2RBValue < 10.4f) {redL2RBOpacity = redOpacity[52];}
+        else if(l2RBValue < 10.6f) {redL2RBOpacity = redOpacity[53];}
+        else if(l2RBValue < 10.8f) {redL2RBOpacity = redOpacity[54];}
+        else if(l2RBValue < 11.f)  {redL2RBOpacity = redOpacity[55];}
+        else if(l2RBValue < 11.2f) {redL2RBOpacity = redOpacity[56];}
+        else if(l2RBValue < 11.4f) {redL2RBOpacity = redOpacity[57];}
+        else if(l2RBValue < 11.6f) {redL2RBOpacity = redOpacity[58];}
+        else if(l2RBValue < 11.8f) {redL2RBOpacity = redOpacity[59];}
+        else if(l2RBValue < 12.f)  {redL2RBOpacity = redOpacity[60];}
+
+        // 12 dB <= Red values < 18 dB
+        else if(l2RBValue < 12.2f) {redL2RBOpacity = redOpacity[61];}
+        else if(l2RBValue < 12.4f) {redL2RBOpacity = redOpacity[62];}
+        else if(l2RBValue < 12.6f) {redL2RBOpacity = redOpacity[63];}
+        else if(l2RBValue < 12.8f) {redL2RBOpacity = redOpacity[64];}
+        else if(l2RBValue < 13.f)  {redL2RBOpacity = redOpacity[65];}
+        else if(l2RBValue < 13.2f) {redL2RBOpacity = redOpacity[66];}
+        else if(l2RBValue < 13.4f) {redL2RBOpacity = redOpacity[67];}
+        else if(l2RBValue < 13.6f) {redL2RBOpacity = redOpacity[68];}
+        else if(l2RBValue < 13.8f) {redL2RBOpacity = redOpacity[69];}
+        else if(l2RBValue < 14.f)  {redL2RBOpacity = redOpacity[70];}
+        else if(l2RBValue < 14.2f) {redL2RBOpacity = redOpacity[71];}
+        else if(l2RBValue < 14.4f) {redL2RBOpacity = redOpacity[72];}
+        else if(l2RBValue < 14.6f) {redL2RBOpacity = redOpacity[73];}
+        else if(l2RBValue < 14.8f) {redL2RBOpacity = redOpacity[74];}
+        else if(l2RBValue < 15.f)  {redL2RBOpacity = redOpacity[75];}
+        else if(l2RBValue < 15.2f) {redL2RBOpacity = redOpacity[76];}
+        else if(l2RBValue < 15.4f) {redL2RBOpacity = redOpacity[77];}
+        else if(l2RBValue < 15.6f) {redL2RBOpacity = redOpacity[78];}
+        else if(l2RBValue < 15.8f) {redL2RBOpacity = redOpacity[79];}
+        else if(l2RBValue < 16.f)  {redL2RBOpacity = redOpacity[80];}
+        else if(l2RBValue < 16.2f) {redL2RBOpacity = redOpacity[81];}
+        else if(l2RBValue < 16.4f) {redL2RBOpacity = redOpacity[82];}
+        else if(l2RBValue < 16.6f) {redL2RBOpacity = redOpacity[83];}
+        else if(l2RBValue < 16.8f) {redL2RBOpacity = redOpacity[84];}
+        else if(l2RBValue < 17.f)  {redL2RBOpacity = redOpacity[85];}
+        else if(l2RBValue < 17.2f) {redL2RBOpacity = redOpacity[86];}
+        else if(l2RBValue < 17.4f) {redL2RBOpacity = redOpacity[87];}
+        else if(l2RBValue < 17.6f) {redL2RBOpacity = redOpacity[88];}
+        else if(l2RBValue < 17.8f) {redL2RBOpacity = redOpacity[89];}
+        else if(l2RBValue < 18.f)  {redL2RBOpacity = redOpacity[90];}
+
+        // 18 dB <= Red values <= 24 dB
+        else if(l2RBValue < 18.2f) {redL2RBOpacity = redOpacity[91];}
+        else if(l2RBValue < 18.4f) {redL2RBOpacity = redOpacity[92];}
+        else if(l2RBValue < 18.6f) {redL2RBOpacity = redOpacity[93];}
+        else if(l2RBValue < 18.8f) {redL2RBOpacity = redOpacity[94];}
+        else if(l2RBValue < 19.f)  {redL2RBOpacity = redOpacity[95];}
+        else if(l2RBValue < 19.2f) {redL2RBOpacity = redOpacity[96];}
+        else if(l2RBValue < 19.4f) {redL2RBOpacity = redOpacity[97];}
+        else if(l2RBValue < 19.6f) {redL2RBOpacity = redOpacity[98];}
+        else if(l2RBValue < 19.8f) {redL2RBOpacity = redOpacity[99];}
+        else if(l2RBValue < 20.f)  {redL2RBOpacity = redOpacity[100];}
+        else if(l2RBValue < 20.2f) {redL2RBOpacity = redOpacity[101];}
+        else if(l2RBValue < 20.4f) {redL2RBOpacity = redOpacity[102];}
+        else if(l2RBValue < 20.6f) {redL2RBOpacity = redOpacity[103];}
+        else if(l2RBValue < 20.8f) {redL2RBOpacity = redOpacity[104];}
+        else if(l2RBValue < 21.f)  {redL2RBOpacity = redOpacity[105];}
+        else if(l2RBValue < 21.2f) {redL2RBOpacity = redOpacity[106];}
+        else if(l2RBValue < 21.4f) {redL2RBOpacity = redOpacity[107];}
+        else if(l2RBValue < 21.6f) {redL2RBOpacity = redOpacity[108];}
+        else if(l2RBValue < 21.8f) {redL2RBOpacity = redOpacity[109];}
+        else if(l2RBValue < 22.f)  {redL2RBOpacity = redOpacity[110];}
+        else if(l2RBValue < 22.2f) {redL2RBOpacity = redOpacity[111];}
+        else if(l2RBValue < 22.4f) {redL2RBOpacity = redOpacity[112];}
+        else if(l2RBValue < 22.6f) {redL2RBOpacity = redOpacity[113];}
+        else if(l2RBValue < 22.8f) {redL2RBOpacity = redOpacity[114];}
+        else if(l2RBValue < 23.f)  {redL2RBOpacity = redOpacity[115];}
+        else if(l2RBValue < 23.2f) {redL2RBOpacity = redOpacity[116];}
+        else if(l2RBValue < 23.4f) {redL2RBOpacity = redOpacity[117];}
+        else if(l2RBValue < 23.6f) {redL2RBOpacity = redOpacity[118];}
+        else if(l2RBValue < 23.8f) {redL2RBOpacity = redOpacity[119];}
+        else if(l2RBValue < 24.f)  {redL2RBOpacity = redOpacity[120];}
+        else if(l2RBValue >= 24.f) {redL2RBOpacity = redOpacity[121];}
+        else {redL2RBOpacity = redOpacity[0];}
+
+
+        if(l2RBValue == 0.f) {baseL2RBOpacity = baseOpacity[200];}
+        else if(l2RBValue > -0.2f) {baseL2RBOpacity = baseOpacity[199];}
+        else if(l2RBValue > -0.4f) {baseL2RBOpacity = baseOpacity[198];}
+        else if(l2RBValue > -0.6f) {baseL2RBOpacity = baseOpacity[197];}
+        else if(l2RBValue > -0.8f) {baseL2RBOpacity = baseOpacity[196];}
+        else if(l2RBValue > -1.f)  {baseL2RBOpacity = baseOpacity[195];}
+        else if(l2RBValue > -1.2f) {baseL2RBOpacity = baseOpacity[194];}
+        else if(l2RBValue > -1.4f) {baseL2RBOpacity = baseOpacity[193];}
+        else if(l2RBValue > -1.6f) {baseL2RBOpacity = baseOpacity[192];}
+        else if(l2RBValue > -1.8f) {baseL2RBOpacity = baseOpacity[191];}
+        else if(l2RBValue > -2.f)  {baseL2RBOpacity = baseOpacity[190];}
+        else if(l2RBValue > -2.2f) {baseL2RBOpacity = baseOpacity[189];}
+        else if(l2RBValue > -2.4f) {baseL2RBOpacity = baseOpacity[188];}
+        else if(l2RBValue > -2.6f) {baseL2RBOpacity = baseOpacity[187];}
+        else if(l2RBValue > -2.8f) {baseL2RBOpacity = baseOpacity[186];}
+        else if(l2RBValue > -3.f)  {baseL2RBOpacity = baseOpacity[185];}
+        else if(l2RBValue > -3.2f) {baseL2RBOpacity = baseOpacity[184];}
+        else if(l2RBValue > -3.4f) {baseL2RBOpacity = baseOpacity[183];}
+        else if(l2RBValue > -3.6f) {baseL2RBOpacity = baseOpacity[182];}
+        else if(l2RBValue > -3.8f) {baseL2RBOpacity = baseOpacity[181];}
+        else if(l2RBValue > -4.f)  {baseL2RBOpacity = baseOpacity[180];}
+        else if(l2RBValue > -4.2f) {baseL2RBOpacity = baseOpacity[179];}
+        else if(l2RBValue > -4.4f) {baseL2RBOpacity = baseOpacity[178];}
+        else if(l2RBValue > -4.6f) {baseL2RBOpacity = baseOpacity[177];}
+        else if(l2RBValue > -4.8f) {baseL2RBOpacity = baseOpacity[176];}
+        else if(l2RBValue > -5.f)  {baseL2RBOpacity = baseOpacity[175];}
+        else if(l2RBValue > -5.2f) {baseL2RBOpacity = baseOpacity[174];}
+        else if(l2RBValue > -5.4f) {baseL2RBOpacity = baseOpacity[173];}
+        else if(l2RBValue > -5.6f) {baseL2RBOpacity = baseOpacity[172];}
+        else if(l2RBValue > -5.8f) {baseL2RBOpacity = baseOpacity[171];}
+        else if(l2RBValue > -6.f)  {baseL2RBOpacity = baseOpacity[170];}
+
+        // 6 dB <= Red values < 12 dB
+        else if(l2RBValue > -6.2f) {baseL2RBOpacity = baseOpacity[169];}
+        else if(l2RBValue > -6.4f) {baseL2RBOpacity = baseOpacity[168];}
+        else if(l2RBValue > -6.6f) {baseL2RBOpacity = baseOpacity[167];}
+        else if(l2RBValue > -6.8f) {baseL2RBOpacity = baseOpacity[166];}
+        else if(l2RBValue > -7.f)  {baseL2RBOpacity = baseOpacity[165];}
+        else if(l2RBValue > -7.2f) {baseL2RBOpacity = baseOpacity[164];}
+        else if(l2RBValue > -7.4f) {baseL2RBOpacity = baseOpacity[163];}
+        else if(l2RBValue > -7.6f) {baseL2RBOpacity = baseOpacity[162];}
+        else if(l2RBValue > -7.8f) {baseL2RBOpacity = baseOpacity[161];}
+        else if(l2RBValue > -8.f)  {baseL2RBOpacity = baseOpacity[160];}
+        else if(l2RBValue > -8.2f) {baseL2RBOpacity = baseOpacity[159];}
+        else if(l2RBValue > -8.4f) {baseL2RBOpacity = baseOpacity[158];}
+        else if(l2RBValue > -8.6f) {baseL2RBOpacity = baseOpacity[157];}
+        else if(l2RBValue > -8.8f) {baseL2RBOpacity = baseOpacity[156];}
+        else if(l2RBValue > -9.f)  {baseL2RBOpacity = baseOpacity[155];}
+        else if(l2RBValue > -9.2f) {baseL2RBOpacity = baseOpacity[154];}
+        else if(l2RBValue > -9.4f) {baseL2RBOpacity = baseOpacity[153];}
+        else if(l2RBValue > -9.6f) {baseL2RBOpacity = baseOpacity[152];}
+        else if(l2RBValue > -9.8f) {baseL2RBOpacity = baseOpacity[151];}
+        else if(l2RBValue > -10.f) {baseL2RBOpacity = baseOpacity[150];}
+        else if(l2RBValue > -10.2f) {baseL2RBOpacity = baseOpacity[149];}
+        else if(l2RBValue > -10.4f) {baseL2RBOpacity = baseOpacity[148];}
+        else if(l2RBValue > -10.6f) {baseL2RBOpacity = baseOpacity[147];}
+        else if(l2RBValue > -10.8f) {baseL2RBOpacity = baseOpacity[146];}
+        else if(l2RBValue > -11.f)  {baseL2RBOpacity = baseOpacity[145];}
+        else if(l2RBValue > -11.2f) {baseL2RBOpacity = baseOpacity[144];}
+        else if(l2RBValue > -11.4f) {baseL2RBOpacity = baseOpacity[143];}
+        else if(l2RBValue > -11.6f) {baseL2RBOpacity = baseOpacity[142];}
+        else if(l2RBValue > -11.8f) {baseL2RBOpacity = baseOpacity[141];}
+        else if(l2RBValue > -12.f)  {baseL2RBOpacity = baseOpacity[140];}
+
+        // 12 dB <= Red values < 18 dB
+        else if(l2RBValue > -12.2f) {baseL2RBOpacity = baseOpacity[139];}
+        else if(l2RBValue > -12.4f) {baseL2RBOpacity = baseOpacity[138];}
+        else if(l2RBValue > -12.6f) {baseL2RBOpacity = baseOpacity[137];}
+        else if(l2RBValue > -12.8f) {baseL2RBOpacity = baseOpacity[136];}
+        else if(l2RBValue > -13.f)  {baseL2RBOpacity = baseOpacity[135];}
+        else if(l2RBValue > -13.2f) {baseL2RBOpacity = baseOpacity[134];}
+        else if(l2RBValue > -13.4f) {baseL2RBOpacity = baseOpacity[133];}
+        else if(l2RBValue > -13.6f) {baseL2RBOpacity = baseOpacity[132];}
+        else if(l2RBValue > -13.8f) {baseL2RBOpacity = baseOpacity[131];}
+        else if(l2RBValue > -14.f)  {baseL2RBOpacity = baseOpacity[130];}
+        else if(l2RBValue > -14.2f) {baseL2RBOpacity = baseOpacity[129];}
+        else if(l2RBValue > -14.4f) {baseL2RBOpacity = baseOpacity[128];}
+        else if(l2RBValue > -14.6f) {baseL2RBOpacity = baseOpacity[127];}
+        else if(l2RBValue > -14.8f) {baseL2RBOpacity = baseOpacity[126];}
+        else if(l2RBValue > -15.f)  {baseL2RBOpacity = baseOpacity[125];}
+        else if(l2RBValue > -15.2f) {baseL2RBOpacity = baseOpacity[124];}
+        else if(l2RBValue > -15.4f) {baseL2RBOpacity = baseOpacity[123];}
+        else if(l2RBValue > -15.6f) {baseL2RBOpacity = baseOpacity[122];}
+        else if(l2RBValue > -15.8f) {baseL2RBOpacity = baseOpacity[121];}
+        else if(l2RBValue > -16.f)  {baseL2RBOpacity = baseOpacity[120];}
+        else if(l2RBValue > -16.2f) {baseL2RBOpacity = baseOpacity[119];}
+        else if(l2RBValue > -16.4f) {baseL2RBOpacity = baseOpacity[118];}
+        else if(l2RBValue > -16.6f) {baseL2RBOpacity = baseOpacity[117];}
+        else if(l2RBValue > -16.8f) {baseL2RBOpacity = baseOpacity[116];}
+        else if(l2RBValue > -17.f)  {baseL2RBOpacity = baseOpacity[115];}
+        else if(l2RBValue > -17.2f) {baseL2RBOpacity = baseOpacity[114];}
+        else if(l2RBValue > -17.4f) {baseL2RBOpacity = baseOpacity[113];}
+        else if(l2RBValue > -17.6f) {baseL2RBOpacity = baseOpacity[112];}
+        else if(l2RBValue > -17.8f) {baseL2RBOpacity = baseOpacity[111];}
+        else if(l2RBValue > -18.f)  {baseL2RBOpacity = baseOpacity[110];}
+
+        // 18 dB <= Red values <= 24 dB
+        else if(l2RBValue > -18.2f) {baseL2RBOpacity = baseOpacity[109];}
+        else if(l2RBValue > -18.4f) {baseL2RBOpacity = baseOpacity[108];}
+        else if(l2RBValue > -18.6f) {baseL2RBOpacity = baseOpacity[107];}
+        else if(l2RBValue > -18.8f) {baseL2RBOpacity = baseOpacity[106];}
+        else if(l2RBValue > -19.f)  {baseL2RBOpacity = baseOpacity[105];}
+        else if(l2RBValue > -19.2f) {baseL2RBOpacity = baseOpacity[104];}
+        else if(l2RBValue > -19.4f) {baseL2RBOpacity = baseOpacity[103];}
+        else if(l2RBValue > -19.6f) {baseL2RBOpacity = baseOpacity[102];}
+        else if(l2RBValue > -19.8f) {baseL2RBOpacity = baseOpacity[101];}
+        else if(l2RBValue > -20.f)  {baseL2RBOpacity = baseOpacity[100];}
+        else if(l2RBValue > -20.2f) {baseL2RBOpacity = baseOpacity[99];}
+        else if(l2RBValue > -20.4f) {baseL2RBOpacity = baseOpacity[98];}
+        else if(l2RBValue > -20.6f) {baseL2RBOpacity = baseOpacity[97];}
+        else if(l2RBValue > -20.8f) {baseL2RBOpacity = baseOpacity[96];}
+        else if(l2RBValue > -21.f)  {baseL2RBOpacity = baseOpacity[95];}
+        else if(l2RBValue > -21.2f) {baseL2RBOpacity = baseOpacity[94];}
+        else if(l2RBValue > -21.4f) {baseL2RBOpacity = baseOpacity[93];}
+        else if(l2RBValue > -21.6f) {baseL2RBOpacity = baseOpacity[92];}
+        else if(l2RBValue > -21.8f) {baseL2RBOpacity = baseOpacity[91];}
+        else if(l2RBValue > -22.f)  {baseL2RBOpacity = baseOpacity[90];}
+        else if(l2RBValue > -22.2f) {baseL2RBOpacity = baseOpacity[89];}
+        else if(l2RBValue > -22.4f) {baseL2RBOpacity = baseOpacity[88];}
+        else if(l2RBValue > -22.6f) {baseL2RBOpacity = baseOpacity[87];}
+        else if(l2RBValue > -22.8f) {baseL2RBOpacity = baseOpacity[86];}
+        else if(l2RBValue > -23.f)  {baseL2RBOpacity = baseOpacity[85];}
+        else if(l2RBValue > -23.2f) {baseL2RBOpacity = baseOpacity[84];}
+        else if(l2RBValue > -23.4f) {baseL2RBOpacity = baseOpacity[83];}
+        else if(l2RBValue > -23.6f) {baseL2RBOpacity = baseOpacity[82];}
+        else if(l2RBValue > -23.8f) {baseL2RBOpacity = baseOpacity[81];}
+        else if(l2RBValue > -24.f)  {baseL2RBOpacity = baseOpacity[80];}
+
+        // 18 dB <= Red values <= 24 dB
+        else if(l2RBValue > -24.3f) {baseL2RBOpacity = baseOpacity[79];}
+        else if(l2RBValue > -24.6f) {baseL2RBOpacity = baseOpacity[78];}
+        else if(l2RBValue > -24.9f) {baseL2RBOpacity = baseOpacity[77];}
+        else if(l2RBValue > -25.2f) {baseL2RBOpacity = baseOpacity[76];}
+        else if(l2RBValue > -25.5f) {baseL2RBOpacity = baseOpacity[75];}
+        else if(l2RBValue > -25.8f) {baseL2RBOpacity = baseOpacity[74];}
+        else if(l2RBValue > -26.1f) {baseL2RBOpacity = baseOpacity[73];}
+        else if(l2RBValue > -26.4f) {baseL2RBOpacity = baseOpacity[72];}
+        else if(l2RBValue > -26.7f) {baseL2RBOpacity = baseOpacity[71];}
+        else if(l2RBValue > -27.f)  {baseL2RBOpacity = baseOpacity[70];}
+        else if(l2RBValue > -27.3f) {baseL2RBOpacity = baseOpacity[69];}
+        else if(l2RBValue > -27.6f) {baseL2RBOpacity = baseOpacity[68];}
+        else if(l2RBValue > -27.9f) {baseL2RBOpacity = baseOpacity[67];}
+        else if(l2RBValue > -28.2f) {baseL2RBOpacity = baseOpacity[66];}
+        else if(l2RBValue > -28.5f) {baseL2RBOpacity = baseOpacity[65];}
+        else if(l2RBValue > -28.8f) {baseL2RBOpacity = baseOpacity[64];}
+        else if(l2RBValue > -29.1f) {baseL2RBOpacity = baseOpacity[63];}
+        else if(l2RBValue > -29.4f) {baseL2RBOpacity = baseOpacity[62];}
+        else if(l2RBValue > -29.7f) {baseL2RBOpacity = baseOpacity[61];}
+        else if(l2RBValue > -30.f)  {baseL2RBOpacity = baseOpacity[60];}
+
+        else if(l2RBValue > -30.3f) {baseL2RBOpacity = baseOpacity[59];}
+        else if(l2RBValue > -30.6f) {baseL2RBOpacity = baseOpacity[58];}
+        else if(l2RBValue > -30.9f) {baseL2RBOpacity = baseOpacity[57];}
+        else if(l2RBValue > -31.2f) {baseL2RBOpacity = baseOpacity[56];}
+        else if(l2RBValue > -31.5f) {baseL2RBOpacity = baseOpacity[55];}
+        else if(l2RBValue > -31.8f) {baseL2RBOpacity = baseOpacity[54];}
+        else if(l2RBValue > -32.1f) {baseL2RBOpacity = baseOpacity[53];}
+        else if(l2RBValue > -32.4f) {baseL2RBOpacity = baseOpacity[52];}
+        else if(l2RBValue > -32.7f) {baseL2RBOpacity = baseOpacity[51];}
+        else if(l2RBValue > -33.f)  {baseL2RBOpacity = baseOpacity[50];}
+        else if(l2RBValue > -33.3f) {baseL2RBOpacity = baseOpacity[49];}
+        else if(l2RBValue > -33.6f) {baseL2RBOpacity = baseOpacity[48];}
+        else if(l2RBValue > -33.9f) {baseL2RBOpacity = baseOpacity[47];}
+        else if(l2RBValue > -34.2f) {baseL2RBOpacity = baseOpacity[46];}
+        else if(l2RBValue > -34.5f) {baseL2RBOpacity = baseOpacity[45];}
+        else if(l2RBValue > -34.8f) {baseL2RBOpacity = baseOpacity[44];}
+        else if(l2RBValue > -35.1f) {baseL2RBOpacity = baseOpacity[43];}
+        else if(l2RBValue > -35.4f) {baseL2RBOpacity = baseOpacity[42];}
+        else if(l2RBValue > -35.7f) {baseL2RBOpacity = baseOpacity[41];}
+        else if(l2RBValue > -36.f)  {baseL2RBOpacity = baseOpacity[40];}
+
+
+        else if(l2RBValue > -36.6f) {baseL2RBOpacity = baseOpacity[39];}
+        else if(l2RBValue > -37.2f) {baseL2RBOpacity = baseOpacity[38];}
+        else if(l2RBValue > -37.8f) {baseL2RBOpacity = baseOpacity[37];}
+        else if(l2RBValue > -38.4f) {baseL2RBOpacity = baseOpacity[36];}
+        else if(l2RBValue > -39.f)  {baseL2RBOpacity = baseOpacity[35];}
+        else if(l2RBValue > -39.6f) {baseL2RBOpacity = baseOpacity[34];}
+        else if(l2RBValue > -40.2f) {baseL2RBOpacity = baseOpacity[33];}
+        else if(l2RBValue > -40.8f) {baseL2RBOpacity = baseOpacity[32];}
+        else if(l2RBValue > -41.4f) {baseL2RBOpacity = baseOpacity[31];}
+        else if(l2RBValue > -42.f)  {baseL2RBOpacity = baseOpacity[30];}
+
+        else if(l2RBValue > -42.6f) {baseL2RBOpacity = baseOpacity[29];}
+        else if(l2RBValue > -43.2f) {baseL2RBOpacity = baseOpacity[28];}
+        else if(l2RBValue > -43.8f) {baseL2RBOpacity = baseOpacity[27];}
+        else if(l2RBValue > -44.4f) {baseL2RBOpacity = baseOpacity[26];}
+        else if(l2RBValue > -45.f)  {baseL2RBOpacity = baseOpacity[25];}
+        else if(l2RBValue > -45.6f) {baseL2RBOpacity = baseOpacity[24];}
+        else if(l2RBValue > -46.2f) {baseL2RBOpacity = baseOpacity[23];}
+        else if(l2RBValue > -46.8f) {baseL2RBOpacity = baseOpacity[22];}
+        else if(l2RBValue > -47.4f) {baseL2RBOpacity = baseOpacity[21];}
+        else if(l2RBValue > -48.f)  {baseL2RBOpacity = baseOpacity[20];}
+
+        else if(l2RBValue > -48.6f) {baseL2RBOpacity = baseOpacity[19];}
+        else if(l2RBValue > -49.2f) {baseL2RBOpacity = baseOpacity[18];}
+        else if(l2RBValue > -49.8f) {baseL2RBOpacity = baseOpacity[17];}
+        else if(l2RBValue > -50.4f) {baseL2RBOpacity = baseOpacity[16];}
+        else if(l2RBValue > -51.f)  {baseL2RBOpacity = baseOpacity[15];}
+        else if(l2RBValue > -51.6f) {baseL2RBOpacity = baseOpacity[14];}
+        else if(l2RBValue > -52.2f) {baseL2RBOpacity = baseOpacity[13];}
+        else if(l2RBValue > -52.8f) {baseL2RBOpacity = baseOpacity[12];}
+        else if(l2RBValue > -53.4f) {baseL2RBOpacity = baseOpacity[11];}
+        else if(l2RBValue > -54.f)  {baseL2RBOpacity = baseOpacity[10];}
+
+        else if(l2RBValue > -54.6f) {baseL2RBOpacity = baseOpacity[9];}
+        else if(l2RBValue > -55.2f) {baseL2RBOpacity = baseOpacity[8];}
+        else if(l2RBValue > -55.8f) {baseL2RBOpacity = baseOpacity[7];}
+        else if(l2RBValue > -56.4f) {baseL2RBOpacity = baseOpacity[6];}
+        else if(l2RBValue > -57.f)  {baseL2RBOpacity = baseOpacity[5];}
+        else if(l2RBValue > -57.6f) {baseL2RBOpacity = baseOpacity[4];}
+        else if(l2RBValue > -58.2f) {baseL2RBOpacity = baseOpacity[3];}
+        else if(l2RBValue > -58.8f) {baseL2RBOpacity = baseOpacity[2];}
+        else if(l2RBValue > -59.4f) {baseL2RBOpacity = baseOpacity[1];}
+        else if(l2RBValue > -60.f)  {baseL2RBOpacity = baseOpacity[0];}
+        else if(l2RBValue <= -60.f) {baseL2RBOpacity = baseOpacity[0];}
+        else {baseL2RBOpacity = baseOpacity[0];}
+        
+        
+    // FINAL
+        
+        if(finalValue <= 0.f) {redFinalOpacity = redOpacity[0];}
+        else if(finalValue < 0.2f) {redFinalOpacity = redOpacity[1];}
+        else if(finalValue < 0.4f) {redFinalOpacity = redOpacity[2];}
+        else if(finalValue < 0.6f) {redFinalOpacity = redOpacity[3];}
+        else if(finalValue < 0.8f) {redFinalOpacity = redOpacity[4];}
+        else if(finalValue < 1.f)  {redFinalOpacity = redOpacity[5];}
+        else if(finalValue < 1.2f) {redFinalOpacity = redOpacity[6];}
+        else if(finalValue < 1.4f) {redFinalOpacity = redOpacity[7];}
+        else if(finalValue < 1.6f) {redFinalOpacity = redOpacity[8];}
+        else if(finalValue < 1.8f) {redFinalOpacity = redOpacity[9];}
+        else if(finalValue < 2.f)  {redFinalOpacity = redOpacity[10];}
+        else if(finalValue < 2.2f) {redFinalOpacity = redOpacity[11];}
+        else if(finalValue < 2.4f) {redFinalOpacity = redOpacity[12];}
+        else if(finalValue < 2.6f) {redFinalOpacity = redOpacity[13];}
+        else if(finalValue < 2.8f) {redFinalOpacity = redOpacity[14];}
+        else if(finalValue < 3.f)  {redFinalOpacity = redOpacity[15];}
+        else if(finalValue < 3.2f) {redFinalOpacity = redOpacity[16];}
+        else if(finalValue < 3.4f) {redFinalOpacity = redOpacity[17];}
+        else if(finalValue < 3.6f) {redFinalOpacity = redOpacity[18];}
+        else if(finalValue < 3.8f) {redFinalOpacity = redOpacity[19];}
+        else if(finalValue < 4.f)  {redFinalOpacity = redOpacity[20];}
+        else if(finalValue < 4.2f) {redFinalOpacity = redOpacity[21];}
+        else if(finalValue < 4.4f) {redFinalOpacity = redOpacity[22];}
+        else if(finalValue < 4.6f) {redFinalOpacity = redOpacity[23];}
+        else if(finalValue < 4.8f) {redFinalOpacity = redOpacity[24];}
+        else if(finalValue < 5.f)  {redFinalOpacity = redOpacity[25];}
+        else if(finalValue < 5.2f) {redFinalOpacity = redOpacity[26];}
+        else if(finalValue < 5.4f) {redFinalOpacity = redOpacity[27];}
+        else if(finalValue < 5.6f) {redFinalOpacity = redOpacity[28];}
+        else if(finalValue < 5.8f) {redFinalOpacity = redOpacity[29];}
+        else if(finalValue < 6.f)  {redFinalOpacity = redOpacity[30];}
+
+        // 6 dB <= Red values < 12 dB
+        else if(finalValue < 6.2f) {redFinalOpacity = redOpacity[31];}
+        else if(finalValue < 6.4f) {redFinalOpacity = redOpacity[32];}
+        else if(finalValue < 6.6f) {redFinalOpacity = redOpacity[33];}
+        else if(finalValue < 6.8f) {redFinalOpacity = redOpacity[34];}
+        else if(finalValue < 7.f)  {redFinalOpacity = redOpacity[35];}
+        else if(finalValue < 7.2f) {redFinalOpacity = redOpacity[36];}
+        else if(finalValue < 7.4f) {redFinalOpacity = redOpacity[37];}
+        else if(finalValue < 7.6f) {redFinalOpacity = redOpacity[38];}
+        else if(finalValue < 7.8f) {redFinalOpacity = redOpacity[39];}
+        else if(finalValue < 8.f)  {redFinalOpacity = redOpacity[40];}
+        else if(finalValue < 8.2f) {redFinalOpacity = redOpacity[41];}
+        else if(finalValue < 8.4f) {redFinalOpacity = redOpacity[42];}
+        else if(finalValue < 8.6f) {redFinalOpacity = redOpacity[43];}
+        else if(finalValue < 8.8f) {redFinalOpacity = redOpacity[44];}
+        else if(finalValue < 9.f)  {redFinalOpacity = redOpacity[45];}
+        else if(finalValue < 9.2f) {redFinalOpacity = redOpacity[46];}
+        else if(finalValue < 9.4f) {redFinalOpacity = redOpacity[47];}
+        else if(finalValue < 9.6f) {redFinalOpacity = redOpacity[48];}
+        else if(finalValue < 9.8f) {redFinalOpacity = redOpacity[49];}
+        else if(finalValue < 10.f) {redFinalOpacity = redOpacity[50];}
+        else if(finalValue < 10.2f) {redFinalOpacity = redOpacity[51];}
+        else if(finalValue < 10.4f) {redFinalOpacity = redOpacity[52];}
+        else if(finalValue < 10.6f) {redFinalOpacity = redOpacity[53];}
+        else if(finalValue < 10.8f) {redFinalOpacity = redOpacity[54];}
+        else if(finalValue < 11.f)  {redFinalOpacity = redOpacity[55];}
+        else if(finalValue < 11.2f) {redFinalOpacity = redOpacity[56];}
+        else if(finalValue < 11.4f) {redFinalOpacity = redOpacity[57];}
+        else if(finalValue < 11.6f) {redFinalOpacity = redOpacity[58];}
+        else if(finalValue < 11.8f) {redFinalOpacity = redOpacity[59];}
+        else if(finalValue < 12.f)  {redFinalOpacity = redOpacity[60];}
+
+        // 12 dB <= Red values < 18 dB
+        else if(finalValue < 12.2f) {redFinalOpacity = redOpacity[61];}
+        else if(finalValue < 12.4f) {redFinalOpacity = redOpacity[62];}
+        else if(finalValue < 12.6f) {redFinalOpacity = redOpacity[63];}
+        else if(finalValue < 12.8f) {redFinalOpacity = redOpacity[64];}
+        else if(finalValue < 13.f)  {redFinalOpacity = redOpacity[65];}
+        else if(finalValue < 13.2f) {redFinalOpacity = redOpacity[66];}
+        else if(finalValue < 13.4f) {redFinalOpacity = redOpacity[67];}
+        else if(finalValue < 13.6f) {redFinalOpacity = redOpacity[68];}
+        else if(finalValue < 13.8f) {redFinalOpacity = redOpacity[69];}
+        else if(finalValue < 14.f)  {redFinalOpacity = redOpacity[70];}
+        else if(finalValue < 14.2f) {redFinalOpacity = redOpacity[71];}
+        else if(finalValue < 14.4f) {redFinalOpacity = redOpacity[72];}
+        else if(finalValue < 14.6f) {redFinalOpacity = redOpacity[73];}
+        else if(finalValue < 14.8f) {redFinalOpacity = redOpacity[74];}
+        else if(finalValue < 15.f)  {redFinalOpacity = redOpacity[75];}
+        else if(finalValue < 15.2f) {redFinalOpacity = redOpacity[76];}
+        else if(finalValue < 15.4f) {redFinalOpacity = redOpacity[77];}
+        else if(finalValue < 15.6f) {redFinalOpacity = redOpacity[78];}
+        else if(finalValue < 15.8f) {redFinalOpacity = redOpacity[79];}
+        else if(finalValue < 16.f)  {redFinalOpacity = redOpacity[80];}
+        else if(finalValue < 16.2f) {redFinalOpacity = redOpacity[81];}
+        else if(finalValue < 16.4f) {redFinalOpacity = redOpacity[82];}
+        else if(finalValue < 16.6f) {redFinalOpacity = redOpacity[83];}
+        else if(finalValue < 16.8f) {redFinalOpacity = redOpacity[84];}
+        else if(finalValue < 17.f)  {redFinalOpacity = redOpacity[85];}
+        else if(finalValue < 17.2f) {redFinalOpacity = redOpacity[86];}
+        else if(finalValue < 17.4f) {redFinalOpacity = redOpacity[87];}
+        else if(finalValue < 17.6f) {redFinalOpacity = redOpacity[88];}
+        else if(finalValue < 17.8f) {redFinalOpacity = redOpacity[89];}
+        else if(finalValue < 18.f)  {redFinalOpacity = redOpacity[90];}
+
+        // 18 dB <= Red values <= 24 dB
+        else if(finalValue < 18.2f) {redFinalOpacity = redOpacity[91];}
+        else if(finalValue < 18.4f) {redFinalOpacity = redOpacity[92];}
+        else if(finalValue < 18.6f) {redFinalOpacity = redOpacity[93];}
+        else if(finalValue < 18.8f) {redFinalOpacity = redOpacity[94];}
+        else if(finalValue < 19.f)  {redFinalOpacity = redOpacity[95];}
+        else if(finalValue < 19.2f) {redFinalOpacity = redOpacity[96];}
+        else if(finalValue < 19.4f) {redFinalOpacity = redOpacity[97];}
+        else if(finalValue < 19.6f) {redFinalOpacity = redOpacity[98];}
+        else if(finalValue < 19.8f) {redFinalOpacity = redOpacity[99];}
+        else if(finalValue < 20.f)  {redFinalOpacity = redOpacity[100];}
+        else if(finalValue < 20.2f) {redFinalOpacity = redOpacity[101];}
+        else if(finalValue < 20.4f) {redFinalOpacity = redOpacity[102];}
+        else if(finalValue < 20.6f) {redFinalOpacity = redOpacity[103];}
+        else if(finalValue < 20.8f) {redFinalOpacity = redOpacity[104];}
+        else if(finalValue < 21.f)  {redFinalOpacity = redOpacity[105];}
+        else if(finalValue < 21.2f) {redFinalOpacity = redOpacity[106];}
+        else if(finalValue < 21.4f) {redFinalOpacity = redOpacity[107];}
+        else if(finalValue < 21.6f) {redFinalOpacity = redOpacity[108];}
+        else if(finalValue < 21.8f) {redFinalOpacity = redOpacity[109];}
+        else if(finalValue < 22.f)  {redFinalOpacity = redOpacity[110];}
+        else if(finalValue < 22.2f) {redFinalOpacity = redOpacity[111];}
+        else if(finalValue < 22.4f) {redFinalOpacity = redOpacity[112];}
+        else if(finalValue < 22.6f) {redFinalOpacity = redOpacity[113];}
+        else if(finalValue < 22.8f) {redFinalOpacity = redOpacity[114];}
+        else if(finalValue < 23.f)  {redFinalOpacity = redOpacity[115];}
+        else if(finalValue < 23.2f) {redFinalOpacity = redOpacity[116];}
+        else if(finalValue < 23.4f) {redFinalOpacity = redOpacity[117];}
+        else if(finalValue < 23.6f) {redFinalOpacity = redOpacity[118];}
+        else if(finalValue < 23.8f) {redFinalOpacity = redOpacity[119];}
+        else if(finalValue < 24.f)  {redFinalOpacity = redOpacity[120];}
+        else if(finalValue >= 24.f) {redFinalOpacity = redOpacity[121];}
+        else {redFinalOpacity = redOpacity[0];}
+
+
+        if(finalValue == 0.f) {baseFinalOpacity = baseOpacity[200];}
+        else if(finalValue > -0.2f) {baseFinalOpacity = baseOpacity[199];}
+        else if(finalValue > -0.4f) {baseFinalOpacity = baseOpacity[198];}
+        else if(finalValue > -0.6f) {baseFinalOpacity = baseOpacity[197];}
+        else if(finalValue > -0.8f) {baseFinalOpacity = baseOpacity[196];}
+        else if(finalValue > -1.f)  {baseFinalOpacity = baseOpacity[195];}
+        else if(finalValue > -1.2f) {baseFinalOpacity = baseOpacity[194];}
+        else if(finalValue > -1.4f) {baseFinalOpacity = baseOpacity[193];}
+        else if(finalValue > -1.6f) {baseFinalOpacity = baseOpacity[192];}
+        else if(finalValue > -1.8f) {baseFinalOpacity = baseOpacity[191];}
+        else if(finalValue > -2.f)  {baseFinalOpacity = baseOpacity[190];}
+        else if(finalValue > -2.2f) {baseFinalOpacity = baseOpacity[189];}
+        else if(finalValue > -2.4f) {baseFinalOpacity = baseOpacity[188];}
+        else if(finalValue > -2.6f) {baseFinalOpacity = baseOpacity[187];}
+        else if(finalValue > -2.8f) {baseFinalOpacity = baseOpacity[186];}
+        else if(finalValue > -3.f)  {baseFinalOpacity = baseOpacity[185];}
+        else if(finalValue > -3.2f) {baseFinalOpacity = baseOpacity[184];}
+        else if(finalValue > -3.4f) {baseFinalOpacity = baseOpacity[183];}
+        else if(finalValue > -3.6f) {baseFinalOpacity = baseOpacity[182];}
+        else if(finalValue > -3.8f) {baseFinalOpacity = baseOpacity[181];}
+        else if(finalValue > -4.f)  {baseFinalOpacity = baseOpacity[180];}
+        else if(finalValue > -4.2f) {baseFinalOpacity = baseOpacity[179];}
+        else if(finalValue > -4.4f) {baseFinalOpacity = baseOpacity[178];}
+        else if(finalValue > -4.6f) {baseFinalOpacity = baseOpacity[177];}
+        else if(finalValue > -4.8f) {baseFinalOpacity = baseOpacity[176];}
+        else if(finalValue > -5.f)  {baseFinalOpacity = baseOpacity[175];}
+        else if(finalValue > -5.2f) {baseFinalOpacity = baseOpacity[174];}
+        else if(finalValue > -5.4f) {baseFinalOpacity = baseOpacity[173];}
+        else if(finalValue > -5.6f) {baseFinalOpacity = baseOpacity[172];}
+        else if(finalValue > -5.8f) {baseFinalOpacity = baseOpacity[171];}
+        else if(finalValue > -6.f)  {baseFinalOpacity = baseOpacity[170];}
+
+        // 6 dB <= Red values < 12 dB
+        else if(finalValue > -6.2f) {baseFinalOpacity = baseOpacity[169];}
+        else if(finalValue > -6.4f) {baseFinalOpacity = baseOpacity[168];}
+        else if(finalValue > -6.6f) {baseFinalOpacity = baseOpacity[167];}
+        else if(finalValue > -6.8f) {baseFinalOpacity = baseOpacity[166];}
+        else if(finalValue > -7.f)  {baseFinalOpacity = baseOpacity[165];}
+        else if(finalValue > -7.2f) {baseFinalOpacity = baseOpacity[164];}
+        else if(finalValue > -7.4f) {baseFinalOpacity = baseOpacity[163];}
+        else if(finalValue > -7.6f) {baseFinalOpacity = baseOpacity[162];}
+        else if(finalValue > -7.8f) {baseFinalOpacity = baseOpacity[161];}
+        else if(finalValue > -8.f)  {baseFinalOpacity = baseOpacity[160];}
+        else if(finalValue > -8.2f) {baseFinalOpacity = baseOpacity[159];}
+        else if(finalValue > -8.4f) {baseFinalOpacity = baseOpacity[158];}
+        else if(finalValue > -8.6f) {baseFinalOpacity = baseOpacity[157];}
+        else if(finalValue > -8.8f) {baseFinalOpacity = baseOpacity[156];}
+        else if(finalValue > -9.f)  {baseFinalOpacity = baseOpacity[155];}
+        else if(finalValue > -9.2f) {baseFinalOpacity = baseOpacity[154];}
+        else if(finalValue > -9.4f) {baseFinalOpacity = baseOpacity[153];}
+        else if(finalValue > -9.6f) {baseFinalOpacity = baseOpacity[152];}
+        else if(finalValue > -9.8f) {baseFinalOpacity = baseOpacity[151];}
+        else if(finalValue > -10.f) {baseFinalOpacity = baseOpacity[150];}
+        else if(finalValue > -10.2f) {baseFinalOpacity = baseOpacity[149];}
+        else if(finalValue > -10.4f) {baseFinalOpacity = baseOpacity[148];}
+        else if(finalValue > -10.6f) {baseFinalOpacity = baseOpacity[147];}
+        else if(finalValue > -10.8f) {baseFinalOpacity = baseOpacity[146];}
+        else if(finalValue > -11.f)  {baseFinalOpacity = baseOpacity[145];}
+        else if(finalValue > -11.2f) {baseFinalOpacity = baseOpacity[144];}
+        else if(finalValue > -11.4f) {baseFinalOpacity = baseOpacity[143];}
+        else if(finalValue > -11.6f) {baseFinalOpacity = baseOpacity[142];}
+        else if(finalValue > -11.8f) {baseFinalOpacity = baseOpacity[141];}
+        else if(finalValue > -12.f)  {baseFinalOpacity = baseOpacity[140];}
+
+        // 12 dB <= Red values < 18 dB
+        else if(finalValue > -12.2f) {baseFinalOpacity = baseOpacity[139];}
+        else if(finalValue > -12.4f) {baseFinalOpacity = baseOpacity[138];}
+        else if(finalValue > -12.6f) {baseFinalOpacity = baseOpacity[137];}
+        else if(finalValue > -12.8f) {baseFinalOpacity = baseOpacity[136];}
+        else if(finalValue > -13.f)  {baseFinalOpacity = baseOpacity[135];}
+        else if(finalValue > -13.2f) {baseFinalOpacity = baseOpacity[134];}
+        else if(finalValue > -13.4f) {baseFinalOpacity = baseOpacity[133];}
+        else if(finalValue > -13.6f) {baseFinalOpacity = baseOpacity[132];}
+        else if(finalValue > -13.8f) {baseFinalOpacity = baseOpacity[131];}
+        else if(finalValue > -14.f)  {baseFinalOpacity = baseOpacity[130];}
+        else if(finalValue > -14.2f) {baseFinalOpacity = baseOpacity[129];}
+        else if(finalValue > -14.4f) {baseFinalOpacity = baseOpacity[128];}
+        else if(finalValue > -14.6f) {baseFinalOpacity = baseOpacity[127];}
+        else if(finalValue > -14.8f) {baseFinalOpacity = baseOpacity[126];}
+        else if(finalValue > -15.f)  {baseFinalOpacity = baseOpacity[125];}
+        else if(finalValue > -15.2f) {baseFinalOpacity = baseOpacity[124];}
+        else if(finalValue > -15.4f) {baseFinalOpacity = baseOpacity[123];}
+        else if(finalValue > -15.6f) {baseFinalOpacity = baseOpacity[122];}
+        else if(finalValue > -15.8f) {baseFinalOpacity = baseOpacity[121];}
+        else if(finalValue > -16.f)  {baseFinalOpacity = baseOpacity[120];}
+        else if(finalValue > -16.2f) {baseFinalOpacity = baseOpacity[119];}
+        else if(finalValue > -16.4f) {baseFinalOpacity = baseOpacity[118];}
+        else if(finalValue > -16.6f) {baseFinalOpacity = baseOpacity[117];}
+        else if(finalValue > -16.8f) {baseFinalOpacity = baseOpacity[116];}
+        else if(finalValue > -17.f)  {baseFinalOpacity = baseOpacity[115];}
+        else if(finalValue > -17.2f) {baseFinalOpacity = baseOpacity[114];}
+        else if(finalValue > -17.4f) {baseFinalOpacity = baseOpacity[113];}
+        else if(finalValue > -17.6f) {baseFinalOpacity = baseOpacity[112];}
+        else if(finalValue > -17.8f) {baseFinalOpacity = baseOpacity[111];}
+        else if(finalValue > -18.f)  {baseFinalOpacity = baseOpacity[110];}
+
+        // 18 dB <= Red values <= 24 dB
+        else if(finalValue > -18.2f) {baseFinalOpacity = baseOpacity[109];}
+        else if(finalValue > -18.4f) {baseFinalOpacity = baseOpacity[108];}
+        else if(finalValue > -18.6f) {baseFinalOpacity = baseOpacity[107];}
+        else if(finalValue > -18.8f) {baseFinalOpacity = baseOpacity[106];}
+        else if(finalValue > -19.f)  {baseFinalOpacity = baseOpacity[105];}
+        else if(finalValue > -19.2f) {baseFinalOpacity = baseOpacity[104];}
+        else if(finalValue > -19.4f) {baseFinalOpacity = baseOpacity[103];}
+        else if(finalValue > -19.6f) {baseFinalOpacity = baseOpacity[102];}
+        else if(finalValue > -19.8f) {baseFinalOpacity = baseOpacity[101];}
+        else if(finalValue > -20.f)  {baseFinalOpacity = baseOpacity[100];}
+        else if(finalValue > -20.2f) {baseFinalOpacity = baseOpacity[99];}
+        else if(finalValue > -20.4f) {baseFinalOpacity = baseOpacity[98];}
+        else if(finalValue > -20.6f) {baseFinalOpacity = baseOpacity[97];}
+        else if(finalValue > -20.8f) {baseFinalOpacity = baseOpacity[96];}
+        else if(finalValue > -21.f)  {baseFinalOpacity = baseOpacity[95];}
+        else if(finalValue > -21.2f) {baseFinalOpacity = baseOpacity[94];}
+        else if(finalValue > -21.4f) {baseFinalOpacity = baseOpacity[93];}
+        else if(finalValue > -21.6f) {baseFinalOpacity = baseOpacity[92];}
+        else if(finalValue > -21.8f) {baseFinalOpacity = baseOpacity[91];}
+        else if(finalValue > -22.f)  {baseFinalOpacity = baseOpacity[90];}
+        else if(finalValue > -22.2f) {baseFinalOpacity = baseOpacity[89];}
+        else if(finalValue > -22.4f) {baseFinalOpacity = baseOpacity[88];}
+        else if(finalValue > -22.6f) {baseFinalOpacity = baseOpacity[87];}
+        else if(finalValue > -22.8f) {baseFinalOpacity = baseOpacity[86];}
+        else if(finalValue > -23.f)  {baseFinalOpacity = baseOpacity[85];}
+        else if(finalValue > -23.2f) {baseFinalOpacity = baseOpacity[84];}
+        else if(finalValue > -23.4f) {baseFinalOpacity = baseOpacity[83];}
+        else if(finalValue > -23.6f) {baseFinalOpacity = baseOpacity[82];}
+        else if(finalValue > -23.8f) {baseFinalOpacity = baseOpacity[81];}
+        else if(finalValue > -24.f)  {baseFinalOpacity = baseOpacity[80];}
+
+        // 18 dB <= Red values <= 24 dB
+        else if(finalValue > -24.3f) {baseFinalOpacity = baseOpacity[79];}
+        else if(finalValue > -24.6f) {baseFinalOpacity = baseOpacity[78];}
+        else if(finalValue > -24.9f) {baseFinalOpacity = baseOpacity[77];}
+        else if(finalValue > -25.2f) {baseFinalOpacity = baseOpacity[76];}
+        else if(finalValue > -25.5f) {baseFinalOpacity = baseOpacity[75];}
+        else if(finalValue > -25.8f) {baseFinalOpacity = baseOpacity[74];}
+        else if(finalValue > -26.1f) {baseFinalOpacity = baseOpacity[73];}
+        else if(finalValue > -26.4f) {baseFinalOpacity = baseOpacity[72];}
+        else if(finalValue > -26.7f) {baseFinalOpacity = baseOpacity[71];}
+        else if(finalValue > -27.f)  {baseFinalOpacity = baseOpacity[70];}
+        else if(finalValue > -27.3f) {baseFinalOpacity = baseOpacity[69];}
+        else if(finalValue > -27.6f) {baseFinalOpacity = baseOpacity[68];}
+        else if(finalValue > -27.9f) {baseFinalOpacity = baseOpacity[67];}
+        else if(finalValue > -28.2f) {baseFinalOpacity = baseOpacity[66];}
+        else if(finalValue > -28.5f) {baseFinalOpacity = baseOpacity[65];}
+        else if(finalValue > -28.8f) {baseFinalOpacity = baseOpacity[64];}
+        else if(finalValue > -29.1f) {baseFinalOpacity = baseOpacity[63];}
+        else if(finalValue > -29.4f) {baseFinalOpacity = baseOpacity[62];}
+        else if(finalValue > -29.7f) {baseFinalOpacity = baseOpacity[61];}
+        else if(finalValue > -30.f)  {baseFinalOpacity = baseOpacity[60];}
+
+        else if(finalValue > -30.3f) {baseFinalOpacity = baseOpacity[59];}
+        else if(finalValue > -30.6f) {baseFinalOpacity = baseOpacity[58];}
+        else if(finalValue > -30.9f) {baseFinalOpacity = baseOpacity[57];}
+        else if(finalValue > -31.2f) {baseFinalOpacity = baseOpacity[56];}
+        else if(finalValue > -31.5f) {baseFinalOpacity = baseOpacity[55];}
+        else if(finalValue > -31.8f) {baseFinalOpacity = baseOpacity[54];}
+        else if(finalValue > -32.1f) {baseFinalOpacity = baseOpacity[53];}
+        else if(finalValue > -32.4f) {baseFinalOpacity = baseOpacity[52];}
+        else if(finalValue > -32.7f) {baseFinalOpacity = baseOpacity[51];}
+        else if(finalValue > -33.f)  {baseFinalOpacity = baseOpacity[50];}
+        else if(finalValue > -33.3f) {baseFinalOpacity = baseOpacity[49];}
+        else if(finalValue > -33.6f) {baseFinalOpacity = baseOpacity[48];}
+        else if(finalValue > -33.9f) {baseFinalOpacity = baseOpacity[47];}
+        else if(finalValue > -34.2f) {baseFinalOpacity = baseOpacity[46];}
+        else if(finalValue > -34.5f) {baseFinalOpacity = baseOpacity[45];}
+        else if(finalValue > -34.8f) {baseFinalOpacity = baseOpacity[44];}
+        else if(finalValue > -35.1f) {baseFinalOpacity = baseOpacity[43];}
+        else if(finalValue > -35.4f) {baseFinalOpacity = baseOpacity[42];}
+        else if(finalValue > -35.7f) {baseFinalOpacity = baseOpacity[41];}
+        else if(finalValue > -36.f)  {baseFinalOpacity = baseOpacity[40];}
+
+
+        else if(finalValue > -36.6f) {baseFinalOpacity = baseOpacity[39];}
+        else if(finalValue > -37.2f) {baseFinalOpacity = baseOpacity[38];}
+        else if(finalValue > -37.8f) {baseFinalOpacity = baseOpacity[37];}
+        else if(finalValue > -38.4f) {baseFinalOpacity = baseOpacity[36];}
+        else if(finalValue > -39.f)  {baseFinalOpacity = baseOpacity[35];}
+        else if(finalValue > -39.6f) {baseFinalOpacity = baseOpacity[34];}
+        else if(finalValue > -40.2f) {baseFinalOpacity = baseOpacity[33];}
+        else if(finalValue > -40.8f) {baseFinalOpacity = baseOpacity[32];}
+        else if(finalValue > -41.4f) {baseFinalOpacity = baseOpacity[31];}
+        else if(finalValue > -42.f)  {baseFinalOpacity = baseOpacity[30];}
+
+        else if(finalValue > -42.6f) {baseFinalOpacity = baseOpacity[29];}
+        else if(finalValue > -43.2f) {baseFinalOpacity = baseOpacity[28];}
+        else if(finalValue > -43.8f) {baseFinalOpacity = baseOpacity[27];}
+        else if(finalValue > -44.4f) {baseFinalOpacity = baseOpacity[26];}
+        else if(finalValue > -45.f)  {baseFinalOpacity = baseOpacity[25];}
+        else if(finalValue > -45.6f) {baseFinalOpacity = baseOpacity[24];}
+        else if(finalValue > -46.2f) {baseFinalOpacity = baseOpacity[23];}
+        else if(finalValue > -46.8f) {baseFinalOpacity = baseOpacity[22];}
+        else if(finalValue > -47.4f) {baseFinalOpacity = baseOpacity[21];}
+        else if(finalValue > -48.f)  {baseFinalOpacity = baseOpacity[20];}
+
+        else if(finalValue > -48.6f) {baseFinalOpacity = baseOpacity[19];}
+        else if(finalValue > -49.2f) {baseFinalOpacity = baseOpacity[18];}
+        else if(finalValue > -49.8f) {baseFinalOpacity = baseOpacity[17];}
+        else if(finalValue > -50.4f) {baseFinalOpacity = baseOpacity[16];}
+        else if(finalValue > -51.f)  {baseFinalOpacity = baseOpacity[15];}
+        else if(finalValue > -51.6f) {baseFinalOpacity = baseOpacity[14];}
+        else if(finalValue > -52.2f) {baseFinalOpacity = baseOpacity[13];}
+        else if(finalValue > -52.8f) {baseFinalOpacity = baseOpacity[12];}
+        else if(finalValue > -53.4f) {baseFinalOpacity = baseOpacity[11];}
+        else if(finalValue > -54.f)  {baseFinalOpacity = baseOpacity[10];}
+
+        else if(finalValue > -54.6f) {baseFinalOpacity = baseOpacity[9];}
+        else if(finalValue > -55.2f) {baseFinalOpacity = baseOpacity[8];}
+        else if(finalValue > -55.8f) {baseFinalOpacity = baseOpacity[7];}
+        else if(finalValue > -56.4f) {baseFinalOpacity = baseOpacity[6];}
+        else if(finalValue > -57.f)  {baseFinalOpacity = baseOpacity[5];}
+        else if(finalValue > -57.6f) {baseFinalOpacity = baseOpacity[4];}
+        else if(finalValue > -58.2f) {baseFinalOpacity = baseOpacity[3];}
+        else if(finalValue > -58.8f) {baseFinalOpacity = baseOpacity[2];}
+        else if(finalValue > -59.4f) {baseFinalOpacity = baseOpacity[1];}
+        else if(finalValue > -60.f)  {baseFinalOpacity = baseOpacity[0];}
+        else if(finalValue <= -60.f) {baseFinalOpacity = baseOpacity[0];}
+        else {baseFinalOpacity = baseOpacity[0];}
+        
+        if((l2RValueRaw + r2LValueRaw) >= 0.f) {
+            redL2RAOpacity = 1.f;
+            redR2LOpacity = 1.f;
+            redL2RBOpacity = 1.f;
+            redFinalOpacity = 1.f;
+        }
         
         repaint();
             
     }
-    if (slider == &l2RGainKnob){
-        float l2RValue = slider -> getValue();
-    }
-    if (slider == &r2LGainKnob){
-        float r2LValue = slider -> getValue();
-    }
+//    if (slider == &l2RGainKnob){
+//        float l2RValue = slider -> getValue();
+//    }
+//    if (slider == &r2LGainKnob){
+//        float r2LValue = slider -> getValue();
+//    }
     if (slider == &tempoSelector) {
 
     }

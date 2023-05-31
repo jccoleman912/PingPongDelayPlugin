@@ -232,10 +232,22 @@ private:
     juce::DrawableImage rightPingPongRedB;
 
     
-    
+    float baseInitialOpacity;
     float redInitialOpacity;
-    float orangeInitialOpacity;
-    float emptyBaseOpacity;
+    
+    float baseL2RAOpacity;
+    float redL2RAOpacity;
+    
+    float baseR2LOpacity;
+    float redR2LOpacity;
+    
+    float baseL2RBOpacity;
+    float redL2RBOpacity;
+    
+    float baseFinalOpacity;
+    float redFinalOpacity;
+
+    
     
     
     
