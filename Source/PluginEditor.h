@@ -85,6 +85,12 @@ private:
     juce::Image spriteSheet;
     juce::Image rescaledSpriteSheet;
     
+    juce::Image sideColorBGImage;
+    juce::DrawableImage tempoOverlay;
+    juce::DrawableImage smoothOverlay;
+    float tempoOverlayOpacity;
+    float smoothOverlayOpacity;
+    
     juce::Image bypassOFFImage;
     juce::Image bypassONImage;
     
