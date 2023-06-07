@@ -84,6 +84,9 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
 //
 //
 //
+    
+    faderBackgroundImage = juce::ImageCache::getFromMemory(BinaryData::FaderBackground_png, BinaryData::FaderBackground_pngSize);
+    
     bypassOFFImage = juce::ImageCache::getFromMemory(BinaryData::BypassOFF_jpg, BinaryData::BypassOFF_jpgSize);
     bypassONImage = juce::ImageCache::getFromMemory(BinaryData::BypassON_jpg, BinaryData::BypassON_jpgSize);
     
@@ -415,6 +418,8 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     
     knobPosition = mix100;
     
+    smoothKnobPosition = mix0;
+    
     
     //
     // Initial Gain Knob
@@ -422,13 +427,12 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     
     initialGainKnob.addListener(this);
     // Specify location in window (xPos,yPos,width,height)
-    initialGainKnob.setBounds(250,25,100,100);
-    initialGainKnob.setRange(-60.f,24.f,0.1f); // (min, max, interval)
+    initialGainKnob.setBounds(379, 4, 40, 152);
+    initialGainKnob.setRange(-70.f, 38.f, 0.1f); // (min, max, interval)
     initialGainKnob.setValue(-9.f); // initial value
     initialGainKnob.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     initialGainKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
-    initialGainKnob.setName("Initial dB Drop");
-    initialGainKnob.getTitle();
+    initialGainKnob.setLookAndFeel(&gainLNF);
     addAndMakeVisible(initialGainKnob);
 
     
@@ -438,13 +442,12 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     
     l2RGainKnob.addListener(this);
     // Specify location in window (xPos,yPos,width,height)
-    l2RGainKnob.setBounds(145,170,100,100);
-    l2RGainKnob.setRange(-60.f,24.f,0.1f); // (min, max, interval)
+    l2RGainKnob.setBounds(299, 100, 40, 152);
+    l2RGainKnob.setRange(-70.f, 38.f, 0.1f); // (min, max, interval)
     l2RGainKnob.setValue(0.f); // initial value
     l2RGainKnob.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     l2RGainKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
-    l2RGainKnob.setName("Left to Right dB Drop");
-    l2RGainKnob.getTitle();
+    l2RGainKnob.setLookAndFeel(&gainLNF);
     addAndMakeVisible(l2RGainKnob);
     
     //
@@ -453,13 +456,12 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     
     r2LGainKnob.addListener(this);
     // Specify location in window (xPos,yPos,width,height)
-    r2LGainKnob.setBounds(425,170,100,100);
-    r2LGainKnob.setRange(-60.f,24.f,0.1f); // (min, max, interval)
+    r2LGainKnob.setBounds(459, 244, 40, 152);
+    r2LGainKnob.setRange(-70.f, 38.f, 0.1f); // (min, max, interval)
     r2LGainKnob.setValue(-6.f); // initial value
     r2LGainKnob.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     r2LGainKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
-    r2LGainKnob.setName("Right to Left dB Drop");
-    r2LGainKnob.getTitle();
+    r2LGainKnob.setLookAndFeel(&gainLNF);
     addAndMakeVisible(r2LGainKnob);
     
     //
@@ -483,14 +485,11 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     
     mixKnob.addListener(this);
     // Specify location in window (xPos,yPos,width,height)
-    mixKnob.setBounds(20,450,100,100);
+    mixKnob.setBounds(682,194,76,104);
     mixKnob.setRange(0.f,100.f,0.1); // (min, max, interval)
     mixKnob.setValue(100.f); // initial value
     mixKnob.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     mixKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
-    mixKnob.setName("Mix");
-    mixKnob.getTitle();
-//    mixKnob.setLookAndFeel(&mixKnobLookAndFeel);
     addAndMakeVisible(mixKnob);
     mixKnob.setAlpha(0.f);
     
@@ -500,14 +499,13 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     
     smoothKnob.addListener(this);
     // Specify location in window (xPos,yPos,width,height)
-    smoothKnob.setBounds(260,400,160,100);
+    smoothKnob.setBounds(682,462,76,104);
     smoothKnob.setRange(0.f,500.f,0.1); // (min, max, interval)
     smoothKnob.setValue(0.f); // initial value
     smoothKnob.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     smoothKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
-    smoothKnob.setName("Smooth MS");
-    smoothKnob.getTitle();
     addAndMakeVisible(smoothKnob);
+    smoothKnob.setAlpha(0.f);
         
     
     
@@ -626,7 +624,28 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     addAndMakeVisible(smoothButton);
     smoothButton.setAlpha(0.f);
     
+    smoothOverlayOpacity = 0.65f;
     
+    
+    if(((&initialGainKnob)->getValue()) > 24.f) {
+        initialGainKnob.setValue(24.0);
+    }
+    if(((&l2RGainKnob)->getValue()) > 24.f) {
+        l2RGainKnob.setValue(24.0);
+    }
+    if(((&r2LGainKnob)->getValue()) > 24.f) {
+        r2LGainKnob.setValue(24.0);
+    }
+    if(((&initialGainKnob)->getValue()) < -60.f) {
+        initialGainKnob.setValue(-60.0);
+    }
+    if(((&l2RGainKnob)->getValue()) < -60.f) {
+        l2RGainKnob.setValue(-60.0);
+    }
+    if(((&r2LGainKnob)->getValue()) < -60.f) {
+        r2LGainKnob.setValue(-60.0);
+    }
+
     
     sliderAttachment.emplace_back(new juce::AudioProcessorValueTreeState::SliderAttachment(audioProcessor.state, "initialDropValue", initialGainKnob));
     sliderAttachment.emplace_back(new juce::AudioProcessorValueTreeState::SliderAttachment(audioProcessor.state, "l2RDropValue", l2RGainKnob));
@@ -686,6 +705,7 @@ void Coleman_HW2AudioProcessorEditor::paint (juce::Graphics& g)
         smoothOutcome = smoothOFFImage;
     }
     
+    
     g.drawImage(bypassOutcome, 16, 32, 128, 80, 0, 0, 400, 250);
     
     g.drawImage(syncOutcome, 16, 144, 128, 80, 0, 0, 400, 250);
@@ -700,7 +720,12 @@ void Coleman_HW2AudioProcessorEditor::paint (juce::Graphics& g)
     
     g.drawImage(smoothOutcome, 656, 368, 128, 80, 0, 0, 400, 250);
 
-    g.drawImage(knobPosition, 680, 190, 100, 100, 0, 0, 1000, 1000);
+    g.drawImage(knobPosition, 674, 188, 90, 90, 0, 0, 1000, 1000);
+    
+    g.drawImage(smoothKnobPosition, 674, 456, 90, 90, 0, 0, 1000, 1000);
+    
+
+    
 
     
 //    emptyInitialDrawable.setImage(emptyInitial);
@@ -743,6 +768,7 @@ void Coleman_HW2AudioProcessorEditor::paint (juce::Graphics& g)
 //    redR2LDropFinalDrawable.setImage(redR2LFinalDrop);
     redR2LDropFinalDrawable.drawAt(g, 240, 544, redFinalOpacity);
     
+
     tempoOverlay.drawAt(g, 16, 224, tempoOverlayOpacity);
     smoothOverlay.drawAt(g, 656, 432, smoothOverlayOpacity);
     
@@ -767,6 +793,12 @@ void Coleman_HW2AudioProcessorEditor::paint (juce::Graphics& g)
     leftPingPongRedB.drawAt(g, 192, 368, redR2LOpacity);
     rightPingPongRedB.drawAt(g, 544, 512, redL2RBOpacity);
     
+    
+    g.drawImage(faderBackgroundImage, 368, 0, 64, 160, 0, 16, 200, 500);
+    
+    g.drawImage(faderBackgroundImage, 288, 96, 64, 160, 0, 16, 200, 500);
+    
+    g.drawImage(faderBackgroundImage, 448, 240, 64, 160, 0, 16, 200, 500);
     
 
 //
@@ -886,12 +918,11 @@ void Coleman_HW2AudioProcessorEditor::buttonClicked(juce::Button *button){
         bool smoothBool = smoothButton.getToggleState();
         if(smoothBool) {
             smoothOutcome = smoothONImage;
-            smoothOverlayOpacity = 0.65f;
+            smoothOverlayOpacity = 0.f;
         } else {
             smoothOutcome = smoothOFFImage;
-            smoothOverlayOpacity = 0.f;
+            smoothOverlayOpacity = 0.65f;
         }
-//        repaint(656, 368, 128, 64);
         repaint();
     }
 }
@@ -2672,6 +2703,26 @@ void Coleman_HW2AudioProcessorEditor::sliderValueChanged(juce::Slider * slider)
             redFinalOpacity = 1.f;
         }
         
+        if(((&initialGainKnob)->getValue()) > 24.f) {
+            initialGainKnob.setValue(24.0);
+        }
+        if(((&l2RGainKnob)->getValue()) > 24.f) {
+            l2RGainKnob.setValue(24.0);
+        }
+        if(((&r2LGainKnob)->getValue()) > 24.f) {
+            r2LGainKnob.setValue(24.0);
+        }
+        if(((&initialGainKnob)->getValue()) < -60.f) {
+            initialGainKnob.setValue(-60.0);
+        }
+        if(((&l2RGainKnob)->getValue()) < -60.f) {
+            l2RGainKnob.setValue(-60.0);
+        }
+        if(((&r2LGainKnob)->getValue()) < -60.f) {
+            r2LGainKnob.setValue(-60.0);
+        }
+
+        
         repaint();
             
     }
@@ -2899,6 +2950,225 @@ void Coleman_HW2AudioProcessorEditor::sliderValueChanged(juce::Slider * slider)
         else if (mixValue >= 0.5f) {knobPosition = mix0x5;}
         else if (mixValue >= 0.f) {knobPosition = mix0;}
         else {knobPosition = mix100;}
+        
+        repaint();
+    }
+    if(slider == &smoothKnob) {
+        float smoothValue = slider->getValue();
+        
+        if(smoothValue == 500) {smoothKnobPosition = mix100;}
+        // Knob images 90 - 99.5
+        else if (smoothValue >= 497.5f) {smoothKnobPosition = mix99x5;}
+        else if (smoothValue >= 495.f)  {smoothKnobPosition = mix99;}
+        else if (smoothValue >= 492.5f) {smoothKnobPosition = mix98x5;}
+        else if (smoothValue >= 490.f)  {smoothKnobPosition = mix98;}
+        else if (smoothValue >= 487.5f) {smoothKnobPosition = mix97x5;}
+        else if (smoothValue >= 485.f)  {smoothKnobPosition = mix97;}
+        else if (smoothValue >= 482.5f) {smoothKnobPosition = mix96x5;}
+        else if (smoothValue >= 480.f)  {smoothKnobPosition = mix96;}
+        else if (smoothValue >= 477.5f) {smoothKnobPosition = mix95x5;}
+        else if (smoothValue >= 475.f)  {smoothKnobPosition = mix95;}
+        else if (smoothValue >= 472.5f) {smoothKnobPosition = mix94x5;}
+        else if (smoothValue >= 470.f)  {smoothKnobPosition = mix94;}
+        else if (smoothValue >= 467.5f) {smoothKnobPosition = mix93x5;}
+        else if (smoothValue >= 465.f)  {smoothKnobPosition = mix93;}
+        else if (smoothValue >= 462.5f) {smoothKnobPosition = mix92x5;}
+        else if (smoothValue >= 460.f)  {smoothKnobPosition = mix92;}
+        else if (smoothValue >= 457.5f) {smoothKnobPosition = mix91x5;}
+        else if (smoothValue >= 455.f)  {smoothKnobPosition = mix91;}
+        else if (smoothValue >= 452.5f) {smoothKnobPosition = mix90x5;}
+        else if (smoothValue >= 450.f)  {smoothKnobPosition = mix90;}
+        // Knob images 80 - 89.5
+        else if (smoothValue >= 447.5f) {smoothKnobPosition = mix89x5;}
+        else if (smoothValue >= 445.f)  {smoothKnobPosition = mix89;}
+        else if (smoothValue >= 442.5f) {smoothKnobPosition = mix88x5;}
+        else if (smoothValue >= 440.f)  {smoothKnobPosition = mix88;}
+        else if (smoothValue >= 437.5f) {smoothKnobPosition = mix87x5;}
+        else if (smoothValue >= 435.f)  {smoothKnobPosition = mix87;}
+        else if (smoothValue >= 432.5f) {smoothKnobPosition = mix86x5;}
+        else if (smoothValue >= 430.f)  {smoothKnobPosition = mix86;}
+        else if (smoothValue >= 427.5f) {smoothKnobPosition = mix85x5;}
+        else if (smoothValue >= 425.f)  {smoothKnobPosition = mix85;}
+        else if (smoothValue >= 422.5f) {smoothKnobPosition = mix84x5;}
+        else if (smoothValue >= 420.f)  {smoothKnobPosition = mix84;}
+        else if (smoothValue >= 417.5f) {smoothKnobPosition = mix83x5;}
+        else if (smoothValue >= 415.f)  {smoothKnobPosition = mix83;}
+        else if (smoothValue >= 412.5f) {smoothKnobPosition = mix82x5;}
+        else if (smoothValue >= 410.f)  {smoothKnobPosition = mix82;}
+        else if (smoothValue >= 407.5f) {smoothKnobPosition = mix81x5;}
+        else if (smoothValue >= 405.f)  {smoothKnobPosition = mix81;}
+        else if (smoothValue >= 402.5f) {smoothKnobPosition = mix80x5;}
+        else if (smoothValue >= 400.f)  {smoothKnobPosition = mix80;}
+        // Knob images 90 - 99.5
+        else if (smoothValue >= 397.5f) {smoothKnobPosition = mix79x5;}
+        else if (smoothValue >= 395.f)  {smoothKnobPosition = mix79;}
+        else if (smoothValue >= 392.5f) {smoothKnobPosition = mix78x5;}
+        else if (smoothValue >= 390.f)  {smoothKnobPosition = mix78;}
+        else if (smoothValue >= 387.5f) {smoothKnobPosition = mix77x5;}
+        else if (smoothValue >= 385.f)  {smoothKnobPosition = mix77;}
+        else if (smoothValue >= 382.5f) {smoothKnobPosition = mix76x5;}
+        else if (smoothValue >= 380.f)  {smoothKnobPosition = mix76;}
+        else if (smoothValue >= 377.5f) {smoothKnobPosition = mix75x5;}
+        else if (smoothValue >= 375.f)  {smoothKnobPosition = mix75;}
+        else if (smoothValue >= 372.5f) {smoothKnobPosition = mix74x5;}
+        else if (smoothValue >= 370.f)  {smoothKnobPosition = mix74;}
+        else if (smoothValue >= 367.5f) {smoothKnobPosition = mix73x5;}
+        else if (smoothValue >= 365.f)  {smoothKnobPosition = mix73;}
+        else if (smoothValue >= 362.5f) {smoothKnobPosition = mix72x5;}
+        else if (smoothValue >= 360.f)  {smoothKnobPosition = mix72;}
+        else if (smoothValue >= 357.5f) {smoothKnobPosition = mix71x5;}
+        else if (smoothValue >= 355.f)  {smoothKnobPosition = mix71;}
+        else if (smoothValue >= 352.5f) {smoothKnobPosition = mix70x5;}
+        else if (smoothValue >= 350.f)  {smoothKnobPosition = mix70;}
+        // Knob images 80 - 89.5
+        else if (smoothValue >= 347.5f) {smoothKnobPosition = mix69x5;}
+        else if (smoothValue >= 345.f)  {smoothKnobPosition = mix69;}
+        else if (smoothValue >= 342.5f) {smoothKnobPosition = mix68x5;}
+        else if (smoothValue >= 340.f)  {smoothKnobPosition = mix68;}
+        else if (smoothValue >= 337.5f) {smoothKnobPosition = mix67x5;}
+        else if (smoothValue >= 335.f)  {smoothKnobPosition = mix67;}
+        else if (smoothValue >= 332.5f) {smoothKnobPosition = mix66x5;}
+        else if (smoothValue >= 330.f)  {smoothKnobPosition = mix66;}
+        else if (smoothValue >= 327.5f) {smoothKnobPosition = mix65x5;}
+        else if (smoothValue >= 325.f)  {smoothKnobPosition = mix65;}
+        else if (smoothValue >= 322.5f) {smoothKnobPosition = mix64x5;}
+        else if (smoothValue >= 320.f)  {smoothKnobPosition = mix64;}
+        else if (smoothValue >= 317.5f) {smoothKnobPosition = mix63x5;}
+        else if (smoothValue >= 315.f)  {smoothKnobPosition = mix63;}
+        else if (smoothValue >= 312.5f) {smoothKnobPosition = mix62x5;}
+        else if (smoothValue >= 310.f)  {smoothKnobPosition = mix62;}
+        else if (smoothValue >= 307.5f) {smoothKnobPosition = mix61x5;}
+        else if (smoothValue >= 305.f)  {smoothKnobPosition = mix61;}
+        else if (smoothValue >= 302.5f) {smoothKnobPosition = mix60x5;}
+        else if (smoothValue >= 300.f)  {smoothKnobPosition = mix60;}
+        // Knob images 90 - 99.5
+        else if (smoothValue >= 297.5f) {smoothKnobPosition = mix59x5;}
+        else if (smoothValue >= 295.f)  {smoothKnobPosition = mix59;}
+        else if (smoothValue >= 292.5f) {smoothKnobPosition = mix58x5;}
+        else if (smoothValue >= 290.f)  {smoothKnobPosition = mix58;}
+        else if (smoothValue >= 287.5f) {smoothKnobPosition = mix57x5;}
+        else if (smoothValue >= 285.f)  {smoothKnobPosition = mix57;}
+        else if (smoothValue >= 282.5f) {smoothKnobPosition = mix56x5;}
+        else if (smoothValue >= 280.f)  {smoothKnobPosition = mix56;}
+        else if (smoothValue >= 277.5f) {smoothKnobPosition = mix55x5;}
+        else if (smoothValue >= 275.f)  {smoothKnobPosition = mix55;}
+        else if (smoothValue >= 272.5f) {smoothKnobPosition = mix54x5;}
+        else if (smoothValue >= 270.f)  {smoothKnobPosition = mix54;}
+        else if (smoothValue >= 267.5f) {smoothKnobPosition = mix53x5;}
+        else if (smoothValue >= 265.f)  {smoothKnobPosition = mix53;}
+        else if (smoothValue >= 262.5f) {smoothKnobPosition = mix52x5;}
+        else if (smoothValue >= 260.f)  {smoothKnobPosition = mix52;}
+        else if (smoothValue >= 257.5f) {smoothKnobPosition = mix51x5;}
+        else if (smoothValue >= 255.f)  {smoothKnobPosition = mix51;}
+        else if (smoothValue >= 252.5f) {smoothKnobPosition = mix50x5;}
+        else if (smoothValue >= 250.f)  {smoothKnobPosition = mix50;}
+        // Knob images 80 - 89.5
+        else if (smoothValue >= 247.5f) {smoothKnobPosition = mix49x5;}
+        else if (smoothValue >= 245.f)  {smoothKnobPosition = mix49;}
+        else if (smoothValue >= 242.5f) {smoothKnobPosition = mix48x5;}
+        else if (smoothValue >= 240.f)  {smoothKnobPosition = mix48;}
+        else if (smoothValue >= 237.5f) {smoothKnobPosition = mix47x5;}
+        else if (smoothValue >= 235.f)  {smoothKnobPosition = mix47;}
+        else if (smoothValue >= 232.5f) {smoothKnobPosition = mix46x5;}
+        else if (smoothValue >= 230.f)  {smoothKnobPosition = mix46;}
+        else if (smoothValue >= 227.5f) {smoothKnobPosition = mix45x5;}
+        else if (smoothValue >= 225.f)  {smoothKnobPosition = mix45;}
+        else if (smoothValue >= 222.5f) {smoothKnobPosition = mix44x5;}
+        else if (smoothValue >= 220.f)  {smoothKnobPosition = mix44;}
+        else if (smoothValue >= 217.5f) {smoothKnobPosition = mix43x5;}
+        else if (smoothValue >= 215.f)  {smoothKnobPosition = mix43;}
+        else if (smoothValue >= 212.5f) {smoothKnobPosition = mix42x5;}
+        else if (smoothValue >= 210.f)  {smoothKnobPosition = mix42;}
+        else if (smoothValue >= 207.5f) {smoothKnobPosition = mix41x5;}
+        else if (smoothValue >= 205.f)  {smoothKnobPosition = mix41;}
+        else if (smoothValue >= 202.5f) {smoothKnobPosition = mix40x5;}
+        else if (smoothValue >= 200.f)  {smoothKnobPosition = mix40;}
+        // Knob images 90 - 99.5
+        else if (smoothValue >= 197.5f) {smoothKnobPosition = mix39x5;}
+        else if (smoothValue >= 195.f)  {smoothKnobPosition = mix39;}
+        else if (smoothValue >= 192.5f) {smoothKnobPosition = mix38x5;}
+        else if (smoothValue >= 190.f)  {smoothKnobPosition = mix38;}
+        else if (smoothValue >= 187.5f) {smoothKnobPosition = mix37x5;}
+        else if (smoothValue >= 185.f)  {smoothKnobPosition = mix37;}
+        else if (smoothValue >= 182.5f) {smoothKnobPosition = mix36x5;}
+        else if (smoothValue >= 180.f)  {smoothKnobPosition = mix36;}
+        else if (smoothValue >= 177.5f) {smoothKnobPosition = mix35x5;}
+        else if (smoothValue >= 175.f)  {smoothKnobPosition = mix35;}
+        else if (smoothValue >= 172.5f) {smoothKnobPosition = mix34x5;}
+        else if (smoothValue >= 170.f)  {smoothKnobPosition = mix34;}
+        else if (smoothValue >= 167.5f) {smoothKnobPosition = mix33x5;}
+        else if (smoothValue >= 165.f)  {smoothKnobPosition = mix33;}
+        else if (smoothValue >= 162.5f) {smoothKnobPosition = mix32x5;}
+        else if (smoothValue >= 160.f)  {smoothKnobPosition = mix32;}
+        else if (smoothValue >= 157.5f) {smoothKnobPosition = mix31x5;}
+        else if (smoothValue >= 155.f)  {smoothKnobPosition = mix31;}
+        else if (smoothValue >= 152.5f) {smoothKnobPosition = mix30x5;}
+        else if (smoothValue >= 150.f)  {smoothKnobPosition = mix30;}
+        // Knob images 80 - 89.5
+        else if (smoothValue >= 147.5f) {smoothKnobPosition = mix29x5;}
+        else if (smoothValue >= 145.f)  {smoothKnobPosition = mix29;}
+        else if (smoothValue >= 142.5f) {smoothKnobPosition = mix28x5;}
+        else if (smoothValue >= 140.f)  {smoothKnobPosition = mix28;}
+        else if (smoothValue >= 137.5f) {smoothKnobPosition = mix27x5;}
+        else if (smoothValue >= 135.f)  {smoothKnobPosition = mix27;}
+        else if (smoothValue >= 132.5f) {smoothKnobPosition = mix26x5;}
+        else if (smoothValue >= 130.f)  {smoothKnobPosition = mix26;}
+        else if (smoothValue >= 127.5f) {smoothKnobPosition = mix25x5;}
+        else if (smoothValue >= 125.f)  {smoothKnobPosition = mix25;}
+        else if (smoothValue >= 122.5f) {smoothKnobPosition = mix24x5;}
+        else if (smoothValue >= 120.f)  {smoothKnobPosition = mix24;}
+        else if (smoothValue >= 117.5f) {smoothKnobPosition = mix23x5;}
+        else if (smoothValue >= 115.f)  {smoothKnobPosition = mix23;}
+        else if (smoothValue >= 112.5f) {smoothKnobPosition = mix22x5;}
+        else if (smoothValue >= 110.f)  {smoothKnobPosition = mix22;}
+        else if (smoothValue >= 107.5f) {smoothKnobPosition = mix21x5;}
+        else if (smoothValue >= 105.f)  {smoothKnobPosition = mix21;}
+        else if (smoothValue >= 102.5f) {smoothKnobPosition = mix20x5;}
+        else if (smoothValue >= 100.f)  {smoothKnobPosition = mix20;}
+        // Knob images 90 - 99.5
+        else if (smoothValue >= 97.5f) {smoothKnobPosition = mix19x5;}
+        else if (smoothValue >= 95.f)  {smoothKnobPosition = mix19;}
+        else if (smoothValue >= 92.5f) {smoothKnobPosition = mix18x5;}
+        else if (smoothValue >= 90.f)  {smoothKnobPosition = mix18;}
+        else if (smoothValue >= 87.5f) {smoothKnobPosition = mix17x5;}
+        else if (smoothValue >= 85.f)  {smoothKnobPosition = mix17;}
+        else if (smoothValue >= 82.5f) {smoothKnobPosition = mix16x5;}
+        else if (smoothValue >= 80.f)  {smoothKnobPosition = mix16;}
+        else if (smoothValue >= 77.5f) {smoothKnobPosition = mix15x5;}
+        else if (smoothValue >= 75.f)  {smoothKnobPosition = mix15;}
+        else if (smoothValue >= 72.5f) {smoothKnobPosition = mix14x5;}
+        else if (smoothValue >= 70.f)  {smoothKnobPosition = mix14;}
+        else if (smoothValue >= 67.5f) {smoothKnobPosition = mix13x5;}
+        else if (smoothValue >= 65.f)  {smoothKnobPosition = mix13;}
+        else if (smoothValue >= 62.5f) {smoothKnobPosition = mix12x5;}
+        else if (smoothValue >= 60.f)  {smoothKnobPosition = mix12;}
+        else if (smoothValue >= 57.5f) {smoothKnobPosition = mix11x5;}
+        else if (smoothValue >= 55.f)  {smoothKnobPosition = mix11;}
+        else if (smoothValue >= 52.5f) {smoothKnobPosition = mix10x5;}
+        else if (smoothValue >= 50.f)  {smoothKnobPosition = mix10;}
+        // Knob images 80 - 89.5
+        else if (smoothValue >= 47.5f) {smoothKnobPosition = mix9x5;}
+        else if (smoothValue >= 45.f)  {smoothKnobPosition = mix9;}
+        else if (smoothValue >= 42.5f) {smoothKnobPosition = mix8x5;}
+        else if (smoothValue >= 40.f)  {smoothKnobPosition = mix8;}
+        else if (smoothValue >= 37.5f) {smoothKnobPosition = mix7x5;}
+        else if (smoothValue >= 35.f)  {smoothKnobPosition = mix7;}
+        else if (smoothValue >= 32.5f) {smoothKnobPosition = mix6x5;}
+        else if (smoothValue >= 30.f)  {smoothKnobPosition = mix6;}
+        else if (smoothValue >= 27.5f) {smoothKnobPosition = mix5x5;}
+        else if (smoothValue >= 25.f)  {smoothKnobPosition = mix5;}
+        else if (smoothValue >= 22.5f) {smoothKnobPosition = mix4x5;}
+        else if (smoothValue >= 20.f)  {smoothKnobPosition = mix4;}
+        else if (smoothValue >= 17.5f) {smoothKnobPosition = mix3x5;}
+        else if (smoothValue >= 15.f)  {smoothKnobPosition = mix3;}
+        else if (smoothValue >= 12.5f) {smoothKnobPosition = mix2x5;}
+        else if (smoothValue >= 10.f)  {smoothKnobPosition = mix2;}
+        else if (smoothValue >= 7.5f)  {smoothKnobPosition = mix1x5;}
+        else if (smoothValue >= 5.f)   {smoothKnobPosition = mix1;}
+        else if (smoothValue >= 2.5f)  {smoothKnobPosition = mix0x5;}
+        else if (smoothValue >= 0.f)   {smoothKnobPosition = mix0;}
+        
+        else {smoothKnobPosition = mix0;}
         
         repaint();
     }

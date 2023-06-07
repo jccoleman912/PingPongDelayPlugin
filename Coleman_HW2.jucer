@@ -15,6 +15,11 @@
             file="Source/PluginEditor.cpp"/>
       <FILE id="SS0wG8" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
       <GROUP id="{171362BA-BC12-F66F-6F89-D48AACD70E2C}" name="Binary Data">
+        <FILE id="VJohNx" name="TempoDial.png" compile="0" resource="1" file="Source/Binary Data/TempoDial.png"/>
+        <FILE id="v65ymM" name="FaderBackground.png" compile="0" resource="1"
+              file="Source/Binary Data/FaderBackground.png"/>
+        <FILE id="Ugctjl" name="FaderPingPong.png" compile="0" resource="1"
+              file="Source/Binary Data/FaderPingPong.png"/>
         <FILE id="drDgts" name="SideColorBGPingPong.jpg" compile="0" resource="1"
               file="Source/Binary Data/SideColorBGPingPong.jpg"/>
         <FILE id="VbkTP7" name="RedArrowFinalGain.png" compile="0" resource="1"
@@ -303,8 +308,12 @@
               resource="1" file="Source/Binary Data/FullScalePingpongDelayUI2500.jpg"/>
       </GROUP>
       <GROUP id="{D754E666-C757-2488-5E7B-84115018277C}" name="Components">
+        <FILE id="q2ENYc" name="GainFaders.cpp" compile="1" resource="0" file="Source/Components/GainFaders.cpp"/>
+        <FILE id="RTj9Ro" name="GainFaders.h" compile="0" resource="0" file="Source/Components/GainFaders.h"/>
         <FILE id="PP4e1v" name="MixKnob.cpp" compile="1" resource="0" file="Source/Components/MixKnob.cpp"/>
         <FILE id="sbjHOo" name="MixKnob.h" compile="0" resource="0" file="Source/Components/MixKnob.h"/>
+        <FILE id="Q6TNgU" name="TempoDial.cpp" compile="1" resource="0" file="Source/Components/TempoDial.cpp"/>
+        <FILE id="LyLa8l" name="TempoDial.h" compile="0" resource="0" file="Source/Components/TempoDial.h"/>
       </GROUP>
     </GROUP>
   </MAINGROUP>

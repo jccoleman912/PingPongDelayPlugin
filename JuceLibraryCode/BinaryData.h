@@ -8,6 +8,15 @@
 
 namespace BinaryData
 {
+    extern const char*   TempoDial_png;
+    const int            TempoDial_pngSize = 6738;
+
+    extern const char*   FaderBackground_png;
+    const int            FaderBackground_pngSize = 5732;
+
+    extern const char*   FaderPingPong_png;
+    const int            FaderPingPong_pngSize = 6455;
+
     extern const char*   SideColorBGPingPong_jpg;
     const int            SideColorBGPingPong_jpgSize = 7168;
 
@@ -756,7 +765,7 @@ namespace BinaryData
     const int            FullScalePingpongDelayUI2500_jpgSize = 875273;
 
     // Number of elements in the namedResourceList and originalFileNames arrays.
-    const int namedResourceListSize = 249;
+    const int namedResourceListSize = 252;
 
     // Points to the start of a list of resource names.
     extern const char* namedResourceList[];

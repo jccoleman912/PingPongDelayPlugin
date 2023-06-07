@@ -35,13 +35,13 @@ juce::AudioProcessorValueTreeState::ParameterLayout Coleman_HW2AudioProcessor::c
     
     params.push_back(std::make_unique<juce::AudioParameterFloat> ("initialDropValue",
                                                                    "Initial dB Drop",
-                                                                   juce::NormalisableRange<float> (-60.f,   24.f), -10.f));
+                                                                   juce::NormalisableRange<float> (-70.f,   38.f), -10.f));
     params.push_back(std::make_unique<juce::AudioParameterFloat> ("l2RDropValue",
                                                                    "Left to Right dB Drop",
-                                                                   juce::NormalisableRange<float> (-60.f,   24.f), 0.f));
+                                                                   juce::NormalisableRange<float> (-70.f,   38.f), 0.f));
     params.push_back(std::make_unique<juce::AudioParameterFloat> ("r2LDropValue",
                                                                    "Right to Left dB Drop",
-                                                                   juce::NormalisableRange<float> (-60.f,   24.f), -6.f));
+                                                                   juce::NormalisableRange<float> (-70.f,   38.f), -6.f));
     
     params.push_back(std::make_unique<juce::AudioParameterFloat> ("tempoValue",
                                                                    "Tempo",

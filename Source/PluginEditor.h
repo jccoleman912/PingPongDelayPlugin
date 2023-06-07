@@ -11,6 +11,7 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 #include "Components/MixKnob.h"
+#include "Components/GainFaders.h"
 
 //==============================================================================
 /**
@@ -43,6 +44,8 @@ private:
     juce::Slider initialGainKnob;
     juce::Slider l2RGainKnob;
     juce::Slider r2LGainKnob;
+    
+    juce::GainFaders gainLNF;
     
     // Tempo slider
     juce::Slider tempoSelector;
@@ -94,6 +97,8 @@ private:
     juce::Image bypassOFFImage;
     juce::Image bypassONImage;
     
+    
+    
     juce::Image syncOFFImage;
     juce::Image syncONImage;
     
@@ -115,35 +120,7 @@ private:
     
     juce::Image smoothOFFImage;
     juce::Image smoothONImage;
-    
 
-
-    // Images that are clipped portions of the sprite sheet.
-    // These are associated with the correct boolean outcome of the button's toggle state.
-    juce::Image bypassOFF;
-    juce::Image bypassON;
-    
-    juce::Image syncOFF;
-    juce::Image syncON;
-    
-    juce::Image noteWHOLE;
-    juce::Image noteHALF;
-    juce::Image noteQUARTER;
-    juce::Image note8TH;
-    juce::Image note16TH;
-    juce::Image note32ND;
-    
-    juce::Image tripletOFF;
-    juce::Image tripletON;
-    
-    juce::Image dottedOFF;
-    juce::Image dottedON;
-//
-//    juce::Image leftFirstImage;
-//    juce::Image rightFirstImage;
-    
-    juce::Image smoothOFF;
-    juce::Image smoothON;
     
     // Images placed in the paint() method that are updated in the listener using repaint().
     juce::Image bypassOutcome;
@@ -153,6 +130,8 @@ private:
     juce::Image dottedOutcome;
     juce::Image leftRightOutcome;
     juce::Image smoothOutcome;
+    
+    juce::Image faderBackgroundImage;
     
     // Rectangles that are used for .rescale() in the constructor.
 //    const juce::Rectangle<int> bypassCrop {0, 0, 128, 80};
@@ -189,6 +168,7 @@ private:
     
     
     juce::Image knobPosition;
+    juce::Image smoothKnobPosition;
     
 //    juce::Image emptyInitial;
 //    juce::DrawableImage emptyInitialDrawable;
