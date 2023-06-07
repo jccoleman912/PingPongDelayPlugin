@@ -12,6 +12,7 @@
 #include "PluginProcessor.h"
 #include "Components/MixKnob.h"
 #include "Components/GainFaders.h"
+#include "Components/TempoDial.h"
 
 //==============================================================================
 /**
@@ -46,6 +47,7 @@ private:
     juce::Slider r2LGainKnob;
     
     juce::GainFaders gainLNF;
+    juce::TempoDial tempoDialLNF;
     
     // Tempo slider
     juce::Slider tempoSelector;

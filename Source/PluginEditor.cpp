@@ -27,64 +27,6 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     tempoOverlay.setImage(sideColorBGImage.rescaled(128, 48));
     smoothOverlay.setImage(sideColorBGImage.rescaled(128, 128));
     
-    
-    
-//    spriteSheet = juce::ImageCache::getFromMemory(BinaryData::FinalPingPongSpriteSheet_jpg, BinaryData::FinalPingPongSpriteSheet_jpgSize);
-//
-//    rescaledSpriteSheet = spriteSheet.rescaled(800, 800, juce::Graphics::highResamplingQuality);
-    
-    //
-    // Setting up the note selector images
-    //
-    
-//    noteSelectorHalf = juce::ImageCache::getFromMemory(BinaryData::PingPongSpriteSheetHalfNote_jpg, BinaryData::PingPongSpriteSheetHalfNote_jpgSize);
-//
-//    rescaledNoteSelectorHalf = noteSelectorHalf.rescaled(800, 800, juce::Graphics::highResamplingQuality);
-//
-//    noteSelectorQuarter = juce::ImageCache::getFromMemory(BinaryData::PingPongSpriteSheetWholeNote_jpg, BinaryData::PingPongSpriteSheetWholeNote_jpgSize);
-//
-//    rescaledNoteSelectorQuarter = noteSelectorQuarter.rescaled(800, 800, juce::Graphics::highResamplingQuality);
-//
-//    noteSelector8th = juce::ImageCache::getFromMemory(BinaryData::FinalPingPongSpriteSheetBottomNotes_jpg, BinaryData::FinalPingPongSpriteSheetBottomNotes_jpgSize);
-//
-//    rescaledNoteSelector8th = noteSelector8th.rescaled(800, 800, juce::Graphics::highResamplingQuality);
-//
-//    noteSelector16th = juce::ImageCache::getFromMemory(BinaryData::PingPongSpriteSheetSixteenthNote_jpg, BinaryData::PingPongSpriteSheetSixteenthNote_jpgSize);
-//
-//    rescaledNoteSelector16th = noteSelector16th.rescaled(800, 800, juce::Graphics::highResamplingQuality);
-//
-//    noteSelector32nd = juce::ImageCache::getFromMemory(BinaryData::PingPongSpriteSheetThirtysecondNote_jpg, BinaryData::PingPongSpriteSheetThirtysecondNote_jpgSize);
-//
-//    rescaledNoteSelector32nd = noteSelector32nd.rescaled(800, 800, juce::Graphics::highResamplingQuality);
-//
-//    bypassOFF = rescaledSpriteSheet.getClippedImage(bypassOFFCrop);
-//    bypassON = rescaledSpriteSheet.getClippedImage(bypassONCrop);
-//
-//    syncOFF = rescaledSpriteSheet.getClippedImage(syncOFFCrop);
-//    syncON = rescaledSpriteSheet.getClippedImage(syncONCrop);
-//
-//    noteWHOLE = rescaledSpriteSheet.getClippedImage(noteSelectorCrop);
-//    noteHALF = rescaledNoteSelectorHalf.getClippedImage(noteSelectorCrop);
-//    noteQUARTER = rescaledNoteSelectorQuarter.getClippedImage(noteSelectorCrop);
-//    note8TH = rescaledNoteSelector8th.getClippedImage(noteSelectorCrop);
-//    note16TH = rescaledNoteSelector16th.getClippedImage(noteSelectorCrop);
-//    note32ND = rescaledNoteSelector32nd.getClippedImage(noteSelectorCrop);
-//
-//    tripletOFF = rescaledSpriteSheet.getClippedImage(tripletOFFCrop);
-//    tripletON = rescaledSpriteSheet.getClippedImage(tripletONCrop);
-//
-//    dottedOFF = rescaledSpriteSheet.getClippedImage(dottedOFFCrop);
-//    dottedON = rescaledSpriteSheet.getClippedImage(dottedONCrop);
-//
-//    leftFirstImage = rescaledSpriteSheet.getClippedImage(leftFirstCrop);
-//    rightFirstImage = rescaledSpriteSheet.getClippedImage(rightFirstCrop);
-//
-//    smoothOFF = rescaledSpriteSheet.getClippedImage(smoothOFFCrop);
-//    smoothON = rescaledSpriteSheet.getClippedImage(smoothONCrop);
-//
-//
-//
-    
     faderBackgroundImage = juce::ImageCache::getFromMemory(BinaryData::FaderBackground_png, BinaryData::FaderBackground_pngSize);
     
     bypassOFFImage = juce::ImageCache::getFromMemory(BinaryData::BypassOFF_jpg, BinaryData::BypassOFF_jpgSize);
@@ -111,41 +53,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     
     smoothOFFImage = juce::ImageCache::getFromMemory(BinaryData::SmoothOFF_jpg, BinaryData::SmoothOFF_jpgSize);
     smoothONImage = juce::ImageCache::getFromMemory(BinaryData::SmoothON_jpg, BinaryData::SmoothON_jpgSize);
-    
-//    bypassOFFImage = bypassOFFImage.rescaled(128, 96, juce::Graphics::highResamplingQuality);
-//    bypassONImage = bypassONImage.rescaled(128, 96, juce::Graphics::highResamplingQuality);
-//
-//    syncOFFImage = syncOFFImage.rescaled(128, 96, juce::Graphics::highResamplingQuality);
-//    syncONImage = syncONImage.rescaled(128, 96, juce::Graphics::highResamplingQuality);
-//
-//    noteSelectorWhole = noteSelectorWhole.rescaled(128, 96, juce::Graphics::highResamplingQuality);
-//    noteSelectorHalf = noteSelectorHalf.rescaled(128, 96, juce::Graphics::highResamplingQuality);
-//    noteSelectorQuarter = bypassOFFImage.rescaled(128, 96, juce::Graphics::highResamplingQuality);
-//    noteSelector8th = bypassOFFImage.rescaled(128, 96, juce::Graphics::highResamplingQuality);
-//    noteSelector16th = bypassOFFImage.rescaled(128, 96, juce::Graphics::highResamplingQuality);
-//    noteSelector32nd = bypassOFFImage.rescaled(128, 96, juce::Graphics::highResamplingQuality);
-//
-//    tripletOFFImage = bypassOFFImage.rescaled(128, 96, juce::Graphics::highResamplingQuality);
-//    tripletONImage = bypassOFFImage.rescaled(128, 96, juce::Graphics::highResamplingQuality);
-//
-//    dottedOFFImage = bypassOFFImage.rescaled(128, 96, juce::Graphics::highResamplingQuality);
-//    dottedONImage = bypassOFFImage.rescaled(128, 96, juce::Graphics::highResamplingQuality);
-//
-//    leftFirstImage = bypassOFFImage.rescaled(128, 96, juce::Graphics::highResamplingQuality);
-//    rightFirstImage = bypassOFFImage.rescaled(128, 96, juce::Graphics::highResamplingQuality);
-//
-//    smoothOFFImage = bypassOFFImage.rescaled(128, 96, juce::Graphics::highResamplingQuality);
-//    smoothONImage = bypassOFFImage.rescaled(128, 96, juce::Graphics::highResamplingQuality);
-    
-    
-    
-//    emptyInitial = juce::ImageCache::getFromMemory(BinaryData::InitialEmpty_jpg, BinaryData::InitialEmpty_jpgSize);
-//    orangeInitial = juce::ImageCache::getFromMemory(BinaryData::InitialOrange_jpg, BinaryData::InitialOrange_jpgSize);
-//    redInitial = juce::ImageCache::getFromMemory(BinaryData::InitialRed_jpg, BinaryData::InitialRed_jpgSize);
-//
-//    emptyInitial = emptyInitial.rescaled(150, 75);
-//    orangeInitial = orangeInitial.rescaled(150, 75);
-//    redInitial = redInitial.rescaled(150, 75);
+
     
     leftPingPong = juce::ImageCache::getFromMemory(BinaryData::LeftPingPong_png, BinaryData::LeftPingPong_pngSize);
     rightPingPong = juce::ImageCache::getFromMemory(BinaryData::RightPingPong_png, BinaryData::RightPingPong_pngSize);
@@ -470,13 +378,12 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     
     tempoSelector.addListener(this);
     // Specify location in window (xPos,yPos,width,height)
-    tempoSelector.setBounds(425,450,160,100);
+    tempoSelector.setBounds(10,234,141,32);
     tempoSelector.setRange(40.0,240.0,0.1); // (min, max, interval)
     tempoSelector.setValue(120.0); // initial value
     tempoSelector.setSliderStyle(juce::Slider::SliderStyle::LinearHorizontal);
     tempoSelector.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
-    tempoSelector.setName("Tempo");
-    tempoSelector.getTitle();
+    tempoSelector.setLookAndFeel(&tempoDialLNF);
     addAndMakeVisible(tempoSelector);
     
     //
@@ -624,7 +531,20 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     addAndMakeVisible(smoothButton);
     smoothButton.setAlpha(0.f);
     
-    smoothOverlayOpacity = 0.65f;
+
+    if(syncButton.getToggleState()) {
+        tempoOverlayOpacity = 0.65f;
+//        tempoSelector.setAlpha(0.35f);
+    } else {
+        tempoOverlayOpacity = 0.f;
+//        tempoSelector.toBehind(&tempoOverlayComp);
+    }
+    if(smoothButton.getToggleState()) {
+        smoothOverlayOpacity = 0.f;
+    } else {
+        smoothOverlayOpacity = 0.65f;
+        
+    }
     
     
     if(((&initialGainKnob)->getValue()) > 24.f) {
@@ -724,48 +644,30 @@ void Coleman_HW2AudioProcessorEditor::paint (juce::Graphics& g)
     
     g.drawImage(smoothKnobPosition, 674, 456, 90, 90, 0, 0, 1000, 1000);
     
-
-    
-
-    
-//    emptyInitialDrawable.setImage(emptyInitial);
-//
-//    emptyInitialDrawable.drawAt(g, 300, 20, emptyBaseOpacity);
     
     
-    
-//    baseInitialDropDrawable.setImage(baseInitialDrop);
     baseInitialDropDrawable.drawAt(g, 240, 32, baseInitialOpacity);
     
-//    redInitialDropDrawable.setImage(redInitialDrop);
     redInitialDropDrawable.drawAt(g, 240, 32, redInitialOpacity);
     
     
-//    baseL2RDropADrawable.setImage(baseL2RDrop);
     baseL2RDropADrawable.drawAt(g, 240, 112, baseL2RAOpacity);
     
-//    redL2RDropADrawable.setImage(redL2RDrop);
     redL2RDropADrawable.drawAt(g, 240, 112, redL2RAOpacity);
     
     
-//    baseR2LDropADrawable.setImage(baseR2LDrop);
     baseR2LDropADrawable.drawAt(g, 240, 256, baseR2LOpacity);
     
-//    redR2LDropADrawable.setImage(redR2LDrop);
     redR2LDropADrawable.drawAt(g, 240, 256, redR2LOpacity);
     
     
-//    baseL2RDropBDrawable.setImage(baseL2RDrop);
     baseL2RDropBDrawable.drawAt(g, 240, 400, baseL2RBOpacity);
     
-//    redL2RDropBDrawable.setImage(redL2RDrop);
     redL2RDropBDrawable.drawAt(g, 240, 400, redL2RBOpacity);
     
     
-//    baseR2LDropFinalDrawable.setImage(baseR2LFinalDrop);
     baseR2LDropFinalDrawable.drawAt(g, 240, 544, baseFinalOpacity);
     
-//    redR2LDropFinalDrawable.setImage(redR2LFinalDrop);
     redR2LDropFinalDrawable.drawAt(g, 240, 544, redFinalOpacity);
     
 
@@ -799,6 +701,7 @@ void Coleman_HW2AudioProcessorEditor::paint (juce::Graphics& g)
     g.drawImage(faderBackgroundImage, 288, 96, 64, 160, 0, 16, 200, 500);
     
     g.drawImage(faderBackgroundImage, 448, 240, 64, 160, 0, 16, 200, 500);
+    
     
 
 //
