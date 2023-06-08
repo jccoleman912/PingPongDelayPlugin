@@ -38,6 +38,10 @@ private:
     Coleman_HW2AudioProcessor& audioProcessor;
 
     /*
+     ***************************************************************************************
+     */
+    
+    /*
      The knobs and sliders of the interface.
     */
     
@@ -45,9 +49,6 @@ private:
     juce::Slider initialGainKnob;
     juce::Slider l2RGainKnob;
     juce::Slider r2LGainKnob;
-    
-    juce::GainFaders gainLNF;
-    juce::TempoDial tempoDialLNF;
     
     // Tempo slider
     juce::Slider tempoSelector;
@@ -57,6 +58,10 @@ private:
 
     // Smooth knob
     juce::Slider smoothKnob;
+    
+    // The look and feel on the sliders
+    juce::GainFaders gainLNF;
+    juce::TempoDial tempoDialLNF;
     
     /*
      The buttons of the interface.
@@ -85,21 +90,25 @@ private:
     // Smooth button
     juce::ToggleButton smoothButton;
     
-    // Images of interface and buttons from Binary Data
+    
+    /*
+     ***************************************************************************************
+     */
+    
+    /*
+     The base images being pulled from Binary Data.
+     */
+    
+    // Images of the main interface (both Left First and Right First versions)
     juce::Image bgImage;
-    juce::Image spriteSheet;
-    juce::Image rescaledSpriteSheet;
+    juce::Image rightBGImage;
     
-    juce::Image sideColorBGImage;
-    juce::DrawableImage tempoOverlay;
-    juce::DrawableImage smoothOverlay;
-    float tempoOverlayOpacity;
-    float smoothOverlayOpacity;
+    // A boolean variable that will switch between the Left/Right interfaces
+    bool leftFirstUI;
     
+    // The images for all of the buttons (on and off)
     juce::Image bypassOFFImage;
     juce::Image bypassONImage;
-    
-    
     
     juce::Image syncOFFImage;
     juce::Image syncONImage;
@@ -122,9 +131,12 @@ private:
     
     juce::Image smoothOFFImage;
     juce::Image smoothONImage;
-
     
-    // Images placed in the paint() method that are updated in the listener using repaint().
+    
+    /*
+     Images placed in the paint() method that are updated in the listener using repaint().
+     These use listeners to correctly display the on or off toggle.
+     */
     juce::Image bypassOutcome;
     juce::Image syncOutcome;
     juce::Image noteOutcome;
@@ -133,112 +145,147 @@ private:
     juce::Image leftRightOutcome;
     juce::Image smoothOutcome;
     
+    // The tan line that faders are placed over.
     juce::Image faderBackgroundImage;
     
-    // Rectangles that are used for .rescale() in the constructor.
-//    const juce::Rectangle<int> bypassCrop {0, 0, 128, 80};
-//    const juce::Rectangle<int> bypassONCrop {128, 0, 128, 80};
-//
-//    const juce::Rectangle<int> syncOFFCrop {0, 64, 128, 80};
-//    const juce::Rectangle<int> syncONCrop {128, 64, 128, 64};
-//
-//    const juce::Rectangle<int> tripletOFFCrop {0, 128, 128, 80};
-//    const juce::Rectangle<int> tripletONCrop {128, 128, 128, 80};
-//
-//    const juce::Rectangle<int> dottedOFFCrop {0, 192, 128, 64};
-//    const juce::Rectangle<int> dottedONCrop {128, 192, 128, 64};
-//
-//    const juce::Rectangle<int> leftFirstCrop {0, 256, 128, 64};
-//    const juce::Rectangle<int> rightFirstCrop {128, 256, 128, 64};
-//
-//    const juce::Rectangle<int> noteSelectorCrop {0, 320, 128, 96};
-//
-//    const juce::Rectangle<int> smoothOFFCrop {0, 416, 128, 64};
-//    const juce::Rectangle<int> smoothONCrop {128, 416, 128, 64};
+    // The tan overlay that creates an opacity change for when the sync/smooth buttons are
+    // engaged or disengaged.
+    juce::Image sideColorBGImage;
+    juce::DrawableImage tempoOverlay;
+    juce::DrawableImage smoothOverlay;
     
-//    const juce::Rectangle<int> imageCrop {0, 0, 400, 250};
-//
-//    const juce::Rectangle<int> syncCrop {0, 0, 400, 250};
-//
-//    const juce::Rectangle<int> tripletCrop {0, 0, 400, 250};
-//
-//    const juce::Rectangle<int> dottedCrop {0, 0, 400, 250};
-//
-//    const juce::Rectangle<int> leftRightCrop {0, 0, 400, 250};
-//
-//    const juce::Rectangle<int> smoothCrop {0, 0, 400, 250};
+    // The opacity values for the overlays above that are updated using the button listeners.
+    float tempoOverlayOpacity;
+    float smoothOverlayOpacity;
     
-    
+    // The two knobs for the mix and smooth values.
     juce::Image knobPosition;
     juce::Image smoothKnobPosition;
     
-//    juce::Image emptyInitial;
-//    juce::DrawableImage emptyInitialDrawable;
-//    juce::Image orangeInitial;
-//    juce::DrawableImage orangeInitialDrawable;
-//    juce::Image redInitial;
-//    juce::DrawableImage redInitialDrawable;
     
+    /*
+     ***************************************************************************************
+     */
+    
+    /*
+     These images are for the various visual elements that respond to the central gain faders.
+     */
+    
+    // The arrow images that are empty.
     juce::Image baseInitialDrop;
     juce::Image baseL2RDrop;
     juce::Image baseR2LDrop;
     juce::Image baseR2LFinalDrop;
     
+    // Extra empty arrows for the Right first interface.
+    juce::Image baseInitialDropRIGHT;
+    juce::Image baseL2RFinalDropRIGHT;
+    
+    // The arrow images that are red. The arrows become red to indicate an increase in gain.
     juce::Image redInitialDrop;
     juce::Image redL2RDrop;
     juce::Image redR2LDrop;
     juce::Image redR2LFinalDrop;
     
+    // Extra red arrows for the Right first interface.
+    juce::Image redInitialDropRIGHT;
+    juce::Image redL2RFinalDropRIGHT;
+    
+    /*
+     These DrawableImage variables are used becuse of their ability to change the opacity.
+     When the user flips the UI with the Left/Right selector, the variables are not changed.
+     This means that the first Left to Right gain drop is simply flipped to being the first
+     Right to Left gain drop, instead of having the variable name changed.
+     */
+    
+    // The empty and red arrows for the initial gain drop for the Left first UI.
     juce::DrawableImage baseInitialDropDrawable;
     juce::DrawableImage redInitialDropDrawable;
     
+    // The empty and red arrows for the first Left to Right gain drop.
     juce::DrawableImage baseL2RDropADrawable;
     juce::DrawableImage redL2RDropADrawable;
     
+    // The empty and red arrows for the first Right to Left gain drop.
     juce::DrawableImage baseR2LDropADrawable;
     juce::DrawableImage redR2LDropADrawable;
     
+    // The empty and red arrows for the second Left to Right gain drop (for Left first UI).
     juce::DrawableImage baseL2RDropBDrawable;
     juce::DrawableImage redL2RDropBDrawable;
     
+    // The empty and red arrows for the final gain drop (for Left first UI).
     juce::DrawableImage baseR2LDropFinalDrawable;
     juce::DrawableImage redR2LDropFinalDrawable;
     
+    // The empty and red arrows for the initial gain drop for the Right first UI.
+    juce::DrawableImage baseInitialDropDrawableRIGHT;
+    juce::DrawableImage redInitialDropDrawableRIGHT;
+    
+    // The empty and red arrows for the final gain drop (for Right first UI).
+    juce::DrawableImage baseL2RDropFinalDrawableRIGHT;
+    juce::DrawableImage redL2RDropFinalDrawableRIGHT;
+    
+    /*
+     These images are the ping pong balls on the left and right edges of the interface's center.
+     */
+    
+    // The white and red ping pong balls for both the left and right sides.
+    // The images for left and right are the same but slightly translated.
+    // This was done so they could be positioned more precisely when downscaled.
     juce::Image leftPingPong;
     juce::Image rightPingPong;
     juce::Image leftPingPongRed;
     juce::Image rightPingPongRed;
     
+    // DrawableImage objects for the white ping pong balls.
     juce::DrawableImage leftPingPongA;
     juce::DrawableImage rightPingPongA;
     juce::DrawableImage leftPingPongB;
     juce::DrawableImage rightPingPongB;
     
+    // DrawableImage objects for the red ping pong balls.
     juce::DrawableImage leftPingPongRedA;
     juce::DrawableImage rightPingPongRedA;
     juce::DrawableImage leftPingPongRedB;
     juce::DrawableImage rightPingPongRedB;
 
+    /*
+     Opacity values for BOTH the arrows and ping pong balls.
+     */
     
+    // Opacity values for the initial gain drop and 1st ping pong ball.
     float baseInitialOpacity;
     float redInitialOpacity;
     
+    // Opacity values for the 1st L2R gain drop (assuming Left first) and 2nd ping pong ball.
     float baseL2RAOpacity;
     float redL2RAOpacity;
     
+    // Opacity values for the 1st R2L gain drop (assuming Left first) and 3rd ping pong ball.
     float baseR2LOpacity;
     float redR2LOpacity;
     
+    // Opacity values for the 2nd L2R gain drop (assuming Left first) and 4th ping pong ball.
     float baseL2RBOpacity;
     float redL2RBOpacity;
     
+    // Opacity values for the 2nd and final R2L gain drop (assuming Left first).
     float baseFinalOpacity;
     float redFinalOpacity;
 
     
+    /*
+     ***************************************************************************************
+     */
     
+    /*
+     These are arrays used to store the different opacity values that are called
+     whenever the gain faders reach a specific range.
+     */
     
-    
+    // The array for the red arrows'/balls' opacities. These scale quickly with a logarithmic
+    // function-styled curve.
     float redOpacity[122] = {0.f, 0.03f, 0.06f, 0.09f, 0.12f, 0.15f, 0.18f, 0.21f, 0.24f,
         0.27f, 0.3f, 0.32f, 0.34f, 0.36f, 0.38f, 0.4f, 0.42f, 0.44f, 0.46f, 0.48f, 0.5f,
         0.52f, 0.54f, 0.56f, 0.58f, 0.59f, 0.6f, 0.61f, 0.62f, 0.63f, 0.64f, 0.65f, 0.66f,
@@ -252,6 +299,7 @@ private:
         0.946f, 0.949f, 0.952f, 0.955f, 0.958f, 0.961f, 0.964f, 0.967f, 0.97f, 0.973f,
         0.976f, 0.979f, 0.982f, 0.985f, 0.988f, 0.991f, 0.994f, 0.997f, 1.f};
     
+    // The array for the empty arrows'/white balls' opacities.
     float baseOpacity[201] =
     {0.f, 0.005f, 0.01f, 0.015f, 0.02f, 0.025f, 0.03f, 0.035f, 0.04f, 0.045f,
         0.05f, 0.055f, 0.06f, 0.065f, 0.07f, 0.075f, 0.08f, 0.085f, 0.09f, 0.095f,
@@ -276,9 +324,14 @@ private:
         1.f};
     
     
-    juce::DrawableImage redI100;
-    juce::Image redI50;
-    juce::Image redI0;
+    /*
+     ***************************************************************************************
+     */
+
+    /*
+     These are the 200 separate knob images being used for the mix and smooth selectors.
+     The knob angles range from 130° (mix0) to -130° (mix100).
+     */
     
     // Knob images 0 - 9.5
     juce::Image mix0;

@@ -15,6 +15,16 @@
             file="Source/PluginEditor.cpp"/>
       <FILE id="SS0wG8" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
       <GROUP id="{171362BA-BC12-F66F-6F89-D48AACD70E2C}" name="Binary Data">
+        <FILE id="blhF0A" name="RedFinalGainRIGHT.png" compile="0" resource="1"
+              file="Source/Binary Data/RedFinalGainRIGHT.png"/>
+        <FILE id="CuLf7n" name="RedInitialGainRIGHT.png" compile="0" resource="1"
+              file="Source/Binary Data/RedInitialGainRIGHT.png"/>
+        <FILE id="D7DEWZ" name="EmptyFinalGainRIGHT.png" compile="0" resource="1"
+              file="Source/Binary Data/EmptyFinalGainRIGHT.png"/>
+        <FILE id="GDvFkB" name="EmptyInitialGainRIGHT.png" compile="0" resource="1"
+              file="Source/Binary Data/EmptyInitialGainRIGHT.png"/>
+        <FILE id="vGdClK" name="FinalPingPongDelayUIRIGHT.jpg" compile="0"
+              resource="1" file="Source/Binary Data/FinalPingPongDelayUIRIGHT.jpg"/>
         <FILE id="VJohNx" name="TempoDial.png" compile="0" resource="1" file="Source/Binary Data/TempoDial.png"/>
         <FILE id="v65ymM" name="FaderBackground.png" compile="0" resource="1"
               file="Source/Binary Data/FaderBackground.png"/>

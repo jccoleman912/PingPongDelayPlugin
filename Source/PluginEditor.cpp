@@ -23,9 +23,14 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     
     bgImage = bgImage.rescaled(800, 640, juce::Graphics::highResamplingQuality);
     
+    rightBGImage = juce::ImageCache::getFromMemory(BinaryData::FinalPingPongDelayUIRIGHT_jpg, BinaryData::FinalPingPongDelayUIRIGHT_jpgSize);
+    
+    rightBGImage = bgImage.rescaled(800, 640, juce::Graphics::highResamplingQuality);
+    
     sideColorBGImage = juce::ImageCache::getFromMemory(BinaryData::SideColorBGPingPong_jpg, BinaryData::SideColorBGPingPong_jpgSize);
     tempoOverlay.setImage(sideColorBGImage.rescaled(128, 48));
     smoothOverlay.setImage(sideColorBGImage.rescaled(128, 128));
+
     
     faderBackgroundImage = juce::ImageCache::getFromMemory(BinaryData::FaderBackground_png, BinaryData::FaderBackground_pngSize);
     
@@ -65,25 +70,47 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     leftPingPongRed = leftPingPongRed.rescaled(80, 80, juce::Graphics::highResamplingQuality);
     rightPingPongRed = rightPingPongRed.rescaled(80, 80, juce::Graphics::highResamplingQuality);
     
+    leftPingPongA.setImage(leftPingPong);
+    rightPingPongA.setImage(rightPingPong);
+    leftPingPongB.setImage(leftPingPong);
+    rightPingPongB.setImage(rightPingPong);
+    
+    leftPingPongRedA.setImage(leftPingPongRed);
+    rightPingPongRedA.setImage(rightPingPongRed);
+    leftPingPongRedB.setImage(leftPingPongRed);
+    rightPingPongRedB.setImage(rightPingPongRed);
+    
     baseInitialDrop = juce::ImageCache::getFromMemory(BinaryData::BaseArrowInitialGain_png, BinaryData::BaseArrowInitialGain_pngSize);
     baseL2RDrop = juce::ImageCache::getFromMemory(BinaryData::BaseArrowL2RGain_png, BinaryData::BaseArrowL2RGain_pngSize);
     baseR2LDrop = juce::ImageCache::getFromMemory(BinaryData::BaseArrowR2LGain_png, BinaryData::BaseArrowR2LGain_pngSize);
     baseR2LFinalDrop = juce::ImageCache::getFromMemory(BinaryData::BaseArrowFinalGain_png, BinaryData::BaseArrowFinalGain_pngSize);
+    
+    baseInitialDropRIGHT = juce::ImageCache::getFromMemory(BinaryData::EmptyInitialGainRIGHT_png, BinaryData::EmptyInitialGainRIGHT_pngSize);
+    baseL2RFinalDropRIGHT = juce::ImageCache::getFromMemory(BinaryData::EmptyFinalGainRIGHT_png, BinaryData::EmptyFinalGainRIGHT_pngSize);
     
     redInitialDrop = juce::ImageCache::getFromMemory(BinaryData::RedArrowInitialGain_png, BinaryData::RedArrowInitialGain_pngSize);
     redL2RDrop = juce::ImageCache::getFromMemory(BinaryData::RedArrowL2RGain_png, BinaryData::RedArrowL2RGain_pngSize);
     redR2LDrop = juce::ImageCache::getFromMemory(BinaryData::RedArrowR2LGain_png, BinaryData::RedArrowR2LGain_pngSize);
     redR2LFinalDrop = juce::ImageCache::getFromMemory(BinaryData::RedArrowFinalGain_png, BinaryData::RedArrowFinalGain_pngSize);
     
+    redInitialDropRIGHT = juce::ImageCache::getFromMemory(BinaryData::RedInitialGainRIGHT_png, BinaryData::RedInitialGainRIGHT_pngSize);
+    redL2RFinalDropRIGHT = juce::ImageCache::getFromMemory(BinaryData::RedFinalGainRIGHT_png, BinaryData::RedFinalGainRIGHT_pngSize);
+    
     baseInitialDrop = baseInitialDrop.rescaled(192, 96, juce::Graphics::highResamplingQuality);
     baseL2RDrop = baseL2RDrop.rescaled(320, 192, juce::Graphics::highResamplingQuality);
     baseR2LDrop = baseR2LDrop.rescaled(320, 192, juce::Graphics::highResamplingQuality);
     baseR2LFinalDrop = baseR2LFinalDrop.rescaled(320, 192, juce::Graphics::highResamplingQuality);
     
+    baseInitialDropRIGHT = baseInitialDropRIGHT.rescaled(192, 96, juce::Graphics::highResamplingQuality);
+    baseL2RFinalDropRIGHT = baseL2RFinalDropRIGHT.rescaled(320, 192, juce::Graphics::highResamplingQuality);
+    
     redInitialDrop = redInitialDrop.rescaled(192, 96, juce::Graphics::highResamplingQuality);
     redL2RDrop = redL2RDrop.rescaled(320, 192, juce::Graphics::highResamplingQuality);
     redR2LDrop = redR2LDrop.rescaled(320, 192, juce::Graphics::highResamplingQuality);
     redR2LFinalDrop = redR2LFinalDrop.rescaled(320, 192, juce::Graphics::highResamplingQuality);
+    
+    redInitialDropRIGHT = redInitialDropRIGHT.rescaled(192, 96, juce::Graphics::highResamplingQuality);
+    redL2RFinalDropRIGHT = redL2RFinalDropRIGHT.rescaled(320, 192, juce::Graphics::highResamplingQuality);
     
     baseInitialDropDrawable.setImage(baseInitialDrop);
     redInitialDropDrawable.setImage(redInitialDrop);
@@ -99,6 +126,12 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     
     baseR2LDropFinalDrawable.setImage(baseR2LFinalDrop);
     redR2LDropFinalDrawable.setImage(redR2LFinalDrop);
+    
+    baseInitialDropDrawableRIGHT.setImage(baseInitialDropRIGHT);
+    redInitialDropDrawableRIGHT.setImage(redInitialDropRIGHT);
+    
+    baseL2RDropFinalDrawableRIGHT.setImage(baseL2RFinalDropRIGHT);
+    redL2RDropFinalDrawableRIGHT.setImage(redL2RFinalDropRIGHT);
 
     
     // Knob images 0 - 9.5 YYY
@@ -350,7 +383,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     
     l2RGainKnob.addListener(this);
     // Specify location in window (xPos,yPos,width,height)
-    l2RGainKnob.setBounds(299, 100, 40, 152);
+//    l2RGainKnob.setBounds(299, 100, 40, 152);
     l2RGainKnob.setRange(-70.f, 38.f, 0.1f); // (min, max, interval)
     l2RGainKnob.setValue(0.f); // initial value
     l2RGainKnob.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
@@ -364,7 +397,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     
     r2LGainKnob.addListener(this);
     // Specify location in window (xPos,yPos,width,height)
-    r2LGainKnob.setBounds(459, 244, 40, 152);
+//    r2LGainKnob.setBounds(459, 244, 40, 152);
     r2LGainKnob.setRange(-70.f, 38.f, 0.1f); // (min, max, interval)
     r2LGainKnob.setValue(-6.f); // initial value
     r2LGainKnob.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
@@ -513,6 +546,17 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     addAndMakeVisible(leftFirstButton);
     leftFirstButton.setAlpha(0.f);
     
+    leftFirstUI = leftFirstButton.getToggleState();
+    
+    
+    if(leftFirstUI) {
+        l2RGainKnob.setBounds(299, 100, 40, 152);
+        r2LGainKnob.setBounds(459, 244, 40, 152);
+    } else {
+        l2RGainKnob.setBounds(459, 100, 40, 152);
+        r2LGainKnob.setBounds(299, 244, 40, 152);
+    }
+    
     rightFirstButton.addListener(this);
     rightFirstButton.setBounds(728,37,52,52);
     rightFirstButton.setToggleState(false, juce::dontSendNotification);
@@ -534,10 +578,10 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
 
     if(syncButton.getToggleState()) {
         tempoOverlayOpacity = 0.65f;
-//        tempoSelector.setAlpha(0.35f);
+        tempoSelector.setAlpha(0.35f);
     } else {
         tempoOverlayOpacity = 0.f;
-//        tempoSelector.toBehind(&tempoOverlayComp);
+        tempoSelector.setAlpha(1.f);
     }
     if(smoothButton.getToggleState()) {
         smoothOverlayOpacity = 0.f;
@@ -599,10 +643,88 @@ Coleman_HW2AudioProcessorEditor::~Coleman_HW2AudioProcessorEditor()
 //==============================================================================
 void Coleman_HW2AudioProcessorEditor::paint (juce::Graphics& g)
 {
-    g.drawImageAt(bgImage, 0, 0);
 
+    if(leftFirstUI) {
+        g.drawImageAt(bgImage, 0, 0);
+        
+        baseInitialDropDrawable.drawAt(g, 240, 32, baseInitialOpacity);
+        redInitialDropDrawable.drawAt(g, 240, 32, redInitialOpacity);
+        
+        baseL2RDropADrawable.drawAt(g, 240, 112, baseL2RAOpacity);
+        redL2RDropADrawable.drawAt(g, 240, 112, redL2RAOpacity);
+        
+        baseR2LDropADrawable.drawAt(g, 240, 256, baseR2LOpacity);
+        redR2LDropADrawable.drawAt(g, 240, 256, redR2LOpacity);
+        
+        baseL2RDropBDrawable.drawAt(g, 240, 400, baseL2RBOpacity);
+        redL2RDropBDrawable.drawAt(g, 240, 400, redL2RBOpacity);
+        
+        baseR2LDropFinalDrawable.drawAt(g, 240, 544, baseFinalOpacity);
+        redR2LDropFinalDrawable.drawAt(g, 240, 544, redFinalOpacity);
+        
+        
+        leftPingPongA.drawAt(g, 192, 80, baseInitialOpacity);
+        rightPingPongA.drawAt(g, 544, 224, baseL2RAOpacity);
+        leftPingPongB.drawAt(g, 192, 368, baseR2LOpacity);
+        rightPingPongB.drawAt(g, 544, 512, baseL2RBOpacity);
+        
+        leftPingPongRedA.drawAt(g, 192, 80, redInitialOpacity);
+        rightPingPongRedA.drawAt(g, 544, 224, redL2RAOpacity);
+        leftPingPongRedB.drawAt(g, 192, 368, redR2LOpacity);
+        rightPingPongRedB.drawAt(g, 544, 512, redL2RBOpacity);
+        
+        
+        g.drawImage(faderBackgroundImage, 368, 0, 64, 160, 0, 16, 200, 500);
+        
+        g.drawImage(faderBackgroundImage, 288, 96, 64, 160, 0, 16, 200, 500);
+        
+        g.drawImage(faderBackgroundImage, 448, 240, 64, 160, 0, 16, 200, 500);
+       
+        
+        l2RGainKnob.setBounds(299, 100, 40, 152);
+        r2LGainKnob.setBounds(459, 244, 40, 152);
+    }
+    else {
+        g.drawImageAt(rightBGImage, 0, 0);
+        
+        baseInitialDropDrawableRIGHT.drawAt(g, 384, 32, baseInitialOpacity);
+        redInitialDropDrawableRIGHT.drawAt(g, 384, 32, redInitialOpacity);
+        
+        baseR2LDropADrawable.drawAt(g, 240, 112, baseL2RAOpacity);
+        redR2LDropADrawable.drawAt(g, 240, 112, redL2RAOpacity);
+        
+        baseL2RDropBDrawable.drawAt(g, 240, 256, baseR2LOpacity);
+        redL2RDropBDrawable.drawAt(g, 240, 256, redR2LOpacity);
+        
+        baseR2LDropADrawable.drawAt(g, 240, 400, baseL2RBOpacity);
+        redR2LDropADrawable.drawAt(g, 240, 400, redL2RBOpacity);
+        
+        baseL2RDropFinalDrawableRIGHT.drawAt(g, 240, 544, baseFinalOpacity);
+        redL2RDropFinalDrawableRIGHT.drawAt(g, 240, 544, redFinalOpacity);
     
-    
+        
+        leftPingPongA.drawAt(g, 544, 80, baseInitialOpacity);
+        rightPingPongA.drawAt(g, 192, 224, baseL2RAOpacity);
+        leftPingPongB.drawAt(g, 544, 368, baseR2LOpacity);
+        rightPingPongB.drawAt(g, 192, 512, baseL2RBOpacity);
+        
+        leftPingPongRedA.drawAt(g, 544, 80, redInitialOpacity);
+        rightPingPongRedA.drawAt(g, 192, 224, redL2RAOpacity);
+        leftPingPongRedB.drawAt(g, 544, 368, redR2LOpacity);
+        rightPingPongRedB.drawAt(g, 192, 512, redL2RBOpacity);
+        
+        
+        g.drawImage(faderBackgroundImage, 368, 0, 64, 160, 0, 16, 200, 500);
+        
+        g.drawImage(faderBackgroundImage, 448, 96, 64, 160, 0, 16, 200, 500);
+        
+        g.drawImage(faderBackgroundImage, 288, 240, 64, 160, 0, 16, 200, 500);
+        
+        
+        l2RGainKnob.setBounds(459, 100, 40, 152);
+        r2LGainKnob.setBounds(299, 244, 40, 152);
+    }
+
     if(!bypassOutcome.isValid()) {
         bypassOutcome = bypassOFFImage;
     }
@@ -644,78 +766,10 @@ void Coleman_HW2AudioProcessorEditor::paint (juce::Graphics& g)
     
     g.drawImage(smoothKnobPosition, 674, 456, 90, 90, 0, 0, 1000, 1000);
     
-    
-    
-    baseInitialDropDrawable.drawAt(g, 240, 32, baseInitialOpacity);
-    
-    redInitialDropDrawable.drawAt(g, 240, 32, redInitialOpacity);
-    
-    
-    baseL2RDropADrawable.drawAt(g, 240, 112, baseL2RAOpacity);
-    
-    redL2RDropADrawable.drawAt(g, 240, 112, redL2RAOpacity);
-    
-    
-    baseR2LDropADrawable.drawAt(g, 240, 256, baseR2LOpacity);
-    
-    redR2LDropADrawable.drawAt(g, 240, 256, redR2LOpacity);
-    
-    
-    baseL2RDropBDrawable.drawAt(g, 240, 400, baseL2RBOpacity);
-    
-    redL2RDropBDrawable.drawAt(g, 240, 400, redL2RBOpacity);
-    
-    
-    baseR2LDropFinalDrawable.drawAt(g, 240, 544, baseFinalOpacity);
-    
-    redR2LDropFinalDrawable.drawAt(g, 240, 544, redFinalOpacity);
-    
-
     tempoOverlay.drawAt(g, 16, 224, tempoOverlayOpacity);
     smoothOverlay.drawAt(g, 656, 432, smoothOverlayOpacity);
     
 
-    leftPingPongA.setImage(leftPingPong);
-    rightPingPongA.setImage(rightPingPong);
-    leftPingPongB.setImage(leftPingPong);
-    rightPingPongB.setImage(rightPingPong);
-    
-    leftPingPongRedA.setImage(leftPingPongRed);
-    rightPingPongRedA.setImage(rightPingPongRed);
-    leftPingPongRedB.setImage(leftPingPongRed);
-    rightPingPongRedB.setImage(rightPingPongRed);
-    
-    leftPingPongA.drawAt(g, 192, 80, baseInitialOpacity);
-    rightPingPongA.drawAt(g, 544, 224, baseL2RAOpacity);
-    leftPingPongB.drawAt(g, 192, 368, baseR2LOpacity);
-    rightPingPongB.drawAt(g, 544, 512, baseL2RBOpacity);
-    
-    leftPingPongRedA.drawAt(g, 192, 80, redInitialOpacity);
-    rightPingPongRedA.drawAt(g, 544, 224, redL2RAOpacity);
-    leftPingPongRedB.drawAt(g, 192, 368, redR2LOpacity);
-    rightPingPongRedB.drawAt(g, 544, 512, redL2RBOpacity);
-    
-    
-    g.drawImage(faderBackgroundImage, 368, 0, 64, 160, 0, 16, 200, 500);
-    
-    g.drawImage(faderBackgroundImage, 288, 96, 64, 160, 0, 16, 200, 500);
-    
-    g.drawImage(faderBackgroundImage, 448, 240, 64, 160, 0, 16, 200, 500);
-    
-    
-
-//
-//    orangeInitialDrawable.setImage(orangeInitial);
-//
-//    orangeInitialDrawable.drawAt(g, 300, 20, 1.f);
-    
-
-    
-
-
-//    g.drawImage(emptyInitial, 300, 20, 150, 75, 0, 0, 600, 300);
-//    g.drawImage(orangeInitial, 300, 20, 150, 75, 0, 0, 600, 300);
-    
 
 }
 
@@ -725,19 +779,6 @@ void Coleman_HW2AudioProcessorEditor::resized()
     // subcomponents in your editor..
 }
 
-//g.drawImageAt(bypassOutcome, 16, 32);
-//
-//g.drawImageAt(syncOutcome, 16, 144);
-//
-//g.drawImageAt(noteOutcome, 16, 368);
-//
-//g.drawImageAt(tripletOutcome, 16, 480);
-//
-//g.drawImageAt(dottedOutcome, 16, 544);
-//
-//g.drawImageAt(leftRightOutcome, 656, 32);
-//
-//g.drawImageAt(smoothOutcome, 656, 480);
 
 void Coleman_HW2AudioProcessorEditor::buttonClicked(juce::Button *button){
     if (button == &bypassButton){
@@ -752,11 +793,13 @@ void Coleman_HW2AudioProcessorEditor::buttonClicked(juce::Button *button){
     if (button == &syncButton) {
         bool syncBool = syncButton.getToggleState();
         if(syncBool) {
-            syncOutcome = syncONImage;
             tempoOverlayOpacity = 0.65f;
+            tempoSelector.setAlpha(0.35f);
+            syncOutcome = syncONImage;
         } else {
-            syncOutcome = syncOFFImage;
             tempoOverlayOpacity = 0.f;
+            tempoSelector.setAlpha(1.f);
+            syncOutcome = syncOFFImage;
         }
 //        repaint(16, 144, 128, 64);
         repaint();
@@ -807,14 +850,16 @@ void Coleman_HW2AudioProcessorEditor::buttonClicked(juce::Button *button){
         bool leftSelectedBool = leftFirstButton.getToggleState();
         if(leftSelectedBool) {
             leftRightOutcome = leftFirstImage;
-            repaint(656, 32, 128, 64);
+            leftFirstUI = true;
+            repaint();
         }
     }
     if (button == &rightFirstButton) {
         bool rightSelectedBool = rightFirstButton.getToggleState();
         if(rightSelectedBool) {
             leftRightOutcome = rightFirstImage;
-            repaint(656, 32, 128, 64);
+            leftFirstUI = false;
+            repaint();
         }
     }
     if (button == &smoothButton) {
