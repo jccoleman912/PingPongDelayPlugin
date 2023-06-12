@@ -33,6 +33,7 @@ class GainFaders : public LookAndFeel_V4
                            const juce::Slider::SliderStyle style, juce::Slider& slider);
     
     
+    
 };
 
 }

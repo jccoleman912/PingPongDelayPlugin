@@ -368,12 +368,13 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     
     initialGainKnob.addListener(this);
     // Specify location in window (xPos,yPos,width,height)
-    initialGainKnob.setBounds(379, 4, 40, 152);
+    initialGainKnob.setBounds(382, 4, 35, 126);
     initialGainKnob.setRange(-70.f, 38.f, 0.1f); // (min, max, interval)
     initialGainKnob.setValue(-9.f); // initial value
     initialGainKnob.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
-    initialGainKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
+    initialGainKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 0, 0);
     initialGainKnob.setLookAndFeel(&gainLNF);
+//    initialGainKnob.setAlpha(0.5);
     addAndMakeVisible(initialGainKnob);
 
     
@@ -387,7 +388,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     l2RGainKnob.setRange(-70.f, 38.f, 0.1f); // (min, max, interval)
     l2RGainKnob.setValue(0.f); // initial value
     l2RGainKnob.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
-    l2RGainKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
+    l2RGainKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 0, 0);
     l2RGainKnob.setLookAndFeel(&gainLNF);
     addAndMakeVisible(l2RGainKnob);
     
@@ -401,9 +402,42 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     r2LGainKnob.setRange(-70.f, 38.f, 0.1f); // (min, max, interval)
     r2LGainKnob.setValue(-6.f); // initial value
     r2LGainKnob.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
-    r2LGainKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
+    r2LGainKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 0, 0);
     r2LGainKnob.setLookAndFeel(&gainLNF);
     addAndMakeVisible(r2LGainKnob);
+    
+    
+////    initialGainText.setColour(8, juce::Colour (0x00000000));
+//    initialGainText.setBounds(373, 130, 50, 22);
+////    initialGainText.setColour(7, juce::Colour (0x00000000));
+//    initialGainText.setFont(juce::Font("Futura", 18.f, 1));
+////    initialGainText.setLookAndFeel(&textBoxLNF);
+//    initialGainText.applyColourToAllText(juce::Colour (0x96000000));
+//    initialGainText.setJustification(34);
+////    initialGainText.mouseDown(<#const MouseEvent &#>)
+//
+    
+    
+    
+    //    initialGainText.setColour(8, juce::Colour (0x00000000));
+        initialGainText.setBounds(369, 129, 61, 23);
+    //    initialGainText.setColour(7, juce::Colour (0x00000000));
+        initialGainText.setFont(juce::Font("Futura", 18.f, 1));
+        initialGainText.setLookAndFeel(&textBoxLNF);
+        initialGainText.applyColourToAllText(juce::Colour (0x96000000));
+        initialGainText.setJustification(36);
+    //    initialGainText.mouseDown(<#const MouseEvent &#>)
+    
+//    initialText.setBounds(370, 130, 60, 20);
+//    initialText.set
+//    initialText.
+//    initialText.setColour(7, juce::Colour (0x00000000));
+//    initialGainText.set
+    
+//    initialGainText.setFont(<#const Font &newFont#>)
+    addAndMakeVisible(initialGainText);
+    addAndMakeVisible(l2RGainText);
+    addAndMakeVisible(r2LGainText);
     
     //
     // Tempo Slider
@@ -415,9 +449,20 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     tempoSelector.setRange(40.0,240.0,0.1); // (min, max, interval)
     tempoSelector.setValue(120.0); // initial value
     tempoSelector.setSliderStyle(juce::Slider::SliderStyle::LinearHorizontal);
-    tempoSelector.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
+    tempoSelector.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 0, 0);
     tempoSelector.setLookAndFeel(&tempoDialLNF);
     addAndMakeVisible(tempoSelector);
+    
+    //    initialGainText.setColour(8, juce::Colour (0x00000000));
+    tempoText.setBounds(39, 291, 83, 26);
+    //    initialGainText.setColour(7, juce::Colour (0x00000000));
+    tempoText.setFont(juce::Font("Futura", 16.f, 1));
+//    tempoText.setLookAndFeel(&textBoxLNF);
+    tempoText.applyColourToAllText(juce::Colour (0xbf000000));
+    tempoText.setJustification(2);
+    tempoText.setAlpha(0.6f);
+    //    initialGainText.mouseDown(<#const MouseEvent &#>)
+    addAndMakeVisible(tempoText);
     
     //
     // Mix Knob
@@ -489,14 +534,12 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     
     quarterNoteButton.addListener(this);
     quarterNoteButton.setBounds(99,382,38,38);
-    quarterNoteButton.setToggleState(true, juce::dontSendNotification);
     quarterNoteButton.setRadioGroupId(2);
     addAndMakeVisible(quarterNoteButton);
     quarterNoteButton.setAlpha(0.f);
     
     eighthNoteButton.addListener(this);
     eighthNoteButton.setBounds(20,421,38,38);
-    eighthNoteButton.setToggleState(false, juce::dontSendNotification);
     eighthNoteButton.setRadioGroupId(2);
     addAndMakeVisible(eighthNoteButton);
     eighthNoteButton.setAlpha(0.f);
@@ -550,11 +593,11 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     
     
     if(leftFirstUI) {
-        l2RGainKnob.setBounds(299, 100, 40, 152);
-        r2LGainKnob.setBounds(459, 244, 40, 152);
+        l2RGainKnob.setBounds(302, 100, 35, 126);
+        r2LGainKnob.setBounds(462, 244, 35, 126);
     } else {
-        l2RGainKnob.setBounds(459, 100, 40, 152);
-        r2LGainKnob.setBounds(299, 244, 40, 152);
+        l2RGainKnob.setBounds(502, 100, 35, 126);
+        r2LGainKnob.setBounds(462, 244, 35, 126);
     }
     
     rightFirstButton.addListener(this);
@@ -680,9 +723,15 @@ void Coleman_HW2AudioProcessorEditor::paint (juce::Graphics& g)
         
         g.drawImage(faderBackgroundImage, 448, 240, 64, 160, 0, 16, 200, 500);
        
-        
-        l2RGainKnob.setBounds(299, 100, 40, 152);
-        r2LGainKnob.setBounds(459, 244, 40, 152);
+//        if(leftFirstUI) {
+//            l2RGainKnob.setBounds(302, 100, 35, 126);
+//            r2LGainKnob.setBounds(462, 244, 35, 126);
+//        } else {
+//            l2RGainKnob.setBounds(462, 100, 35, 126);
+//            r2LGainKnob.setBounds(302, 244, 35, 126);
+//        }
+        l2RGainKnob.setBounds(302, 100, 35, 126);
+        r2LGainKnob.setBounds(462, 244, 35, 126);
     }
     else {
         g.drawImageAt(rightBGImage, 0, 0);
@@ -721,8 +770,8 @@ void Coleman_HW2AudioProcessorEditor::paint (juce::Graphics& g)
         g.drawImage(faderBackgroundImage, 288, 240, 64, 160, 0, 16, 200, 500);
         
         
-        l2RGainKnob.setBounds(459, 100, 40, 152);
-        r2LGainKnob.setBounds(299, 244, 40, 152);
+        l2RGainKnob.setBounds(462, 100, 35, 126);
+        r2LGainKnob.setBounds(302, 244, 35, 126);
     }
 
     if(!bypassOutcome.isValid()) {
@@ -769,8 +818,6 @@ void Coleman_HW2AudioProcessorEditor::paint (juce::Graphics& g)
     tempoOverlay.drawAt(g, 16, 224, tempoOverlayOpacity);
     smoothOverlay.drawAt(g, 656, 432, smoothOverlayOpacity);
     
-
-
 }
 
 void Coleman_HW2AudioProcessorEditor::resized()
@@ -878,6 +925,18 @@ void Coleman_HW2AudioProcessorEditor::buttonClicked(juce::Button *button){
 void Coleman_HW2AudioProcessorEditor::sliderValueChanged(juce::Slider * slider)
 {
     // This is how we check which slider was moved
+    if (slider == &tempoSelector) {
+        float tempoValue = (&tempoSelector)->getValue();
+        
+        tempoString = std::to_string((std::floorf((tempoValue * 10.f) + 0.5f)) / 10.0);
+        tempoString = tempoString.replace("00000", "");
+        tempoString = tempoString + " BPM";
+//        if(initial)
+        
+        tempoText.setText(tempoString);
+        
+        repaint();
+    }
     if (slider == &initialGainKnob || slider == &l2RGainKnob || slider == &r2LGainKnob){
         
         float initialValue = (&initialGainKnob)->getValue();
@@ -887,6 +946,15 @@ void Coleman_HW2AudioProcessorEditor::sliderValueChanged(juce::Slider * slider)
         float r2LValue = r2LValueRaw + initialValue + l2RValueRaw;
         float l2RBValue = l2RValueRaw + r2LValueRaw + initialValue + l2RValueRaw;
         float finalValue = r2LValueRaw + l2RValueRaw + r2LValueRaw + initialValue + l2RValueRaw;
+        
+        initialGainString = std::to_string((std::floorf((initialValue * 10.f) + 0.5f)) / 10.0);
+        initialGainString = initialGainString.replace("00000", "");
+//        if(initial)
+        
+        initialGainText.setText(initialGainString);
+        
+//        initialGainText.setText("" + l2RValueRaw);
+//        initialGainText.setText("" + r2LValueRaw);
         
         // Red values < 6 dB
         if(initialValue <= 0.f) {redInitialOpacity = redOpacity[0];}
@@ -2674,15 +2742,6 @@ void Coleman_HW2AudioProcessorEditor::sliderValueChanged(juce::Slider * slider)
         repaint();
             
     }
-//    if (slider == &l2RGainKnob){
-//        float l2RValue = slider -> getValue();
-//    }
-//    if (slider == &r2LGainKnob){
-//        float r2LValue = slider -> getValue();
-//    }
-    if (slider == &tempoSelector) {
-
-    }
     if (slider == &mixKnob) {
         float mixValue = slider->getValue();
         
@@ -3121,4 +3180,3 @@ void Coleman_HW2AudioProcessorEditor::sliderValueChanged(juce::Slider * slider)
         repaint();
     }
 }
-

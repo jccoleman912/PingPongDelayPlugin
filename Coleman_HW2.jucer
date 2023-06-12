@@ -318,6 +318,9 @@
               resource="1" file="Source/Binary Data/FullScalePingpongDelayUI2500.jpg"/>
       </GROUP>
       <GROUP id="{D754E666-C757-2488-5E7B-84115018277C}" name="Components">
+        <FILE id="ecEXWd" name="CustomTextBox.cpp" compile="1" resource="0"
+              file="Source/Components/CustomTextBox.cpp"/>
+        <FILE id="uZg3Em" name="CustomTextBox.h" compile="0" resource="0" file="Source/Components/CustomTextBox.h"/>
         <FILE id="q2ENYc" name="GainFaders.cpp" compile="1" resource="0" file="Source/Components/GainFaders.cpp"/>
         <FILE id="RTj9Ro" name="GainFaders.h" compile="0" resource="0" file="Source/Components/GainFaders.h"/>
         <FILE id="PP4e1v" name="MixKnob.cpp" compile="1" resource="0" file="Source/Components/MixKnob.cpp"/>

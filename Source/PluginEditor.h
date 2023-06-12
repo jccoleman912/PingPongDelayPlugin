@@ -13,6 +13,7 @@
 #include "Components/MixKnob.h"
 #include "Components/GainFaders.h"
 #include "Components/TempoDial.h"
+#include "Components/CustomTextBox.h"
 
 //==============================================================================
 /**
@@ -37,12 +38,15 @@ private:
     // access the processor object that created it.
     Coleman_HW2AudioProcessor& audioProcessor;
 
+    
     /*
      ***************************************************************************************
      */
     
     /*
-     The knobs and sliders of the interface.
+     The knobs and sliders of the interface. All of these are made invisible so images from
+     BinaryData are the only things visible, those these are what the user actually interacts
+     with.
     */
     
     // Gain knobs
@@ -62,6 +66,30 @@ private:
     // The look and feel on the sliders
     juce::GainFaders gainLNF;
     juce::TempoDial tempoDialLNF;
+    
+    //
+    juce::TextEditor initialGainText;
+    juce::TextEditor l2RGainText;
+    juce::TextEditor r2LGainText;
+    
+    juce::TextEditor tempoText;
+    juce::TextEditor mixText;
+    juce::TextEditor smoothText;
+    
+    juce::CustomTextBox textBoxLNF;
+    
+    juce::String initialGainString;
+    juce::String l2RGainString;
+    juce::String r2LGainString;
+    
+    juce::String tempoString;
+    juce::String mixString;
+    juce::String smoothString;
+    
+//    juce::Justifica
+    
+//    juce::TextLayout initialText;
+//    juce::Tex
     
     /*
      The buttons of the interface.
@@ -96,7 +124,7 @@ private:
      */
     
     /*
-     The base images being pulled from Binary Data.
+     The button images being pulled from Binary Data.
      */
     
     // Images of the main interface (both Left First and Right First versions)
@@ -131,12 +159,13 @@ private:
     
     juce::Image smoothOFFImage;
     juce::Image smoothONImage;
-    
-    
+
     /*
      Images placed in the paint() method that are updated in the listener using repaint().
      These use listeners to correctly display the on or off toggle.
      */
+    
+    // Outcome objects that are assigned the respective button on/off images.
     juce::Image bypassOutcome;
     juce::Image syncOutcome;
     juce::Image noteOutcome;
@@ -145,12 +174,24 @@ private:
     juce::Image leftRightOutcome;
     juce::Image smoothOutcome;
     
+    
+    /*
+     ***************************************************************************************
+     */
+    
+    /*
+     The other element images being pulled from Binary Data.
+     */
+    
     // The tan line that faders are placed over.
     juce::Image faderBackgroundImage;
     
-    // The tan overlay that creates an opacity change for when the sync/smooth buttons are
-    // engaged or disengaged.
+    // A square of the tan color on the sides of the UI.
     juce::Image sideColorBGImage;
+    
+    // DrawableImage variables that pull from sideColorBGImage and change opacity when the
+    // sync or smooth button is changed. This creates an overlay to make those sections
+    // visually distinct when engaged/disengaged.
     juce::DrawableImage tempoOverlay;
     juce::DrawableImage smoothOverlay;
     
@@ -168,7 +209,7 @@ private:
      */
     
     /*
-     These images are for the various visual elements that respond to the central gain faders.
+     These images are for the arrows that respond to the central gain faders.
      */
     
     // The arrow images that are empty.
@@ -226,8 +267,13 @@ private:
     juce::DrawableImage baseL2RDropFinalDrawableRIGHT;
     juce::DrawableImage redL2RDropFinalDrawableRIGHT;
     
+    
     /*
-     These images are the ping pong balls on the left and right edges of the interface's center.
+     ***************************************************************************************
+     */
+    
+    /*
+     These images are for the ping pong balls that respond to the central gain faders.
      */
     
     // The white and red ping pong balls for both the left and right sides.
@@ -250,6 +296,11 @@ private:
     juce::DrawableImage leftPingPongRedB;
     juce::DrawableImage rightPingPongRedB;
 
+    
+    /*
+     ***************************************************************************************
+     */
+    
     /*
      Opacity values for BOTH the arrows and ping pong balls.
      */
@@ -555,8 +606,7 @@ private:
    
     // Knob image 100
     juce::Image mix100;
-
-
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Coleman_HW2AudioProcessorEditor)
     
 public:
