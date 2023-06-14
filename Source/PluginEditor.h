@@ -86,6 +86,10 @@ private:
     juce::String mixString;
     juce::String smoothString;
     
+    juce::Label tempoLabel;
+    juce::Label mixLabel;
+    juce::Label smoothLabel;
+    
 //    juce::Justifica
     
 //    juce::TextLayout initialText;

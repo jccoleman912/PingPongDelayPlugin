@@ -17,8 +17,6 @@ float PingPongDelay::processSample(float x, const int c){
     if(leftDelayFirst) {
         yLeft = leftBuffer[read];
         
-        
-        
         yRight = rightBuffer[read2];
         
         right = yRight;
@@ -26,12 +24,9 @@ float PingPongDelay::processSample(float x, const int c){
         rightBuffer[write2] = (leftBuffer[read2] * l2RDropLinear);
         
         
-        
         left = yLeft;
         
         leftBuffer[write] = (x * initialDropLinear) + (rightBuffer[read] * r2LDropLinear);
-        
-        
         
         
         // Increment Index
