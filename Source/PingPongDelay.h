@@ -74,4 +74,6 @@ private:
     int delaySamples = 10000;
     float Fs = 48000.f;
     
+    float negInfLinearGain = 0.f;
+    
 };

@@ -57,6 +57,8 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
     
+    float Fs = 48000;
+    
     float alpha = 0.9999f;
     
     float alphaDelay = 0.9999f;

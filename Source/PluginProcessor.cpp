@@ -179,8 +179,7 @@ void Coleman_HW2AudioProcessor::prepareToPlay (double sampleRate, int samplesPer
 
     float tr = 0.08f; // 80 ms response time for smoothing
     alpha = std::exp(-log(9.f)/(sampleRate * tr));
-
-
+    
 }
 
 void Coleman_HW2AudioProcessor::releaseResources()
@@ -306,7 +305,10 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
     if(boolSyncValue) {
         playHead = this->getPlayHead();
         playHead->getCurrentPosition(positionInfo);
+//        playHead->getPosition();
         finalTempo = positionInfo.bpm;
+//        std::optional<double> finalT;
+//        finalTempo = positionInfo.getBpm();
 
     } else {
         finalTempo = tempoValue;
@@ -344,7 +346,7 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
             {
                 
                 if(!boolSmooth) {
-                    trDelay = 0.f; // 100 ms response time for smoothing
+                    trDelay = 0.f;
                 } else {
                     trDelay = smoothKnobValue/1000;
                 }

@@ -20,7 +20,8 @@
 */
 class Coleman_HW2AudioProcessorEditor  : public juce::AudioProcessorEditor,
 public juce::Slider::Listener,
-public juce::Button::Listener
+public juce::Button::Listener,
+public juce::TextEditor::Listener
 {
 public:
     Coleman_HW2AudioProcessorEditor (Coleman_HW2AudioProcessor&);
@@ -32,6 +33,9 @@ public:
     
     void sliderValueChanged(juce::Slider *slider) override;
     void buttonClicked (juce::Button *button) override;
+    void textEditorReturnKeyPressed (juce::TextEditor& textEditor) override;
+    void textEditorFocusLost (juce::TextEditor& textEditor) override;
+    void textEditorTextChanged (juce::TextEditor& textEditor) override;
     
 private:
     // This reference is provided as a quick way for your editor to
@@ -76,6 +80,11 @@ private:
     juce::TextEditor mixText;
     juce::TextEditor smoothText;
     
+//    bool negInfInitial;
+//    bool negInfL2R;
+//    bool negInfR2L;
+    
+    
     juce::CustomTextBox textBoxLNF;
     
     juce::String initialGainString;
@@ -89,6 +98,9 @@ private:
     juce::Label tempoLabel;
     juce::Label mixLabel;
     juce::Label smoothLabel;
+    
+    juce::StringRef bannedInputString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`~!@#$%^&*()_=[{]}|;:'><?/\\\"+- ";
+    juce::StringRef bannedInputStringGain = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`~!@#$%^&*()_=[{]}|;:'><?/\\\" ";
     
 //    juce::Justifica
     
@@ -122,6 +134,8 @@ private:
     // Smooth button
     juce::ToggleButton smoothButton;
     
+    // The useless button used for the TextEditor's loss of focus work correctly
+    juce::ToggleButton backgroundUselessButton;
     
     /*
      ***************************************************************************************
@@ -206,6 +220,9 @@ private:
     // The two knobs for the mix and smooth values.
     juce::Image knobPosition;
     juce::Image smoothKnobPosition;
+    
+    juce::DrawableImage warningMessage;
+    int warningOpacity;
     
     
     /*

@@ -150,15 +150,33 @@ void PingPongDelay::setLeftOrRight(bool leftFirst) {
 }
 
 void PingPongDelay::setInitialDropLinear(float initialLinear) {
-    initialDropLinear = initialLinear;
+    if(initialLinear > 0.0012f) {
+        initialDropLinear = initialLinear;
+    } else {
+        initialDropLinear = 0.f;
+    }
+////
+////        initialDropLinear = initialLinear;
 }
 
 void PingPongDelay::setL2RDropLinear(float l2RLinear) {
-    l2RDropLinear = l2RLinear;
+    if(l2RLinear > 0.0012f) {
+        l2RDropLinear = l2RLinear;
+    } else {
+        l2RDropLinear = 0.f;
+    }
+//
+////        l2RDropLinear = l2RLinear;
 }
 
 void PingPongDelay::setR2LDropLinear(float r2LLinear) {
-    r2LDropLinear = r2LLinear;
+    if(r2LLinear > 0.0012f) {
+        r2LDropLinear = r2LLinear;
+    } else {
+        r2LDropLinear = 0.f;
+    }
+    
+//        r2LDropLinear = r2LLinear;
 }
 
 void PingPongDelay::clearBuffers() {

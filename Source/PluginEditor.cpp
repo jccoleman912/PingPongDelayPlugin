@@ -59,6 +59,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     smoothOFFImage = juce::ImageCache::getFromMemory(BinaryData::SmoothOFF_jpg, BinaryData::SmoothOFF_jpgSize);
     smoothONImage = juce::ImageCache::getFromMemory(BinaryData::SmoothON_jpg, BinaryData::SmoothON_jpgSize);
 
+    warningMessage.setImage(    juce::ImageCache::getFromMemory(BinaryData::WarningScreenFeedback_png, BinaryData::WarningScreenFeedback_pngSize).rescaled(256, 128, juce::Graphics::highResamplingQuality));
     
     leftPingPong = juce::ImageCache::getFromMemory(BinaryData::LeftPingPong_png, BinaryData::LeftPingPong_pngSize);
     rightPingPong = juce::ImageCache::getFromMemory(BinaryData::RightPingPong_png, BinaryData::RightPingPong_pngSize);
@@ -361,6 +362,18 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     
     smoothKnobPosition = mix0;
     
+    //
+    // Useless Background Button
+    // This is used for the TextEditor objects so they will lose focus
+    // whenever the user clicks anywhere on the interface.
+    //
+    
+    backgroundUselessButton.addListener(this);
+    backgroundUselessButton.setBounds(0,0,900,900);
+    backgroundUselessButton.setToggleState(false, juce::dontSendNotification);
+    backgroundUselessButton.setAlpha(0.f);
+    addAndMakeVisible(backgroundUselessButton);
+    
     
     //
     // Initial Gain Knob
@@ -445,6 +458,9 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     addAndMakeVisible(initialGainText);
     addAndMakeVisible(l2RGainText);
     addAndMakeVisible(r2LGainText);
+    initialGainText.addListener(this);
+    l2RGainText.addListener(this);
+    r2LGainText.addListener(this);
     
     //
     // Tempo Slider
@@ -460,15 +476,17 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     tempoSelector.setLookAndFeel(&tempoDialLNF);
     addAndMakeVisible(tempoSelector);
     
+    
+    
     tempoLabel.setBounds(80, 293, 50, 28);
     tempoLabel.setFont(juce::Font("Futura", 15.f, 1));
 //    tempoLabel.setColour(juce::Label::ColourIds::textColourId, juce::Colour (0x96000000));
     tempoLabel.setText("BPM", juce::NotificationType::dontSendNotification);
     tempoLabel.setJustificationType(33);
     addAndMakeVisible(tempoLabel);
-    
+
     //    initialGainText.setColour(8, juce::Colour (0x00000000));
-    tempoText.setBounds(39, 292, 48, 26);
+    tempoText.setBounds(45, 292, 43, 26);
     //    initialGainText.setColour(7, juce::Colour (0x00000000));
     tempoText.setFont(juce::Font("Futura", 15.f, 1));
     tempoText.setLookAndFeel(&textBoxLNF);
@@ -477,12 +495,26 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
 //    tempoText.setAlpha(0.3f);
 //        initialGainText.mouseDown(<#const MouseEvent &#>)
     addAndMakeVisible(tempoText);
+//
+//    juce::TextEditor::Listener tempoListener;
+//
+//    tempoListener.textEditorEscapeKeyPressed(<#TextEditor &#>);
+//
+//    tempoListener.
+    
+//    tempoText.onReturnKey
+    
+    tempoText.addListener(this);
+    
+    
+
 
     
     //
     // Mix Knob
     //
     
+//    mixKnob.addListener(this);
     mixKnob.addListener(this);
     // Specify location in window (xPos,yPos,width,height)
     mixKnob.setBounds(682,194,76,104);
@@ -511,6 +543,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
 //    mixText.setAlpha(0.3f);
     //    initialGainText.mouseDown(<#const MouseEvent &#>)
     addAndMakeVisible(mixText);
+    mixText.addListener(this);
     
     //
     // Smooth Knob
@@ -541,6 +574,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
 //    smoothText.setAlpha(0.6f);
     //    initialGainText.mouseDown(<#const MouseEvent &#>)
     addAndMakeVisible(smoothText);
+    smoothText.addListener(this);
 
     
     
@@ -731,6 +765,8 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     buttonAttachment.emplace_back(new juce::AudioProcessorValueTreeState::ButtonAttachment(audioProcessor.state, "16thNoteValue", sixteenthNoteButton));
     buttonAttachment.emplace_back(new juce::AudioProcessorValueTreeState::ButtonAttachment(audioProcessor.state, "32ndNoteValue", thirtysecondNoteButton));
     buttonAttachment.emplace_back(new juce::AudioProcessorValueTreeState::ButtonAttachment(audioProcessor.state, "smoothButtonValue", smoothButton));
+    
+//    juce
 
 
 }
@@ -877,6 +913,8 @@ void Coleman_HW2AudioProcessorEditor::paint (juce::Graphics& g)
     g.drawImage(knobPosition, 674, 188, 90, 90, 0, 0, 1000, 1000);
     
     g.drawImage(smoothKnobPosition, 674, 456, 90, 90, 0, 0, 1000, 1000);
+
+    warningMessage.drawAt(g, 278, 424, warningOpacity);
     
     tempoOverlay.drawAt(g, 16, 224, tempoOverlayOpacity);
     smoothOverlay.drawAt(g, 656, 432, smoothOverlayOpacity);
@@ -992,6 +1030,170 @@ void Coleman_HW2AudioProcessorEditor::buttonClicked(juce::Button *button){
         }
         repaint();
     }
+}
+
+void Coleman_HW2AudioProcessorEditor::textEditorReturnKeyPressed(juce::TextEditor& textEditor)
+{
+    if(&textEditor == &tempoText) {
+        std::string stdTempoString = tempoText.getText().toStdString();
+        try {
+            tempoSelector.setValue(std::stof((stdTempoString)));
+        } catch (...) {
+            tempoString = std::to_string((std::floorf((tempoSelector.getValue() * 10.f) + 0.5f)) / 10.0);
+            tempoString = tempoString.replace("00000", "");
+            tempoText.setText(tempoString);
+        }
+    }
+    
+    if(&textEditor == &mixText) {
+        std::string stdMixString = mixText.getText().toStdString();
+        try {
+            mixKnob.setValue(std::stof((stdMixString)));
+        } catch (...) {
+            mixString = std::to_string((std::floorf((mixKnob.getValue() * 10.f) + 0.5f)) / 10.0);
+            mixString = mixString.replace("00000", "");
+            mixText.setText(mixString);
+        }
+    }
+    
+    if(&textEditor == &smoothText) {
+        std::string stdSmoothString = smoothText.getText().toStdString();
+        try {
+            smoothKnob.setValue(std::stof((stdSmoothString)));
+        } catch (...) {
+            smoothString = std::to_string((std::floorf((smoothKnob.getValue() * 10.f) + 0.5f)) / 10.0);
+            smoothString = smoothString.replace("00000", "");
+            smoothText.setText(smoothString);
+        }
+    }
+    
+    if(&textEditor == &initialGainText) {
+        std::string stdInitialString = initialGainText.getText().toStdString();
+        try {
+            initialGainKnob.setValue(std::stof((stdInitialString)));
+        } catch (...) {
+            initialGainString = std::to_string((std::floorf((initialGainKnob.getValue() * 10.f) + 0.5f)) / 10.0);
+            initialGainString = initialGainString.replace("00000", "");
+            initialGainText.setText(initialGainString);
+        }
+        if(initialGainKnob.getValue() < -59.9f) {
+            initialGainText.setText("-Inf");
+        }
+    }
+    
+    if(&textEditor == &l2RGainText) {
+        std::string stdL2RString = l2RGainText.getText().toStdString();
+        try {
+            l2RGainKnob.setValue(std::stof((stdL2RString)));
+        } catch (...) {
+            l2RGainString = std::to_string((std::floorf((l2RGainKnob.getValue() * 10.f) + 0.5f)) / 10.0);
+            l2RGainString = l2RGainString.replace("00000", "");
+            l2RGainText.setText(l2RGainString);
+        }
+        if(l2RGainKnob.getValue() < -59.9f) {
+            l2RGainText.setText("-Inf");
+        }
+    }
+    
+    if(&textEditor == &r2LGainText) {
+        std::string stdR2LString = r2LGainText.getText().toStdString();
+        try {
+            r2LGainKnob.setValue(std::stof((stdR2LString)));
+        } catch (...) {
+            r2LGainString = std::to_string((std::floorf((r2LGainKnob.getValue() * 10.f) + 0.5f)) / 10.0);
+            r2LGainString = r2LGainString.replace("00000", "");
+            r2LGainText.setText(r2LGainString);
+        }
+        if(r2LGainKnob.getValue() < -59.9f) {
+            r2LGainText.setText("-Inf");
+        }
+    }
+}
+
+void Coleman_HW2AudioProcessorEditor::textEditorFocusLost (juce::TextEditor& textEditor)
+{
+    if(&textEditor == &tempoText) {
+        tempoString = std::to_string((std::floorf((tempoSelector.getValue() * 10.f) + 0.5f)) / 10.0);
+        tempoString = tempoString.replace("00000", "");
+        tempoText.setText(tempoString);
+    }
+    if(&textEditor == &mixText) {
+        mixString = std::to_string((std::floorf((mixKnob.getValue() * 10.f) + 0.5f)) / 10.0);
+        mixString = mixString.replace("00000", "");
+        mixText.setText(mixString);
+    }
+    if(&textEditor == &smoothText) {
+        smoothString = std::to_string((std::floorf((smoothKnob.getValue() * 10.f) + 0.5f)) / 10.0);
+        smoothString = smoothString.replace("00000", "");
+        smoothText.setText(smoothString);
+    }
+    if(&textEditor == &initialGainText) {
+        initialGainString = std::to_string((std::floorf((initialGainKnob.getValue() * 10.f) + 0.5f)) / 10.0);
+        initialGainString = initialGainString.replace("00000", "");
+        initialGainText.setText(initialGainString);
+        
+        if(initialGainKnob.getValue() < -59.9f) {
+            initialGainText.setText("-Inf");
+        }
+    }
+    if(&textEditor == &l2RGainText) {
+        l2RGainString = std::to_string((std::floorf((l2RGainKnob.getValue() * 10.f) + 0.5f)) / 10.0);
+        l2RGainString = l2RGainString.replace("00000", "");
+        l2RGainText.setText(l2RGainString);
+        
+        if(l2RGainKnob.getValue() < -59.9f) {
+            l2RGainText.setText("-Inf");
+        }
+    }
+    if(&textEditor == &r2LGainText) {
+        r2LGainString = std::to_string((std::floorf((r2LGainKnob.getValue() * 10.f) + 0.5f)) / 10.0);
+        r2LGainString = r2LGainString.replace("00000", "");
+        r2LGainText.setText(r2LGainString);
+        
+        if(r2LGainKnob.getValue() < -59.9f) {
+            r2LGainText.setText("-Inf");
+        }
+    }
+}
+
+void Coleman_HW2AudioProcessorEditor::textEditorTextChanged(juce::TextEditor &textEditor) {
+
+    if(&textEditor == &tempoText) {
+        if(tempoText.getText().containsAnyOf(bannedInputString)) {
+            tempoText.setText(tempoText.getText().removeCharacters(bannedInputString));
+        }
+    }
+
+    if(&textEditor == &mixText) {
+        if(mixText.getText().containsAnyOf(bannedInputString)) {
+            mixText.setText(mixText.getText().removeCharacters(bannedInputString));
+        }
+    }
+
+    if(&textEditor == &smoothText) {
+        if(smoothText.getText().containsAnyOf(bannedInputString)) {
+            smoothText.setText(smoothText.getText().removeCharacters(bannedInputString));
+        }
+    }
+
+    if(&textEditor == &initialGainText) {
+        if(initialGainText.getText().containsAnyOf(bannedInputStringGain) && initialGainText.getText().compare("-Inf") != 0) {
+            initialGainText.setText(initialGainText.getText().removeCharacters(bannedInputStringGain));
+        }
+    }
+
+    if(&textEditor == &l2RGainText) {
+        if(l2RGainText.getText().containsAnyOf(bannedInputStringGain) && l2RGainText.getText().compare("-Inf") != 0) {
+            l2RGainText.setText(l2RGainText.getText().removeCharacters(bannedInputStringGain));
+        }
+    }
+
+    if(&textEditor == &r2LGainText) {
+        if(r2LGainText.getText().containsAnyOf(bannedInputStringGain) && r2LGainText.getText().compare("-Inf") != 0) {
+            r2LGainText.setText(r2LGainText.getText().removeCharacters(bannedInputStringGain));
+        }
+    }
+
 }
 
 void Coleman_HW2AudioProcessorEditor::sliderValueChanged(juce::Slider * slider)
@@ -2801,11 +3003,41 @@ void Coleman_HW2AudioProcessorEditor::sliderValueChanged(juce::Slider * slider)
         else if(finalValue <= -60.f) {baseFinalOpacity = baseOpacity[0];}
         else {baseFinalOpacity = baseOpacity[0];}
         
-        if((l2RValueRaw + r2LValueRaw) >= 0.f) {
-            redL2RAOpacity = 1.f;
-            redR2LOpacity = 1.f;
-            redL2RBOpacity = 1.f;
-            redFinalOpacity = 1.f;
+        if((l2RValueRaw + r2LValueRaw) > 0.f && initialValue >= -59.9f) {
+            warningOpacity = 1.f;
+        } else {
+            warningOpacity = 0.f;
+        }
+        
+        if(initialValue < -59.9f) {
+            baseInitialOpacity = 0.f;
+            redInitialOpacity = 0.f;
+            baseL2RAOpacity = 0.f;
+            redL2RAOpacity = 0.f;
+            baseR2LOpacity = 0.f;
+            redR2LOpacity = 0.f;
+            baseL2RBOpacity = 0.f;
+            redL2RBOpacity = 0.f;
+            baseFinalOpacity = 0.f;
+            redFinalOpacity = 0.f;
+        }
+        if(l2RValueRaw < -59.9f) {
+            baseL2RAOpacity = 0.f;
+            redL2RAOpacity = 0.f;
+            baseR2LOpacity = 0.f;
+            redR2LOpacity = 0.f;
+            baseL2RBOpacity = 0.f;
+            redL2RBOpacity = 0.f;
+            baseFinalOpacity = 0.f;
+            redFinalOpacity = 0.f;
+        }
+        if(r2LValueRaw < -59.9f) {
+            baseR2LOpacity = 0.f;
+            redR2LOpacity = 0.f;
+            baseL2RBOpacity = 0.f;
+            redL2RBOpacity = 0.f;
+            baseFinalOpacity = 0.f;
+            redFinalOpacity = 0.f;
         }
         
         if(((&initialGainKnob)->getValue()) > 24.f) {

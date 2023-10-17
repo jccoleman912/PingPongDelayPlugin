@@ -8,6 +8,9 @@
 
 namespace BinaryData
 {
+    extern const char*   WarningScreenFeedback_png;
+    const int            WarningScreenFeedback_pngSize = 53533;
+
     extern const char*   RedFinalGainRIGHT_png;
     const int            RedFinalGainRIGHT_pngSize = 26897;
 
@@ -780,7 +783,7 @@ namespace BinaryData
     const int            FullScalePingpongDelayUI2500_jpgSize = 875273;
 
     // Number of elements in the namedResourceList and originalFileNames arrays.
-    const int namedResourceListSize = 257;
+    const int namedResourceListSize = 258;
 
     // Points to the start of a list of resource names.
     extern const char* namedResourceList[];
