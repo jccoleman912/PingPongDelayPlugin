@@ -10,25 +10,18 @@
 
 #include "PingPongDelay.h"
 
-
-
 float PingPongDelay::processSample(float x, const int c){
    
     if(leftDelayFirst) {
+        
         yLeft = leftBuffer[read];
         
         yRight = rightBuffer[read2];
         
-        right = yRight;
-        
         rightBuffer[write2] = (leftBuffer[read2] * l2RDropLinear);
-        
-        
-        left = yLeft;
         
         leftBuffer[write] = (x * initialDropLinear) + (rightBuffer[read] * r2LDropLinear);
         
-        
         // Increment Index
         if(c == 0) {
             write++;
@@ -57,32 +50,22 @@ float PingPongDelay::processSample(float x, const int c){
             }
         }
         
-        
         if(c == 0) {
-            output = left;
+            output = yLeft;
         }
         if(c == 1) {
-            output = right;
+            output = yRight;
         }
-    } else {
+    }
+    else {
         
         yRight = rightBuffer[read];
         
-        
-        
         yLeft = leftBuffer[read2];
-        
-        left = yLeft;
         
         leftBuffer[write2] = (rightBuffer[read2] * l2RDropLinear);
         
-        
-        
-        right = yRight;
-        
         rightBuffer[write] = (x * initialDropLinear) + (leftBuffer[read] * r2LDropLinear);
-        
-        
         
         // Increment Index
         if(c == 1) {
@@ -113,25 +96,25 @@ float PingPongDelay::processSample(float x, const int c){
         }
         
         if(c == 0) {
-            output = left;
+            output = yLeft;
         }
         if(c == 1) {
-            output = right;
+            output = yRight;
         }
     }
-        
         return output;
-
 }
 
 
+/*
+ Setting the delay in MS, called in PluginProcessor.cpp
+ */
 void PingPongDelay::setDelayMS(float delayMS){
     
     float delaySec = delayMS / 1000.f;
     delaySamples = delaySec * Fs;
     delaySamples = juce::jmin(delaySamples,1157999);
 
-    
     read = write - delaySamples;
     
     if (read < 0){
@@ -145,18 +128,23 @@ void PingPongDelay::setDelayMS(float delayMS){
 }
 
 
+/*
+ Setting the L/R first delay, called in PluginProcessor.cpp
+ */
 void PingPongDelay::setLeftOrRight(bool leftFirst) {
     leftDelayFirst = leftFirst;
 }
 
+
+/*
+ Setting the linear gain changes, called in PluginProcessor.cpp
+ */
 void PingPongDelay::setInitialDropLinear(float initialLinear) {
     if(initialLinear > 0.0012f) {
         initialDropLinear = initialLinear;
     } else {
         initialDropLinear = 0.f;
     }
-////
-////        initialDropLinear = initialLinear;
 }
 
 void PingPongDelay::setL2RDropLinear(float l2RLinear) {
@@ -165,8 +153,6 @@ void PingPongDelay::setL2RDropLinear(float l2RLinear) {
     } else {
         l2RDropLinear = 0.f;
     }
-//
-////        l2RDropLinear = l2RLinear;
 }
 
 void PingPongDelay::setR2LDropLinear(float r2LLinear) {
@@ -175,18 +161,16 @@ void PingPongDelay::setR2LDropLinear(float r2LLinear) {
     } else {
         r2LDropLinear = 0.f;
     }
-    
-//        r2LDropLinear = r2LLinear;
 }
 
+
+/*
+ A method that clears the opposite side's arrays when the L/R switch is flipped.
+ */
 void PingPongDelay::clearBuffers() {
-    
     std::fill(leftBuffer, leftBuffer + SIZE, 0);
     std::fill(rightBuffer, rightBuffer + SIZE, 0);
-    
 }
-
-
 
 
 void PingPongDelay::processBlock(juce::AudioBuffer<float> &buffer)
@@ -208,8 +192,6 @@ void PingPongDelay::processBlock(juce::AudioBuffer<float> &buffer)
     }
 }
 
-
-
 float PingPongDelay::getSampleRate() {
     return Fs;
 }
@@ -225,5 +207,4 @@ void PingPongDelay::processInPlace(float * buffer, const int numSamples, const i
         
         ++buffer; // move pointer to the next sample
     }
-    
 }

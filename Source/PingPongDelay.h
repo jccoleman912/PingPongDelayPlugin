@@ -45,35 +45,47 @@ public:
     
     float getSampleRate();
     
-    
 private:
-    // One sample of delay
+    
+    /*
+     The longest amount of delay samples possible
+     */
     static const int SIZE = 1158000;
     
+    /*
+     Left/right arrays and the read/write pointers.
+     */
     float leftBuffer[SIZE] = {0.f};
     float rightBuffer[SIZE] = {0.f};
+    
     int write = SIZE - 1;
     int read = 0;
     int write2 = SIZE - 1;
     int read2 = 0;
     
+    /*
+     The final output of processSample() and the left and right components of the output.
+     */
     float output;
-    
-    bool leftDelayFirst;
     
     float yLeft = 0.f;
     float yRight = 0.f;
+
+    /*
+     The boolean check to see which L/R button is selected.
+     */
+    bool leftDelayFirst;
     
+    /*
+     All three linear gain slider values.
+     */
     float initialDropLinear = 0.5f;
     float l2RDropLinear = 0.0f;
     float r2LDropLinear = 0.5f;
-
-    float right = 0.f;
-    float left = 0.f;
     
+    /*
+     Audio Device information needed for time-based calculations.
+     */
     int delaySamples = 10000;
     float Fs = 48000.f;
-    
-    float negInfLinearGain = 0.f;
-    
 };
