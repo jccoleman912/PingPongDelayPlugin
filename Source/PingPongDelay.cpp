@@ -11,98 +11,192 @@
 #include "PingPongDelay.h"
 
 float PingPongDelay::processSample(float x, const int c){
-   
-    if(leftDelayFirst) {
-        
-        yLeft = leftBuffer[read];
-        
-        yRight = rightBuffer[read2];
-        
-        rightBuffer[write2] = (leftBuffer[read2] * l2RDropLinear);
-        
-        leftBuffer[write] = (x * initialDropLinear) + (rightBuffer[read] * r2LDropLinear);
-        
-        // Increment Index
-        if(c == 0) {
-            write++;
-            if (write >= SIZE){
-                write = 0; // circular indexing
+    if(!bypassSelected) {
+        if(leftDelayFirst) {
+            
+            yLeft = leftBuffer[read];
+            
+            yRight = rightBuffer[read2];
+            
+            rightBuffer[write2] = (leftBuffer[read2] * l2RDropLinear);
+            
+            leftBuffer[write] = (x * initialDropLinear) + (rightBuffer[read] * r2LDropLinear);
+            
+            // Increment Index
+            if(c == 0) {
+                write++;
+                if (write >= SIZE){
+                    write = 0; // circular indexing
+                }
+                
+                // Increment Index
+                read++;
+                if (read >= SIZE){
+                    read = 0; // circular indexing
+                }
             }
             
             // Increment Index
-            read++;
-            if (read >= SIZE){
-                read = 0; // circular indexing
+            if(c == 1) {
+                write2++;
+                if (write2 >= SIZE){
+                    write2 = 0; // circular indexing
+                }
+                
+                // Increment Index
+                read2++;
+                if (read2 >= SIZE){
+                    read2 = 0; // circular indexing
+                }
+            }
+            
+            if(c == 0) {
+                output = yLeft;
+            }
+            if(c == 1) {
+                output = yRight;
             }
         }
-        
-        // Increment Index
-        if(c == 1) {
-            write2++;
-            if (write2 >= SIZE){
-                write2 = 0; // circular indexing
+        else {
+            
+            yRight = rightBuffer[read];
+            
+            yLeft = leftBuffer[read2];
+            
+            leftBuffer[write2] = (rightBuffer[read2] * l2RDropLinear);
+            
+            rightBuffer[write] = (x * initialDropLinear) + (leftBuffer[read] * r2LDropLinear);
+            
+            // Increment Index
+            if(c == 1) {
+                write++;
+                if (write >= SIZE){
+                    write = 0; // circular indexing
+                }
+                
+                // Increment Index
+                read++;
+                if (read >= SIZE){
+                    read = 0; // circular indexing
+                }
             }
             
             // Increment Index
-            read2++;
-            if (read2 >= SIZE){
-                read2 = 0; // circular indexing
+            if(c == 0) {
+                write2++;
+                if (write2 >= SIZE){
+                    write2 = 0; // circular indexing
+                }
+                
+                // Increment Index
+                read2++;
+                if (read2 >= SIZE){
+                    read2 = 0; // circular indexing
+                }
+            }
+            
+            if(c == 0) {
+                output = yLeft;
+            }
+            if(c == 1) {
+                output = yRight;
             }
         }
-        
-        if(c == 0) {
-            output = yLeft;
-        }
-        if(c == 1) {
-            output = yRight;
-        }
+        return output;
     }
     else {
-        
-        yRight = rightBuffer[read];
-        
-        yLeft = leftBuffer[read2];
-        
-        leftBuffer[write2] = (rightBuffer[read2] * l2RDropLinear);
-        
-        rightBuffer[write] = (x * initialDropLinear) + (leftBuffer[read] * r2LDropLinear);
-        
-        // Increment Index
-        if(c == 1) {
-            write++;
-            if (write >= SIZE){
-                write = 0; // circular indexing
+        if(leftDelayFirst) {
+            
+            yLeft = leftBuffer[read];
+            
+            yRight = rightBuffer[read2];
+            
+            rightBuffer[write2] = 0;
+            
+            leftBuffer[write] = 0;
+            
+            // Increment Index
+            if(c == 0) {
+                write++;
+                if (write >= SIZE){
+                    write = 0; // circular indexing
+                }
+                
+                // Increment Index
+                read++;
+                if (read >= SIZE){
+                    read = 0; // circular indexing
+                }
             }
             
             // Increment Index
-            read++;
-            if (read >= SIZE){
-                read = 0; // circular indexing
+            if(c == 1) {
+                write2++;
+                if (write2 >= SIZE){
+                    write2 = 0; // circular indexing
+                }
+                
+                // Increment Index
+                read2++;
+                if (read2 >= SIZE){
+                    read2 = 0; // circular indexing
+                }
+            }
+            
+            if(c == 0) {
+                output = yLeft;
+            }
+            if(c == 1) {
+                output = yRight;
             }
         }
-        
-        // Increment Index
-        if(c == 0) {
-            write2++;
-            if (write2 >= SIZE){
-                write2 = 0; // circular indexing
+        else {
+            
+            yRight = rightBuffer[read];
+            
+            yLeft = leftBuffer[read2];
+            
+            leftBuffer[write2] = 0;
+            
+            rightBuffer[write] = 0;
+            
+            // Increment Index
+            if(c == 1) {
+                write++;
+                if (write >= SIZE){
+                    write = 0; // circular indexing
+                }
+                
+                // Increment Index
+                read++;
+                if (read >= SIZE){
+                    read = 0; // circular indexing
+                }
             }
             
             // Increment Index
-            read2++;
-            if (read2 >= SIZE){
-                read2 = 0; // circular indexing
+            if(c == 0) {
+                write2++;
+                if (write2 >= SIZE){
+                    write2 = 0; // circular indexing
+                }
+                
+                // Increment Index
+                read2++;
+                if (read2 >= SIZE){
+                    read2 = 0; // circular indexing
+                }
+            }
+            
+            if(c == 0) {
+                output = yLeft;
+            }
+            if(c == 1) {
+                output = yRight;
             }
         }
-        
-        if(c == 0) {
-            output = yLeft;
-        }
-        if(c == 1) {
-            output = yRight;
-        }
-    }
         return output;
+    }
 }
 
 
@@ -163,14 +257,18 @@ void PingPongDelay::setR2LDropLinear(float r2LLinear) {
     }
 }
 
+void PingPongDelay::setBypassSelected(bool bypass) {
+    bypassSelected = bypass;
+}
+
 
 /*
  A method that clears the opposite side's arrays when the L/R switch is flipped.
  */
-void PingPongDelay::clearBuffers() {
-    std::fill(leftBuffer, leftBuffer + SIZE, 0);
-    std::fill(rightBuffer, rightBuffer + SIZE, 0);
-}
+//void PingPongDelay::clearBuffers() {
+//    std::fill(leftBuffer, leftBuffer + SIZE, 0);
+//    std::fill(rightBuffer, rightBuffer + SIZE, 0);
+//}
 
 
 void PingPongDelay::processBlock(juce::AudioBuffer<float> &buffer)

@@ -1,14 +1,10 @@
 /*
   ==============================================================================
-
     This file contains the basic framework code for a JUCE plugin processor.
-
   ==============================================================================
 */
-
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
-
 //==============================================================================
 Coleman_HW2AudioProcessor::Coleman_HW2AudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -23,13 +19,14 @@ Coleman_HW2AudioProcessor::Coleman_HW2AudioProcessor()
 #endif
 {
 }
-
 Coleman_HW2AudioProcessor::~Coleman_HW2AudioProcessor()
 {
 }
-
-
 juce::AudioProcessorValueTreeState::ParameterLayout Coleman_HW2AudioProcessor::createParameterLayout() {
+    
+    /*
+     Pulling the emplaced values from PluginEditor.cpp.
+     */
     
     std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
     
@@ -53,13 +50,9 @@ juce::AudioProcessorValueTreeState::ParameterLayout Coleman_HW2AudioProcessor::c
                                                                    "Smooth (MS)",
                                                                    juce::NormalisableRange<float> (0.f,   500.f), 0.f));
     
-    
-    
-    
     params.push_back(std::make_unique<juce::AudioParameterBool> ("tripletValue",
                                                                    "Triplet",
                                                                    false));
-    
     params.push_back(std::make_unique<juce::AudioParameterBool> ("dottedValue",
                                                                    "Dotted",
                                                                    false));
@@ -70,13 +63,6 @@ juce::AudioProcessorValueTreeState::ParameterLayout Coleman_HW2AudioProcessor::c
     
     params.push_back(std::make_unique<juce::AudioParameterBool> ("syncValue",
                                                                    "Sync",
-                                                                   false));
-    
-    params.push_back(std::make_unique<juce::AudioParameterBool> ("leftFirstValue",
-                                                                   "Left First",
-                                                                   true));
-    params.push_back(std::make_unique<juce::AudioParameterBool> ("rightFirstValue",
-                                                                   "Right First",
                                                                    false));
     
     params.push_back(std::make_unique<juce::AudioParameterBool> ("wholeNoteValue",
@@ -98,24 +84,24 @@ juce::AudioProcessorValueTreeState::ParameterLayout Coleman_HW2AudioProcessor::c
                                                                    "32nd Note",
                                                                    false));
     
+    params.push_back(std::make_unique<juce::AudioParameterBool> ("leftFirstValue",
+                                                                   "Left First",
+                                                                   true));
+    params.push_back(std::make_unique<juce::AudioParameterBool> ("rightFirstValue",
+                                                                   "Right First",
+                                                                   false));
+    
     params.push_back(std::make_unique<juce::AudioParameterBool> ("smoothButtonValue",
                                                                    "Smooth Engage",
                                                                    false));
     
-//    params.push_back(std::make_unique<juce::AudioParameterChoice> ("noteValue", "Note Type", juce::StringArray {"Whole", "Half", "Quarter", "8th", "16th", "32nd", "64th"}, 3));
-                     
-   
-    
     return {params.begin() , params.end()};
-    
 }
-
 //==============================================================================
 const juce::String Coleman_HW2AudioProcessor::getName() const
 {
     return JucePlugin_Name;
 }
-
 bool Coleman_HW2AudioProcessor::acceptsMidi() const
 {
    #if JucePlugin_WantsMidiInput
@@ -124,7 +110,6 @@ bool Coleman_HW2AudioProcessor::acceptsMidi() const
     return false;
    #endif
 }
-
 bool Coleman_HW2AudioProcessor::producesMidi() const
 {
    #if JucePlugin_ProducesMidiOutput
@@ -133,7 +118,6 @@ bool Coleman_HW2AudioProcessor::producesMidi() const
     return false;
    #endif
 }
-
 bool Coleman_HW2AudioProcessor::isMidiEffect() const
 {
    #if JucePlugin_IsMidiEffect
@@ -142,52 +126,44 @@ bool Coleman_HW2AudioProcessor::isMidiEffect() const
     return false;
    #endif
 }
-
 double Coleman_HW2AudioProcessor::getTailLengthSeconds() const
 {
     return 0.0;
 }
-
 int Coleman_HW2AudioProcessor::getNumPrograms()
 {
     return 1;   // NB: some hosts don't cope very well if you tell them there are 0 programs,
                 // so this should be at least 1, even if you're not really implementing programs.
 }
-
 int Coleman_HW2AudioProcessor::getCurrentProgram()
 {
     return 0;
 }
-
 void Coleman_HW2AudioProcessor::setCurrentProgram (int index)
 {
 }
-
 const juce::String Coleman_HW2AudioProcessor::getProgramName (int index)
 {
     return {};
 }
-
 void Coleman_HW2AudioProcessor::changeProgramName (int index, const juce::String& newName)
 {
 }
-
 //==============================================================================
 void Coleman_HW2AudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     pingPongDelay.prepareToPlay(sampleRate, samplesPerBlock);
-
     float tr = 0.08f; // 80 ms response time for smoothing
     alpha = std::exp(-log(9.f)/(sampleRate * tr));
     
+    hwBufferSize = samplesPerBlock;
+    
 }
-
 void Coleman_HW2AudioProcessor::releaseResources()
 {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
 }
-
 #ifndef JucePlugin_PreferredChannelConfigurations
 bool Coleman_HW2AudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
 {
@@ -202,24 +178,20 @@ bool Coleman_HW2AudioProcessor::isBusesLayoutSupported (const BusesLayout& layou
     if (layouts.getMainOutputChannelSet() != juce::AudioChannelSet::mono()
      && layouts.getMainOutputChannelSet() != juce::AudioChannelSet::stereo())
         return false;
-
     // This checks if the input layout matches the output layout
    #if ! JucePlugin_IsSynth
     if (layouts.getMainOutputChannelSet() != layouts.getMainInputChannelSet())
         return false;
    #endif
-
     return true;
   #endif
 }
 #endif
-
 void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
     juce::ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
-
     // In case we have more outputs than inputs, this code clears any output
     // channels that didn't contain input data, (because these aren't
     // guaranteed to be empty - they may contain garbage).
@@ -228,176 +200,136 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
     // this code if your algorithm always overwrites all the output channels.
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
+    /*
+     Values being pulled from the Value Tree State needed to process the audio
+     */
+    initialdBDropValue = *state.getRawParameterValue("initialDropValue");
+    l2RdBDropValue = *state.getRawParameterValue("l2RDropValue");
+    r2LdBDropValue = *state.getRawParameterValue("r2LDropValue");
     
-
-    float initialdBDropValue = *state.getRawParameterValue("initialDropValue");
+    mixValue = *state.getRawParameterValue("mixValue");
+    mixValue /= 100.f;
     
-    float l2RdBDropValue = *state.getRawParameterValue("l2RDropValue");
+    boolBypassValue = *state.getRawParameterValue("bypassValue");
     
-    float r2LdBDropValue = *state.getRawParameterValue("r2LDropValue");
+    boolSyncValue = *state.getRawParameterValue("syncValue");
     
-    float mixValue = *state.getRawParameterValue("mixValue");
+    tempoValue = *state.getRawParameterValue("tempoValue");
     
-    mixValue /= 100;
+    smoothKnobValue = *state.getRawParameterValue("smoothKnobValue");
     
+    boolTripletValue = *state.getRawParameterValue("tripletValue");
+    boolDottedValue = *state.getRawParameterValue("dottedValue");
     
-    bool boolBypassValue = *state.getRawParameterValue("bypassValue");
+    boolWhole = *state.getRawParameterValue("wholeNoteValue");
+    boolHalf = *state.getRawParameterValue("halfNoteValue");
+    boolQuarter = *state.getRawParameterValue("quarterNoteValue");
+    bool8th = *state.getRawParameterValue("8thNoteValue");
+    bool16th = *state.getRawParameterValue("16thNoteValue");
+    bool32nd = *state.getRawParameterValue("32ndNoteValue");
     
+    boolSmooth = *state.getRawParameterValue("smoothButtonValue");
+    boolLeftFirstValue = *state.getRawParameterValue("leftFirstValue");
     
-    bool boolSyncValue = *state.getRawParameterValue("syncValue");
-    
-    float tempoValue = *state.getRawParameterValue("tempoValue");
-    
-    float smoothKnobValue = *state.getRawParameterValue("smoothKnobValue");
-    
-    
-    bool boolTripletValue = *state.getRawParameterValue("tripletValue");
-    
-    bool boolDottedValue = *state.getRawParameterValue("dottedValue");
-    
-    bool boolWhole = *state.getRawParameterValue("wholeNoteValue");
-    
-    bool boolHalf = *state.getRawParameterValue("halfNoteValue");
-    
-    bool boolQuarter = *state.getRawParameterValue("quarterNoteValue");
-    
-    bool bool8th = *state.getRawParameterValue("8thNoteValue");
-    
-    bool bool16th = *state.getRawParameterValue("16thNoteValue");
-    
-    bool bool32nd = *state.getRawParameterValue("32ndNoteValue");
-    
-    bool boolSmooth = *state.getRawParameterValue("smoothButtonValue");
-
-    
-    bool boolLeftFirstValue = *state.getRawParameterValue("leftFirstValue");
-    
+    /*
+     Conditional checks to assign the correct length to the delay. If an error occurs,
+     the multiplier will default to 1.f (a quarter note delay).
+     */
     if(boolWhole) {
-        
         noteMultiplier = 4.f;
-        
     } else if(boolHalf) {
-        
         noteMultiplier = 2.f;
-        
     } else if(boolQuarter) {
-        
         noteMultiplier = 1.f;
-        
     } else if(bool8th) {
-        
         noteMultiplier = 0.5f;
-        
     } else if(bool16th) {
-        
         noteMultiplier = 0.25f;
-        
     } else if(bool32nd) {
-        
         noteMultiplier = 0.125f;
-        
     } else {
-        
         noteMultiplier = 1.f;
-        
     };
     
+    /*
+     Conditional check to determine if tempo value comes from slider or sync.
+     NOTE: Sync may need revision due to deprecation.
+     */
     if(boolSyncValue) {
-        playHead = this->getPlayHead();
-        playHead->getCurrentPosition(positionInfo);
-//        playHead->getPosition();
-        finalTempo = positionInfo.bpm;
-//        std::optional<double> finalT;
-//        finalTempo = positionInfo.getBpm();
-
+        try {
+            playHead = this->getPlayHead();
+            playHead->getCurrentPosition(positionInfo);
+            finalTempo = positionInfo.bpm;
+        } catch (...) {
+            finalTempo = tempoValue;
+        }
     } else {
         finalTempo = tempoValue;
     }
     
-    
-    
     pingPongDelay.setLeftOrRight(boolLeftFirstValue);
-    
     
     delayMS = 1000.f * noteMultiplier * (60.f / finalTempo);
     
-    
+    /*
+     Conditional checks to alter the delay time if the Triplet or Dotted buttons are engaged.
+     */
     if(boolTripletValue) {
-        
         delayMS *= (2.f/3.f);
-        
     }
-    
     if(boolDottedValue) {
-        
         delayMS *= 1.5f;
     }
-        
-
-    float y = 0.f;
     
-    float Fs = pingPongDelay.getSampleRate();
-
-    if(!boolBypassValue) {
-        
-        for (int channel = 0; channel < totalNumInputChannels; ++channel)
+    pingPongDelay.setBypassSelected(boolBypassValue);
+    
+    Fs = pingPongDelay.getSampleRate();
+    
+    for (int channel = 0; channel < totalNumInputChannels; ++channel)
+    {
+        for (int n = 0; n < buffer.getNumSamples(); ++n)
         {
-            for (int n = 0; n < buffer.getNumSamples(); ++n)
-            {
-                
-                if(!boolSmooth) {
-                    trDelay = 0.f;
-                } else {
-                    trDelay = smoothKnobValue/1000;
-                }
-
-                alphaDelay = std::exp(-log(9.f)/(Fs * trDelay));
-                
-                smoothDelayMS[channel] = alphaDelay * smoothDelayMS[channel] + (1.f - alphaDelay) * delayMS;
-                
-                pingPongDelay.setDelayMS(smoothDelayMS[channel]);
-                
-                smoothInitialGainDropdB[channel] = alpha * smoothInitialGainDropdB[channel] + (1.f - alpha) * initialdBDropValue;
-                
-                pingPongDelay.setInitialDropLinear(juce::Decibels::decibelsToGain(smoothInitialGainDropdB[channel]));
-                
-                smoothL2RGainDropdB[channel] = alpha * smoothL2RGainDropdB[channel] + (1.f - alpha) * l2RdBDropValue;
-                
-                pingPongDelay.setL2RDropLinear(juce::Decibels::decibelsToGain(smoothL2RGainDropdB[channel]));
-                
-                smoothR2LGainDropdB[channel] = alpha * smoothR2LGainDropdB[channel] + (1.f - alpha) * r2LdBDropValue;
-                
-                pingPongDelay.setR2LDropLinear(juce::Decibels::decibelsToGain(smoothR2LGainDropdB[channel]));
- 
-                
-                float x = buffer.getWritePointer(channel)[n];
-
-                    
-                y = pingPongDelay.processSample(x, channel);
-                
-                smoothMix[channel] = alpha * smoothMix[channel] + (1 - alpha) * mixValue;
-
-                    
-                buffer.getWritePointer(channel)[n] = (smoothMix[channel] * y) + ((1 - smoothMix[channel]) * x);
-                    
-                }
+            if(!boolSmooth) {
+                trDelay = 0.f;
+            } else {
+                trDelay = smoothKnobValue/1000;
+            }
             
+            alphaDelay = std::exp(-log(9.f)/(Fs * trDelay));
+            
+            smoothDelayMS[channel] = alphaDelay * smoothDelayMS[channel] + (1.f - alphaDelay) * delayMS;
+            
+            pingPongDelay.setDelayMS(smoothDelayMS[channel]);
+            
+            smoothInitialGainDropdB[channel] = alpha * smoothInitialGainDropdB[channel] + (1.f - alpha) * initialdBDropValue;
+            
+            pingPongDelay.setInitialDropLinear(juce::Decibels::decibelsToGain(smoothInitialGainDropdB[channel]));
+            
+            smoothL2RGainDropdB[channel] = alpha * smoothL2RGainDropdB[channel] + (1.f - alpha) * l2RdBDropValue;
+            
+            pingPongDelay.setL2RDropLinear(juce::Decibels::decibelsToGain(smoothL2RGainDropdB[channel]));
+            
+            smoothR2LGainDropdB[channel] = alpha * smoothR2LGainDropdB[channel] + (1.f - alpha) * r2LdBDropValue;
+            
+            pingPongDelay.setR2LDropLinear(juce::Decibels::decibelsToGain(smoothR2LGainDropdB[channel]));
+            
+            x = buffer.getWritePointer(channel)[n];
+            y = pingPongDelay.processSample(x, channel);
+            
+            smoothMix[channel] = alpha * smoothMix[channel] + (1 - alpha) * mixValue;
+            buffer.getWritePointer(channel)[n] = (smoothMix[channel] * y) + ((1 - smoothMix[channel]) * x);
         }
-        
-    } else { pingPongDelay.clearBuffers(); }
+    }
 }
-
 //==============================================================================
 bool Coleman_HW2AudioProcessor::hasEditor() const
 {
     return true; // (change this to false if you choose to not supply an editor)
 }
-
 juce::AudioProcessorEditor* Coleman_HW2AudioProcessor::createEditor()
 {
     return new Coleman_HW2AudioProcessorEditor (*this);
 }
-
 //==============================================================================
 void Coleman_HW2AudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
@@ -409,7 +341,6 @@ void Coleman_HW2AudioProcessor::getStateInformation (juce::MemoryBlock& destData
     std::unique_ptr<juce::XmlElement> xml (currentState.createXml());
     copyXmlToBinary(*xml, destData);
 }
-
 void Coleman_HW2AudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
@@ -420,7 +351,6 @@ void Coleman_HW2AudioProcessor::setStateInformation (const void* data, int sizeI
         
     }
 }
-
 //==============================================================================
 // This creates new instances of the plugin..
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()

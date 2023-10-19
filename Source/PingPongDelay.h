@@ -18,8 +18,6 @@ public:
     
     float processSample(float x, const int c);
     
-    float processSampleRightFirst(float x, const int c);
-    
     void processBlock(juce::AudioBuffer<float> &buffer);
     
     void processInPlace(float * buffer, const int numSamples, const int c);
@@ -41,16 +39,17 @@ public:
     
     void setLeftOrRight(bool leftFirst);
     
-    void clearBuffers();
+    void setBypassSelected(bool bypass);
     
     float getSampleRate();
+
     
 private:
     
     /*
      The longest amount of delay samples possible
      */
-    static const int SIZE = 1158000;
+    static const int SIZE = 864000;
     
     /*
      Left/right arrays and the read/write pointers.
@@ -76,12 +75,16 @@ private:
      */
     bool leftDelayFirst;
     
+    bool bypassSelected;
+    
     /*
      All three linear gain slider values.
      */
     float initialDropLinear = 0.5f;
     float l2RDropLinear = 0.0f;
     float r2LDropLinear = 0.5f;
+    
+    
     
     /*
      Audio Device information needed for time-based calculations.
