@@ -1,20 +1,15 @@
 /*
   ==============================================================================
-
     This file contains the basic framework code for a JUCE plugin editor.
-
   ==============================================================================
 */
-
 #pragma once
-
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 #include "Components/MixKnob.h"
 #include "Components/GainFaders.h"
 #include "Components/TempoDial.h"
 #include "Components/CustomTextBox.h"
-
 //==============================================================================
 /**
 */
@@ -26,7 +21,6 @@ public juce::TextEditor::Listener
 public:
     Coleman_HW2AudioProcessorEditor (Coleman_HW2AudioProcessor&);
     ~Coleman_HW2AudioProcessorEditor() override;
-
     //==============================================================================
     void paint (juce::Graphics&) override;
     void resized() override;
@@ -41,7 +35,6 @@ private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     Coleman_HW2AudioProcessor& audioProcessor;
-
     
     /*
      ***************************************************************************************
@@ -63,15 +56,16 @@ private:
     
     // Mix knob
     juce::Slider mixKnob;
-
     // Smooth knob
     juce::Slider smoothKnob;
     
-    // The look and feel on the sliders
+    // The look and feel of the sliders
     juce::GainFaders gainLNF;
     juce::TempoDial tempoDialLNF;
     
-    //
+    /*
+     The Text Editors being placed underneath the slider and knobs.
+    */
     juce::TextEditor initialGainText;
     juce::TextEditor l2RGainText;
     juce::TextEditor r2LGainText;
@@ -80,13 +74,10 @@ private:
     juce::TextEditor mixText;
     juce::TextEditor smoothText;
     
-//    bool negInfInitial;
-//    bool negInfL2R;
-//    bool negInfR2L;
-    
-    
+    // The look and feel of all the TextEditors
     juce::CustomTextBox textBoxLNF;
     
+    // The String values being put into the Text Editors
     juce::String initialGainString;
     juce::String l2RGainString;
     juce::String r2LGainString;
@@ -95,17 +86,15 @@ private:
     juce::String mixString;
     juce::String smoothString;
     
+    // The suffix Labels after the Text Editors
     juce::Label tempoLabel;
     juce::Label mixLabel;
     juce::Label smoothLabel;
     
+    // The StringRef objects to ensure letters and unneeded characters can't be input
+    // into TextEditors.
     juce::StringRef bannedInputString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`~!@#$%^&*()_=[{]}|;:'><?/\\\"+- ";
     juce::StringRef bannedInputStringGain = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`~!@#$%^&*()_=[{]}|;:'><?/\\\" ";
-    
-//    juce::Justifica
-    
-//    juce::TextLayout initialText;
-//    juce::Tex
     
     /*
      The buttons of the interface.
@@ -126,7 +115,6 @@ private:
     juce::ToggleButton tripletButton;
     juce::ToggleButton dottedButton;
     juce::ToggleButton syncButton;
-
     // Left/Right first selector
     juce::ToggleButton leftFirstButton;
     juce::ToggleButton rightFirstButton;
@@ -177,7 +165,6 @@ private:
     
     juce::Image smoothOFFImage;
     juce::Image smoothONImage;
-
     /*
      Images placed in the paint() method that are updated in the listener using repaint().
      These use listeners to correctly display the on or off toggle.
@@ -316,7 +303,6 @@ private:
     juce::DrawableImage rightPingPongRedA;
     juce::DrawableImage leftPingPongRedB;
     juce::DrawableImage rightPingPongRedB;
-
     
     /*
      ***************************************************************************************
@@ -345,7 +331,6 @@ private:
     // Opacity values for the 2nd and final R2L gain drop (assuming Left first).
     float baseFinalOpacity;
     float redFinalOpacity;
-
     
     /*
      ***************************************************************************************
@@ -399,7 +384,6 @@ private:
     /*
      ***************************************************************************************
      */
-
     /*
      These are the 200 separate knob images being used for the mix and smooth selectors.
      The knob angles range from 130° (mix0) to -130° (mix100).
@@ -426,7 +410,6 @@ private:
     juce::Image mix8x5;
     juce::Image mix9;
     juce::Image mix9x5;
-
     // Knob images 10 - 19.5
     juce::Image mix10;
     juce::Image mix10x5;
@@ -514,7 +497,6 @@ private:
     juce::Image mix48x5;
     juce::Image mix49;
     juce::Image mix49x5;
-
     // Knob images 50 - 59.5
     juce::Image mix50;
     juce::Image mix50x5;
@@ -632,6 +614,10 @@ private:
     
 public:
     
+    /*
+     The attachements needed to emplace the slider and button values into
+     the ValueTreeState.
+     */
     std::vector<std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>> sliderAttachment;
     std::vector<std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment>> buttonAttachment;
     
