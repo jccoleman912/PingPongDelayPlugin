@@ -1037,7 +1037,13 @@ void Coleman_HW2AudioProcessorEditor::textEditorReturnKeyPressed(juce::TextEdito
     if(&textEditor == &tempoText) {
         std::string stdTempoString = tempoText.getText().toStdString();
         try {
-            tempoSelector.setValue(std::stof((stdTempoString)));
+            if(std::stof(stdTempoString) != tempoSelector.getValue()) {
+                tempoSelector.setValue(std::stof((stdTempoString)));
+            } else {
+                tempoString = std::to_string((std::floorf((tempoSelector.getValue() * 10.f) + 0.5f)) / 10.0);
+                tempoString = tempoString.replace("00000", "");
+                tempoText.setText(tempoString);
+            }
         } catch (...) {
             tempoString = std::to_string((std::floorf((tempoSelector.getValue() * 10.f) + 0.5f)) / 10.0);
             tempoString = tempoString.replace("00000", "");
@@ -1048,7 +1054,13 @@ void Coleman_HW2AudioProcessorEditor::textEditorReturnKeyPressed(juce::TextEdito
     if(&textEditor == &mixText) {
         std::string stdMixString = mixText.getText().toStdString();
         try {
-            mixKnob.setValue(std::stof((stdMixString)));
+            if(std::stof(stdMixString) != mixKnob.getValue()) {
+                mixKnob.setValue(std::stof((stdMixString)));
+            } else {
+                mixString = std::to_string((std::floorf((mixKnob.getValue() * 10.f) + 0.5f)) / 10.0);
+                mixString = mixString.replace("00000", "");
+                mixText.setText(mixString);
+            }
         } catch (...) {
             mixString = std::to_string((std::floorf((mixKnob.getValue() * 10.f) + 0.5f)) / 10.0);
             mixString = mixString.replace("00000", "");
@@ -1059,7 +1071,13 @@ void Coleman_HW2AudioProcessorEditor::textEditorReturnKeyPressed(juce::TextEdito
     if(&textEditor == &smoothText) {
         std::string stdSmoothString = smoothText.getText().toStdString();
         try {
-            smoothKnob.setValue(std::stof((stdSmoothString)));
+            if(std::stof(stdSmoothString) != smoothKnob.getValue()) {
+                smoothKnob.setValue(std::stof((stdSmoothString)));
+            } else {
+                smoothString = std::to_string((std::floorf((smoothKnob.getValue() * 10.f) + 0.5f)) / 10.0);
+                smoothString = smoothString.replace("00000", "");
+                smoothText.setText(smoothString);
+            }
         } catch (...) {
             smoothString = std::to_string((std::floorf((smoothKnob.getValue() * 10.f) + 0.5f)) / 10.0);
             smoothString = smoothString.replace("00000", "");
@@ -1070,7 +1088,13 @@ void Coleman_HW2AudioProcessorEditor::textEditorReturnKeyPressed(juce::TextEdito
     if(&textEditor == &initialGainText) {
         std::string stdInitialString = initialGainText.getText().toStdString();
         try {
-            initialGainKnob.setValue(std::stof((stdInitialString)));
+            if(std::stof(stdInitialString) != initialGainKnob.getValue()) {
+                initialGainKnob.setValue(std::stof((stdInitialString)));
+            } else {
+                initialGainString = std::to_string((std::floorf((initialGainKnob.getValue() * 10.f) + 0.5f)) / 10.0);
+                initialGainString = initialGainString.replace("00000", "");
+                initialGainText.setText(initialGainString);
+            }
         } catch (...) {
             initialGainString = std::to_string((std::floorf((initialGainKnob.getValue() * 10.f) + 0.5f)) / 10.0);
             initialGainString = initialGainString.replace("00000", "");
@@ -1084,7 +1108,13 @@ void Coleman_HW2AudioProcessorEditor::textEditorReturnKeyPressed(juce::TextEdito
     if(&textEditor == &l2RGainText) {
         std::string stdL2RString = l2RGainText.getText().toStdString();
         try {
-            l2RGainKnob.setValue(std::stof((stdL2RString)));
+            if(std::stof(stdL2RString) != l2RGainKnob.getValue()) {
+                l2RGainKnob.setValue(std::stof((stdL2RString)));
+            } else {
+                l2RGainString = std::to_string((std::floorf((l2RGainKnob.getValue() * 10.f) + 0.5f)) / 10.0);
+                l2RGainString = l2RGainString.replace("00000", "");
+                l2RGainText.setText(l2RGainString);
+            }
         } catch (...) {
             l2RGainString = std::to_string((std::floorf((l2RGainKnob.getValue() * 10.f) + 0.5f)) / 10.0);
             l2RGainString = l2RGainString.replace("00000", "");
@@ -1098,7 +1128,13 @@ void Coleman_HW2AudioProcessorEditor::textEditorReturnKeyPressed(juce::TextEdito
     if(&textEditor == &r2LGainText) {
         std::string stdR2LString = r2LGainText.getText().toStdString();
         try {
-            r2LGainKnob.setValue(std::stof((stdR2LString)));
+            if(std::stof(stdR2LString) != r2LGainKnob.getValue()) {
+                r2LGainKnob.setValue(std::stof((stdR2LString)));
+            } else {
+                r2LGainString = std::to_string((std::floorf((r2LGainKnob.getValue() * 10.f) + 0.5f)) / 10.0);
+                r2LGainString = r2LGainString.replace("00000", "");
+                r2LGainText.setText(r2LGainString);
+            }
         } catch (...) {
             r2LGainString = std::to_string((std::floorf((r2LGainKnob.getValue() * 10.f) + 0.5f)) / 10.0);
             r2LGainString = r2LGainString.replace("00000", "");
@@ -1135,6 +1171,7 @@ void Coleman_HW2AudioProcessorEditor::textEditorFocusLost (juce::TextEditor& tex
         if(initialGainKnob.getValue() < -59.9f) {
             initialGainText.setText("-Inf");
         }
+        
     }
     if(&textEditor == &l2RGainText) {
         l2RGainString = std::to_string((std::floorf((l2RGainKnob.getValue() * 10.f) + 0.5f)) / 10.0);
@@ -1144,6 +1181,7 @@ void Coleman_HW2AudioProcessorEditor::textEditorFocusLost (juce::TextEditor& tex
         if(l2RGainKnob.getValue() < -59.9f) {
             l2RGainText.setText("-Inf");
         }
+        
     }
     if(&textEditor == &r2LGainText) {
         r2LGainString = std::to_string((std::floorf((r2LGainKnob.getValue() * 10.f) + 0.5f)) / 10.0);
@@ -1153,7 +1191,9 @@ void Coleman_HW2AudioProcessorEditor::textEditorFocusLost (juce::TextEditor& tex
         if(r2LGainKnob.getValue() < -59.9f) {
             r2LGainText.setText("-Inf");
         }
+        
     }
+    textEditor.setHighlightedRegion({0, 0});
 }
 
 void Coleman_HW2AudioProcessorEditor::textEditorTextChanged(juce::TextEditor &textEditor) {
@@ -1193,7 +1233,6 @@ void Coleman_HW2AudioProcessorEditor::textEditorTextChanged(juce::TextEditor &te
             r2LGainText.setText(r2LGainText.getText().removeCharacters(bannedInputStringGain));
         }
     }
-
 }
 
 void Coleman_HW2AudioProcessorEditor::sliderValueChanged(juce::Slider * slider)

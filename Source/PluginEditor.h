@@ -46,6 +46,8 @@ private:
      with.
     */
     
+    const juce::Range<int> emptyRange{0, 0};
+    
     // Gain knobs
     juce::Slider initialGainKnob;
     juce::Slider l2RGainKnob;
