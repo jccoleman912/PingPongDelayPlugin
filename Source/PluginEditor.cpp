@@ -17,23 +17,17 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     setResizable(false, false);
     setSize (800, 640);
     
-
+    //
+    // Setting up the image for the background UI
+    //
     
     bgImage = juce::ImageCache::getFromMemory(BinaryData::PingPongDelayUI_jpg, BinaryData::PingPongDelayUI_jpgSize);
-    
     bgImage = bgImage.rescaled(800, 640, juce::Graphics::highResamplingQuality);
     
-    rightBGImage = juce::ImageCache::getFromMemory(BinaryData::FinalPingPongDelayUIRIGHT_jpg, BinaryData::FinalPingPongDelayUIRIGHT_jpgSize);
-    
-    rightBGImage = bgImage.rescaled(800, 640, juce::Graphics::highResamplingQuality);
-    
-    sideColorBGImage = juce::ImageCache::getFromMemory(BinaryData::SideColorBGPingPong_jpg, BinaryData::SideColorBGPingPong_jpgSize);
-    tempoOverlay.setImage(sideColorBGImage.rescaled(128, 48));
-    smoothOverlay.setImage(sideColorBGImage.rescaled(128, 128));
+    //
+    // Setting up the on and off button images
+    //
 
-    
-    faderBackgroundImage = juce::ImageCache::getFromMemory(BinaryData::FaderBackground_png, BinaryData::FaderBackground_pngSize);
-    
     bypassOFFImage = juce::ImageCache::getFromMemory(BinaryData::BypassOFF_jpg, BinaryData::BypassOFF_jpgSize);
     bypassONImage = juce::ImageCache::getFromMemory(BinaryData::BypassON_jpg, BinaryData::BypassON_jpgSize);
     
@@ -58,8 +52,24 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     
     smoothOFFImage = juce::ImageCache::getFromMemory(BinaryData::SmoothOFF_jpg, BinaryData::SmoothOFF_jpgSize);
     smoothONImage = juce::ImageCache::getFromMemory(BinaryData::SmoothON_jpg, BinaryData::SmoothON_jpgSize);
-
+    
+    //
+    // Setting up the image used for the Fader backgrounds.
+    //
+    
+    faderBackgroundImage = juce::ImageCache::getFromMemory(BinaryData::FaderBackground_png, BinaryData::FaderBackground_pngSize);
+    
+    //
+    // Setting up the warning message that is displayed when the L2R and
+    // R2L gains create an unstable feedback loop.
+    //
+    
     warningMessage.setImage(    juce::ImageCache::getFromMemory(BinaryData::WarningScreenFeedback_png, BinaryData::WarningScreenFeedback_pngSize).rescaled(256, 128, juce::Graphics::highResamplingQuality));
+    
+    //
+    // Setting up the white and red "ping pong balls" used as a representation
+    // of the gain of both the left and right channels.
+    //
     
     leftPingPong = juce::ImageCache::getFromMemory(BinaryData::LeftPingPong_png, BinaryData::LeftPingPong_pngSize);
     rightPingPong = juce::ImageCache::getFromMemory(BinaryData::RightPingPong_png, BinaryData::RightPingPong_pngSize);
@@ -80,6 +90,11 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     rightPingPongRedA.setImage(rightPingPongRed);
     leftPingPongRedB.setImage(leftPingPongRed);
     rightPingPongRedB.setImage(rightPingPongRed);
+    
+    //
+    // Setting up the empty and red arrows used as a representation of the
+    // gain change from one channel to the other.
+    //
     
     baseInitialDrop = juce::ImageCache::getFromMemory(BinaryData::BaseArrowInitialGain_png, BinaryData::BaseArrowInitialGain_pngSize);
     baseL2RDrop = juce::ImageCache::getFromMemory(BinaryData::BaseArrowL2RGain_png, BinaryData::BaseArrowL2RGain_pngSize);
@@ -133,7 +148,21 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     
     baseL2RDropFinalDrawableRIGHT.setImage(baseL2RFinalDropRIGHT);
     redL2RDropFinalDrawableRIGHT.setImage(redL2RFinalDropRIGHT);
-
+    
+    //
+    // Setting up the overlay images that will be used dependent upon
+    // the toggle state of syncButton and smoothButton.
+    //
+    
+    sideColorBGImage = juce::ImageCache::getFromMemory(BinaryData::SideColorBGPingPong_jpg, BinaryData::SideColorBGPingPong_jpgSize);
+    tempoOverlay.setImage(sideColorBGImage.rescaled(128, 48));
+    smoothOverlay.setImage(sideColorBGImage.rescaled(128, 128));
+    
+    /*
+     ***************************************************************************************
+     ***************************************************************************************
+     ***************************************************************************************
+     */
     
     // Knob images 0 - 9.5 YYY
     mix0 = juce::ImageCache::getFromMemory(BinaryData::Mix0Knob_jpg, BinaryData::Mix0Knob_jpgSize);
@@ -670,7 +699,8 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     }
     
     //
-    // Setting up a conditional check so fade effect
+    // Setting up conditional checks so gain values are set to intended
+    // range. The initialzed range is incorrect for visual reasons.
     //
     
     if(((&initialGainKnob)->getValue()) > 24.f) {
@@ -771,7 +801,7 @@ void Coleman_HW2AudioProcessorEditor::paint (juce::Graphics& g)
         r2LGainKnob.setBounds(462, 244, 35, 126);
     }
     else {
-        g.drawImageAt(rightBGImage, 0, 0);
+        g.drawImageAt(bgImage, 0, 0);
         
         baseInitialDropDrawableRIGHT.drawAt(g, 384, 32, baseInitialOpacity);
         redInitialDropDrawableRIGHT.drawAt(g, 384, 32, redInitialOpacity);
@@ -969,6 +999,13 @@ void Coleman_HW2AudioProcessorEditor::buttonClicked(juce::Button *button){
     }
 }
 
+/*
+ textEditorReturnKeyPressed(juce::TextEditor& textEditor) establishes the behavior of
+ the TextEditors when the return key is pressed. Try + catch blocks are used to prevent
+ DAW crashes when an unexpected input occurs (ie letters or a number too large). The
+ entered value will change the appropriate slider/knob.
+ */
+
 void Coleman_HW2AudioProcessorEditor::textEditorReturnKeyPressed(juce::TextEditor& textEditor)
 {
     if(&textEditor == &tempoText) {
@@ -1103,6 +1140,12 @@ void Coleman_HW2AudioProcessorEditor::textEditorReturnKeyPressed(juce::TextEdito
     }
 }
 
+/*
+ textEditorReturnKeyPressed(juce::TextEditor& textEditor) establishes the behavior of
+ the TextEditors when the focus is lost. The pre-existing value is returned to, and
+ any highlighted regions are unselected.
+ */
+
 void Coleman_HW2AudioProcessorEditor::textEditorFocusLost (juce::TextEditor& textEditor)
 {
     if(&textEditor == &tempoText) {
@@ -1124,34 +1167,37 @@ void Coleman_HW2AudioProcessorEditor::textEditorFocusLost (juce::TextEditor& tex
         initialGainString = std::to_string((std::floorf((initialGainKnob.getValue() * 10.f) + 0.5f)) / 10.0);
         initialGainString = initialGainString.replace("00000", "");
         initialGainText.setText(initialGainString);
-        
         if(initialGainKnob.getValue() < -59.9f) {
             initialGainText.setText("-Inf");
         }
-        
     }
     if(&textEditor == &l2RGainText) {
         l2RGainString = std::to_string((std::floorf((l2RGainKnob.getValue() * 10.f) + 0.5f)) / 10.0);
         l2RGainString = l2RGainString.replace("00000", "");
         l2RGainText.setText(l2RGainString);
-        
         if(l2RGainKnob.getValue() < -59.9f) {
             l2RGainText.setText("-Inf");
         }
-        
     }
     if(&textEditor == &r2LGainText) {
         r2LGainString = std::to_string((std::floorf((r2LGainKnob.getValue() * 10.f) + 0.5f)) / 10.0);
         r2LGainString = r2LGainString.replace("00000", "");
         r2LGainText.setText(r2LGainString);
-        
         if(r2LGainKnob.getValue() < -59.9f) {
             r2LGainText.setText("-Inf");
         }
-        
     }
     textEditor.setHighlightedRegion({0, 0});
 }
+
+/*
+ textEditorTextChanged(juce::TextEditor &textEditor) establishes the behavior of
+ the TextEditors when the text is changed. This method is implemented to stop users
+ from inputting invalid characters (ie letters, other random characters). The try +
+ catch blocks in textEditorReturnKeyPressed act as reinforcement in the event users
+ can bypass this intended restriction. "-" and "+" are not allowed in tempoText, mixText,
+ and smoothText, but are allowed in the gain TextEditors.
+ */
 
 void Coleman_HW2AudioProcessorEditor::textEditorTextChanged(juce::TextEditor &textEditor) {
 
@@ -1217,6 +1263,12 @@ void Coleman_HW2AudioProcessorEditor::sliderValueChanged(juce::Slider * slider)
         if(r2LValueRaw < -59.9f) {
             r2LGainText.setText("-Inf");
         }
+        
+        /*
+         ***************************************************************************************
+         ***************************************************************************************
+         ***************************************************************************************
+         */
         
         // Red values < 6 dB
         if(initialValue <= 0.f) {redInitialOpacity = redOpacity[0];}
@@ -1567,6 +1619,12 @@ void Coleman_HW2AudioProcessorEditor::sliderValueChanged(juce::Slider * slider)
         else if(initialValue > -60.f)  {baseInitialOpacity = baseOpacity[0];}
         else if(initialValue <= -60.f) {baseInitialOpacity = baseOpacity[0];}
         else {baseInitialOpacity = baseOpacity[0];}
+        
+        /*
+         ***************************************************************************************
+         ***************************************************************************************
+         ***************************************************************************************
+         */
         
     // L2RA
         
@@ -1919,6 +1977,12 @@ void Coleman_HW2AudioProcessorEditor::sliderValueChanged(juce::Slider * slider)
         else if(l2RAValue <= -60.f) {baseL2RAOpacity = baseOpacity[0];}
         else {baseL2RAOpacity = baseOpacity[0];}
         
+        /*
+         ***************************************************************************************
+         ***************************************************************************************
+         ***************************************************************************************
+         */
+        
     // R2L
         
         if(r2LValue <= 0.f) {redR2LOpacity = redOpacity[0];}
@@ -2270,6 +2334,11 @@ void Coleman_HW2AudioProcessorEditor::sliderValueChanged(juce::Slider * slider)
         else if(r2LValue <= -60.f) {baseR2LOpacity = baseOpacity[0];}
         else {baseR2LOpacity = baseOpacity[0];}
         
+        /*
+         ***************************************************************************************
+         ***************************************************************************************
+         ***************************************************************************************
+         */
         
     // L2RB
         
@@ -2622,6 +2691,11 @@ void Coleman_HW2AudioProcessorEditor::sliderValueChanged(juce::Slider * slider)
         else if(l2RBValue <= -60.f) {baseL2RBOpacity = baseOpacity[0];}
         else {baseL2RBOpacity = baseOpacity[0];}
         
+        /*
+         ***************************************************************************************
+         ***************************************************************************************
+         ***************************************************************************************
+         */
         
     // FINAL
         
@@ -2974,6 +3048,12 @@ void Coleman_HW2AudioProcessorEditor::sliderValueChanged(juce::Slider * slider)
         else if(finalValue <= -60.f) {baseFinalOpacity = baseOpacity[0];}
         else {baseFinalOpacity = baseOpacity[0];}
         
+        /*
+         ***************************************************************************************
+         ***************************************************************************************
+         ***************************************************************************************
+         */
+        
         if((l2RValueRaw + r2LValueRaw) > 0.f && initialValue >= -59.9f) {
             warningOpacity = 1.f;
         } else {
@@ -3030,10 +3110,16 @@ void Coleman_HW2AudioProcessorEditor::sliderValueChanged(juce::Slider * slider)
             r2LGainKnob.setValue(-60.0);
         }
 
-        
         repaint();
             
     }
+    
+    /*
+     ***************************************************************************************
+     ***************************************************************************************
+     ***************************************************************************************
+     */
+    
     if (slider == &mixKnob) {
         float mixValue = slider->getValue();
         
@@ -3257,6 +3343,13 @@ void Coleman_HW2AudioProcessorEditor::sliderValueChanged(juce::Slider * slider)
         
         repaint();
     }
+    
+    /*
+     ***************************************************************************************
+     ***************************************************************************************
+     ***************************************************************************************
+     */
+    
     if(slider == &smoothKnob) {
         float smoothValue = slider->getValue();
         

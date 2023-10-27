@@ -6,7 +6,6 @@
 #pragma once
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
-#include "Components/MixKnob.h"
 #include "Components/GainFaders.h"
 #include "Components/TempoDial.h"
 #include "Components/CustomTextBox.h"
@@ -135,9 +134,8 @@ private:
      The button images being pulled from Binary Data.
      */
     
-    // Images of the main interface (both Left First and Right First versions)
+    // Images of the main interface
     juce::Image bgImage;
-    juce::Image rightBGImage;
     
     // A boolean variable that will switch between the Left/Right interfaces
     bool leftFirstUI;

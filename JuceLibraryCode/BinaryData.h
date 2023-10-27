@@ -8,6 +8,30 @@
 
 namespace BinaryData
 {
+    extern const char*   RedArrowFinalGain_png;
+    const int            RedArrowFinalGain_pngSize = 31801;
+
+    extern const char*   RedArrowInitialGain_png;
+    const int            RedArrowInitialGain_pngSize = 17935;
+
+    extern const char*   RedArrowL2RGain_png;
+    const int            RedArrowL2RGain_pngSize = 47492;
+
+    extern const char*   RedArrowR2LGain_png;
+    const int            RedArrowR2LGain_pngSize = 52365;
+
+    extern const char*   BaseArrowFinalGain_png;
+    const int            BaseArrowFinalGain_pngSize = 27272;
+
+    extern const char*   BaseArrowInitialGain_png;
+    const int            BaseArrowInitialGain_pngSize = 17603;
+
+    extern const char*   BaseArrowL2RGain_png;
+    const int            BaseArrowL2RGain_pngSize = 26803;
+
+    extern const char*   BaseArrowR2LGain_png;
+    const int            BaseArrowR2LGain_pngSize = 45263;
+
     extern const char*   WarningScreenFeedback_png;
     const int            WarningScreenFeedback_pngSize = 53533;
 
@@ -23,9 +47,6 @@ namespace BinaryData
     extern const char*   EmptyInitialGainRIGHT_png;
     const int            EmptyInitialGainRIGHT_pngSize = 17568;
 
-    extern const char*   FinalPingPongDelayUIRIGHT_jpg;
-    const int            FinalPingPongDelayUIRIGHT_jpgSize = 355460;
-
     extern const char*   TempoDial_png;
     const int            TempoDial_pngSize = 6738;
 
@@ -37,30 +58,6 @@ namespace BinaryData
 
     extern const char*   SideColorBGPingPong_jpg;
     const int            SideColorBGPingPong_jpgSize = 7168;
-
-    extern const char*   RedArrowFinalGain_png;
-    const int            RedArrowFinalGain_pngSize = 31801;
-
-    extern const char*   BaseArrowFinalGain_png;
-    const int            BaseArrowFinalGain_pngSize = 27272;
-
-    extern const char*   RedArrowR2LGain_png;
-    const int            RedArrowR2LGain_pngSize = 52365;
-
-    extern const char*   BaseArrowR2LGain_png;
-    const int            BaseArrowR2LGain_pngSize = 45263;
-
-    extern const char*   RedArrowL2RGain_png;
-    const int            RedArrowL2RGain_pngSize = 47492;
-
-    extern const char*   BaseArrowL2RGain_png;
-    const int            BaseArrowL2RGain_pngSize = 26803;
-
-    extern const char*   RedArrowInitialGain_png;
-    const int            RedArrowInitialGain_pngSize = 17935;
-
-    extern const char*   BaseArrowInitialGain_png;
-    const int            BaseArrowInitialGain_pngSize = 17603;
 
     extern const char*   RightPingPong_png;
     const int            RightPingPong_pngSize = 21425;
@@ -131,35 +128,8 @@ namespace BinaryData
     extern const char*   EighthNoteSelected_jpg;
     const int            EighthNoteSelected_jpgSize = 47416;
 
-    extern const char*   PingPongSpriteSheetHalfNote_jpg;
-    const int            PingPongSpriteSheetHalfNote_jpgSize = 476595;
-
-    extern const char*   PingPongSpriteSheetSixteenthNote_jpg;
-    const int            PingPongSpriteSheetSixteenthNote_jpgSize = 476699;
-
-    extern const char*   PingPongSpriteSheetThirtysecondNote_jpg;
-    const int            PingPongSpriteSheetThirtysecondNote_jpgSize = 477247;
-
-    extern const char*   PingPongSpriteSheetWholeNote_jpg;
-    const int            PingPongSpriteSheetWholeNote_jpgSize = 476340;
-
-    extern const char*   FinalPingPongSpriteSheetBottomNotes_jpg;
-    const int            FinalPingPongSpriteSheetBottomNotes_jpgSize = 564737;
-
     extern const char*   FinalPingPongDelayUI_jpg;
     const int            FinalPingPongDelayUI_jpgSize = 508113;
-
-    extern const char*   FinalPingPongSpriteSheet_jpg;
-    const int            FinalPingPongSpriteSheet_jpgSize = 695500;
-
-    extern const char*   InitialEmpty_jpg;
-    const int            InitialEmpty_jpgSize = 36308;
-
-    extern const char*   InitialOrange_jpg;
-    const int            InitialOrange_jpgSize = 44346;
-
-    extern const char*   InitialRed_jpg;
-    const int            InitialRed_jpgSize = 45461;
 
     extern const char*   Mix90x5Knob_jpg;
     const int            Mix90x5Knob_jpgSize = 131796;
@@ -764,26 +734,11 @@ namespace BinaryData
     extern const char*   Mix100Knob_jpg;
     const int            Mix100Knob_jpgSize = 132951;
 
-    extern const char*   FinalKnob100_jpg;
-    const int            FinalKnob100_jpgSize = 30806;
-
     extern const char*   KnobSpriteSheet_jpg;
     const int            KnobSpriteSheet_jpgSize = 5330286;
 
-    extern const char*   PingPongButtonSpriteSheetBOTTOMNOTES_jpg;
-    const int            PingPongButtonSpriteSheetBOTTOMNOTES_jpgSize = 851515;
-
-    extern const char*   PingPongButtonSpriteSheet_jpg;
-    const int            PingPongButtonSpriteSheet_jpgSize = 974906;
-
-    extern const char*   FullScalePingpongDelayUI_jpg;
-    const int            FullScalePingpongDelayUI_jpgSize = 956185;
-
-    extern const char*   FullScalePingpongDelayUI2500_jpg;
-    const int            FullScalePingpongDelayUI2500_jpgSize = 875273;
-
     // Number of elements in the namedResourceList and originalFileNames arrays.
-    const int namedResourceListSize = 258;
+    const int namedResourceListSize = 243;
 
     // Points to the start of a list of resource names.
     extern const char* namedResourceList[];

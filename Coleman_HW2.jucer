@@ -15,6 +15,22 @@
             file="Source/PluginEditor.cpp"/>
       <FILE id="SS0wG8" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
       <GROUP id="{171362BA-BC12-F66F-6F89-D48AACD70E2C}" name="Binary Data">
+        <FILE id="t0ROwI" name="RedArrowFinalGain.png" compile="0" resource="1"
+              file="Source/Binary Data/RedArrowFinalGain.png"/>
+        <FILE id="RNmHyg" name="RedArrowInitialGain.png" compile="0" resource="1"
+              file="Source/Binary Data/RedArrowInitialGain.png"/>
+        <FILE id="Mydewm" name="RedArrowL2RGain.png" compile="0" resource="1"
+              file="Source/Binary Data/RedArrowL2RGain.png"/>
+        <FILE id="IT0Dt6" name="RedArrowR2LGain.png" compile="0" resource="1"
+              file="Source/Binary Data/RedArrowR2LGain.png"/>
+        <FILE id="nfPSCP" name="BaseArrowFinalGain.png" compile="0" resource="1"
+              file="Source/Binary Data/BaseArrowFinalGain.png"/>
+        <FILE id="ZEX2Nv" name="BaseArrowInitialGain.png" compile="0" resource="1"
+              file="Source/Binary Data/BaseArrowInitialGain.png"/>
+        <FILE id="ksTugR" name="BaseArrowL2RGain.png" compile="0" resource="1"
+              file="Source/Binary Data/BaseArrowL2RGain.png"/>
+        <FILE id="l7aOrO" name="BaseArrowR2LGain.png" compile="0" resource="1"
+              file="Source/Binary Data/BaseArrowR2LGain.png"/>
         <FILE id="LR8n8A" name="WarningScreenFeedback.png" compile="0" resource="1"
               file="Source/Binary Data/WarningScreenFeedback.png"/>
         <FILE id="blhF0A" name="RedFinalGainRIGHT.png" compile="0" resource="1"
@@ -25,8 +41,6 @@
               file="Source/Binary Data/EmptyFinalGainRIGHT.png"/>
         <FILE id="GDvFkB" name="EmptyInitialGainRIGHT.png" compile="0" resource="1"
               file="Source/Binary Data/EmptyInitialGainRIGHT.png"/>
-        <FILE id="vGdClK" name="FinalPingPongDelayUIRIGHT.jpg" compile="0"
-              resource="1" file="Source/Binary Data/FinalPingPongDelayUIRIGHT.jpg"/>
         <FILE id="VJohNx" name="TempoDial.png" compile="0" resource="1" file="Source/Binary Data/TempoDial.png"/>
         <FILE id="v65ymM" name="FaderBackground.png" compile="0" resource="1"
               file="Source/Binary Data/FaderBackground.png"/>
@@ -34,22 +48,6 @@
               file="Source/Binary Data/FaderPingPong.png"/>
         <FILE id="drDgts" name="SideColorBGPingPong.jpg" compile="0" resource="1"
               file="Source/Binary Data/SideColorBGPingPong.jpg"/>
-        <FILE id="VbkTP7" name="RedArrowFinalGain.png" compile="0" resource="1"
-              file="../Documents/GainElementsPingPong/RedArrowFinalGain.png"/>
-        <FILE id="FsiVwA" name="BaseArrowFinalGain.png" compile="0" resource="1"
-              file="../Documents/GainElementsPingPong/BaseArrowFinalGain.png"/>
-        <FILE id="mg12HJ" name="RedArrowR2LGain.png" compile="0" resource="1"
-              file="../Documents/GainElementsPingPong/RedArrowR2LGain.png"/>
-        <FILE id="MVb4rQ" name="BaseArrowR2LGain.png" compile="0" resource="1"
-              file="../Documents/GainElementsPingPong/BaseArrowR2LGain.png"/>
-        <FILE id="vszTtT" name="RedArrowL2RGain.png" compile="0" resource="1"
-              file="../Documents/GainElementsPingPong/RedArrowL2RGain.png"/>
-        <FILE id="xPqiEr" name="BaseArrowL2RGain.png" compile="0" resource="1"
-              file="../Documents/GainElementsPingPong/BaseArrowL2RGain.png"/>
-        <FILE id="KccNsB" name="RedArrowInitialGain.png" compile="0" resource="1"
-              file="../Documents/GainElementsPingPong/RedArrowInitialGain.png"/>
-        <FILE id="ZjrqvY" name="BaseArrowInitialGain.png" compile="0" resource="1"
-              file="../Documents/GainElementsPingPong/BaseArrowInitialGain.png"/>
         <FILE id="svVhgt" name="RightPingPong.png" compile="0" resource="1"
               file="Source/Binary Data/RightPingPong.png"/>
         <FILE id="wJeA0y" name="RightPingPongRed.png" compile="0" resource="1"
@@ -86,25 +84,8 @@
         <FILE id="FWzut4" name="DottedON.jpg" compile="0" resource="1" file="Source/Binary Data/DottedON.jpg"/>
         <FILE id="AJyJVD" name="EighthNoteSelected.jpg" compile="0" resource="1"
               file="Source/Binary Data/EighthNoteSelected.jpg"/>
-        <FILE id="EpnaPV" name="PingPongSpriteSheetHalfNote.jpg" compile="0"
-              resource="1" file="Source/Binary Data/PingPongSpriteSheetHalfNote.jpg"/>
-        <FILE id="XpuEv3" name="PingPongSpriteSheetSixteenthNote.jpg" compile="0"
-              resource="1" file="Source/Binary Data/PingPongSpriteSheetSixteenthNote.jpg"/>
-        <FILE id="SoQMu6" name="PingPongSpriteSheetThirtysecondNote.jpg" compile="0"
-              resource="1" file="Source/Binary Data/PingPongSpriteSheetThirtysecondNote.jpg"/>
-        <FILE id="JAXJ9L" name="PingPongSpriteSheetWholeNote.jpg" compile="0"
-              resource="1" file="Source/Binary Data/PingPongSpriteSheetWholeNote.jpg"/>
-        <FILE id="Txv5qD" name="FinalPingPongSpriteSheetBottomNotes.jpg" compile="0"
-              resource="1" file="Source/Binary Data/FinalPingPongSpriteSheetBottomNotes.jpg"/>
         <FILE id="srQVFj" name="FinalPingPongDelayUI.jpg" compile="0" resource="1"
               file="Source/Binary Data/FinalPingPongDelayUI.jpg"/>
-        <FILE id="n3W39H" name="FinalPingPongSpriteSheet.jpg" compile="0" resource="1"
-              file="Source/Binary Data/FinalPingPongSpriteSheet.jpg"/>
-        <FILE id="xPHeZH" name="InitialEmpty.jpg" compile="0" resource="1"
-              file="Source/Binary Data/InitialEmpty.jpg"/>
-        <FILE id="sA8Ush" name="InitialOrange.jpg" compile="0" resource="1"
-              file="Source/Binary Data/InitialOrange.jpg"/>
-        <FILE id="GmMuwJ" name="InitialRed.jpg" compile="0" resource="1" file="Source/Binary Data/InitialRed.jpg"/>
         <FILE id="GojY46" name="Mix90x5Knob.jpg" compile="0" resource="1" file="Source/Binary Data/Mix90x5Knob.jpg"/>
         <FILE id="lwpCj4" name="Mix91Knob.jpg" compile="0" resource="1" file="Source/Binary Data/Mix91Knob.jpg"/>
         <FILE id="lkQqh7" name="Mix91x5Knob.jpg" compile="0" resource="1" file="Source/Binary Data/Mix91x5Knob.jpg"/>
@@ -306,18 +287,8 @@
         <FILE id="uGJxVH" name="Mix80Knob.jpg" compile="0" resource="1" file="Source/Binary Data/Mix80Knob.jpg"/>
         <FILE id="JybDxa" name="Mix90Knob.jpg" compile="0" resource="1" file="Source/Binary Data/Mix90Knob.jpg"/>
         <FILE id="fE5gDF" name="Mix100Knob.jpg" compile="0" resource="1" file="Source/Binary Data/Mix100Knob.jpg"/>
-        <FILE id="SHhLuj" name="FinalKnob100.jpg" compile="0" resource="1"
-              file="Source/Binary Data/FinalKnob100.jpg"/>
         <FILE id="ARnuyq" name="KnobSpriteSheet.jpg" compile="0" resource="1"
               file="Source/Binary Data/KnobSpriteSheet.jpg"/>
-        <FILE id="rsu9VF" name="PingPongButtonSpriteSheetBOTTOMNOTES.jpg" compile="0"
-              resource="1" file="Source/Binary Data/PingPongButtonSpriteSheetBOTTOMNOTES.jpg"/>
-        <FILE id="qoC12n" name="PingPongButtonSpriteSheet.jpg" compile="0"
-              resource="1" file="Source/Binary Data/PingPongButtonSpriteSheet.jpg"/>
-        <FILE id="p7ZLUI" name="FullScalePingpongDelayUI.jpg" compile="0" resource="1"
-              file="Source/Binary Data/FullScalePingpongDelayUI.jpg"/>
-        <FILE id="cCXfH7" name="FullScalePingpongDelayUI2500.jpg" compile="0"
-              resource="1" file="Source/Binary Data/FullScalePingpongDelayUI2500.jpg"/>
       </GROUP>
       <GROUP id="{D754E666-C757-2488-5E7B-84115018277C}" name="Components">
         <FILE id="ecEXWd" name="CustomTextBox.cpp" compile="1" resource="0"
