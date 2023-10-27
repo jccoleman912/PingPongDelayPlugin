@@ -318,8 +318,14 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
             
             smoothMix[channel] = alpha * smoothMix[channel] + (1 - alpha) * mixValue;
             buffer.getWritePointer(channel)[n] = (smoothMix[channel] * y) + ((1 - smoothMix[channel]) * x);
+            
+            if(boolBypassValue) {
+                buffer.getWritePointer(0)[n] = 0.f;
+                buffer.getWritePointer(1)[n] = 0.f;
+            }
         }
     }
+    
 }
 //==============================================================================
 bool Coleman_HW2AudioProcessor::hasEditor() const

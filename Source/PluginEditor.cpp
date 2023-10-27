@@ -486,7 +486,7 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     addAndMakeVisible(tempoLabel);
 
     //    initialGainText.setColour(8, juce::Colour (0x00000000));
-    tempoText.setBounds(45, 292, 43, 26);
+    tempoText.setBounds(42, 292, 46, 26);
     //    initialGainText.setColour(7, juce::Colour (0x00000000));
     tempoText.setFont(juce::Font("Futura", 15.f, 1));
     tempoText.setLookAndFeel(&textBoxLNF);
@@ -1039,6 +1039,11 @@ void Coleman_HW2AudioProcessorEditor::textEditorReturnKeyPressed(juce::TextEdito
         try {
             if(std::stof(stdTempoString) != tempoSelector.getValue()) {
                 tempoSelector.setValue(std::stof((stdTempoString)));
+                if(std::stof(stdTempoString) < 40.f) {
+                    tempoText.setText("40.0");
+                } else if(std::stof(stdTempoString) > 240.f) {
+                    tempoText.setText("240.0");
+                }
             } else {
                 tempoString = std::to_string((std::floorf((tempoSelector.getValue() * 10.f) + 0.5f)) / 10.0);
                 tempoString = tempoString.replace("00000", "");
@@ -1056,6 +1061,9 @@ void Coleman_HW2AudioProcessorEditor::textEditorReturnKeyPressed(juce::TextEdito
         try {
             if(std::stof(stdMixString) != mixKnob.getValue()) {
                 mixKnob.setValue(std::stof((stdMixString)));
+                if(std::stof(stdMixString) > 100.f) {
+                    mixText.setText("100.0");
+                }
             } else {
                 mixString = std::to_string((std::floorf((mixKnob.getValue() * 10.f) + 0.5f)) / 10.0);
                 mixString = mixString.replace("00000", "");
@@ -1073,6 +1081,9 @@ void Coleman_HW2AudioProcessorEditor::textEditorReturnKeyPressed(juce::TextEdito
         try {
             if(std::stof(stdSmoothString) != smoothKnob.getValue()) {
                 smoothKnob.setValue(std::stof((stdSmoothString)));
+                if(std::stof(stdSmoothString) > 500.f) {
+                    smoothText.setText("500.0");
+                }
             } else {
                 smoothString = std::to_string((std::floorf((smoothKnob.getValue() * 10.f) + 0.5f)) / 10.0);
                 smoothString = smoothString.replace("00000", "");
@@ -1090,6 +1101,9 @@ void Coleman_HW2AudioProcessorEditor::textEditorReturnKeyPressed(juce::TextEdito
         try {
             if(std::stof(stdInitialString) != initialGainKnob.getValue()) {
                 initialGainKnob.setValue(std::stof((stdInitialString)));
+                if(std::stof(stdInitialString) > 24.f) {
+                    initialGainText.setText("24.0");
+                }
             } else {
                 initialGainString = std::to_string((std::floorf((initialGainKnob.getValue() * 10.f) + 0.5f)) / 10.0);
                 initialGainString = initialGainString.replace("00000", "");
@@ -1110,6 +1124,9 @@ void Coleman_HW2AudioProcessorEditor::textEditorReturnKeyPressed(juce::TextEdito
         try {
             if(std::stof(stdL2RString) != l2RGainKnob.getValue()) {
                 l2RGainKnob.setValue(std::stof((stdL2RString)));
+                if(std::stof(stdL2RString) > 24.f) {
+                    l2RGainText.setText("24.0");
+                }
             } else {
                 l2RGainString = std::to_string((std::floorf((l2RGainKnob.getValue() * 10.f) + 0.5f)) / 10.0);
                 l2RGainString = l2RGainString.replace("00000", "");
@@ -1130,6 +1147,9 @@ void Coleman_HW2AudioProcessorEditor::textEditorReturnKeyPressed(juce::TextEdito
         try {
             if(std::stof(stdR2LString) != r2LGainKnob.getValue()) {
                 r2LGainKnob.setValue(std::stof((stdR2LString)));
+                if(std::stof(stdR2LString) > 24.f) {
+                    r2LGainText.setText("24.0");
+                }
             } else {
                 r2LGainString = std::to_string((std::floorf((r2LGainKnob.getValue() * 10.f) + 0.5f)) / 10.0);
                 r2LGainString = r2LGainString.replace("00000", "");
@@ -1198,39 +1218,15 @@ void Coleman_HW2AudioProcessorEditor::textEditorFocusLost (juce::TextEditor& tex
 
 void Coleman_HW2AudioProcessorEditor::textEditorTextChanged(juce::TextEditor &textEditor) {
 
-    if(&textEditor == &tempoText) {
-        if(tempoText.getText().containsAnyOf(bannedInputString)) {
-            tempoText.setText(tempoText.getText().removeCharacters(bannedInputString));
+    if(&textEditor == &tempoText || &textEditor == &mixText || &textEditor == &smoothText) {
+        if(textEditor.getText().containsAnyOf(bannedInputString)) {
+            textEditor.setText(textEditor.getText().removeCharacters(bannedInputString));
         }
     }
 
-    if(&textEditor == &mixText) {
-        if(mixText.getText().containsAnyOf(bannedInputString)) {
-            mixText.setText(mixText.getText().removeCharacters(bannedInputString));
-        }
-    }
-
-    if(&textEditor == &smoothText) {
-        if(smoothText.getText().containsAnyOf(bannedInputString)) {
-            smoothText.setText(smoothText.getText().removeCharacters(bannedInputString));
-        }
-    }
-
-    if(&textEditor == &initialGainText) {
-        if(initialGainText.getText().containsAnyOf(bannedInputStringGain) && initialGainText.getText().compare("-Inf") != 0) {
-            initialGainText.setText(initialGainText.getText().removeCharacters(bannedInputStringGain));
-        }
-    }
-
-    if(&textEditor == &l2RGainText) {
-        if(l2RGainText.getText().containsAnyOf(bannedInputStringGain) && l2RGainText.getText().compare("-Inf") != 0) {
-            l2RGainText.setText(l2RGainText.getText().removeCharacters(bannedInputStringGain));
-        }
-    }
-
-    if(&textEditor == &r2LGainText) {
-        if(r2LGainText.getText().containsAnyOf(bannedInputStringGain) && r2LGainText.getText().compare("-Inf") != 0) {
-            r2LGainText.setText(r2LGainText.getText().removeCharacters(bannedInputStringGain));
+    if(&textEditor == &initialGainText || &textEditor == &l2RGainText || &textEditor == &r2LGainText) {
+        if(textEditor.getText().containsAnyOf(bannedInputStringGain) && textEditor.getText().compare("-Inf") != 0) {
+            textEditor.setText(textEditor.getText().removeCharacters(bannedInputStringGain));
         }
     }
 }
