@@ -200,9 +200,9 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
     // this code if your algorithm always overwrites all the output channels.
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
-    /*
-     Values being pulled from the Value Tree State needed to process the audio
-     */
+    
+    // Values being pulled from the Value Tree State needed for audio processing.
+     
     initialdBDropValue = *state.getRawParameterValue("initialDropValue");
     l2RdBDropValue = *state.getRawParameterValue("l2RDropValue");
     r2LdBDropValue = *state.getRawParameterValue("r2LDropValue");
@@ -231,10 +231,10 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
     boolSmooth = *state.getRawParameterValue("smoothButtonValue");
     boolLeftFirstValue = *state.getRawParameterValue("leftFirstValue");
     
-    /*
-     Conditional checks to assign the correct length to the delay. If an error occurs,
-     the multiplier will default to 1.f (a quarter note delay).
-     */
+    
+    // Conditional checks to assign the correct length to the delay. If an error occurs,
+    // the multiplier will default to 1.f (a quarter note delay).
+     
     if(boolWhole) {
         noteMultiplier = 4.f;
     } else if(boolHalf) {
@@ -251,10 +251,10 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
         noteMultiplier = 1.f;
     };
     
-    /*
-     Conditional check to determine if tempo value comes from slider or sync.
-     NOTE: Sync may need revision due to deprecation.
-     */
+    
+    // Conditional check to determine if tempo value comes from slider or sync.
+    // NOTE: Sync may need revision due to deprecation.
+
     if(boolSyncValue) {
         try {
             playHead = this->getPlayHead();
@@ -271,9 +271,9 @@ void Coleman_HW2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
     
     delayMS = 1000.f * noteMultiplier * (60.f / finalTempo);
     
-    /*
-     Conditional checks to alter the delay time if the Triplet or Dotted buttons are engaged.
-     */
+
+    // Conditional checks to alter the delay time if the Triplet or Dotted buttons are engaged.
+
     if(boolTripletValue) {
         delayMS *= (2.f/3.f);
     }
