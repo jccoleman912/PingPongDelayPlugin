@@ -362,6 +362,11 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     
     smoothKnobPosition = mix0;
     
+    /*
+     ***************************************************************************************
+     ***************************************************************************************
+     ***************************************************************************************
+     */
     
     //
     // Useless Background Button
@@ -369,153 +374,141 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     // whenever the user clicks anywhere on the interface.
     //
     
-    backgroundUselessButton.addListener(this);
     backgroundUselessButton.setBounds(0,0,900,900);
     backgroundUselessButton.setToggleState(false, juce::dontSendNotification);
     backgroundUselessButton.setAlpha(0.f);
+    backgroundUselessButton.addListener(this);
     addAndMakeVisible(backgroundUselessButton);
     
-    
     //
-    // Initial Gain Knob
+    // Initial Gain Knob and Initial Gain Text Editor
     //
     
-    initialGainKnob.addListener(this);
     initialGainKnob.setBounds(382, 4, 35, 126);
     initialGainKnob.setRange(-70.f, 38.f, 0.1f); // (min, max, interval)
     initialGainKnob.setValue(-9.f); // initial value
     initialGainKnob.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     initialGainKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 0, 0);
     initialGainKnob.setLookAndFeel(&gainLNF);
+    initialGainKnob.addListener(this);
     addAndMakeVisible(initialGainKnob);
-
+    
+    initialGainText.setBounds(369, 130, 61, 23);
+    initialGainText.setFont(juce::Font("Futura", 18.f, 1));
+    initialGainText.setLookAndFeel(&textBoxLNF);
+    initialGainText.setJustification(36);
+    initialGainText.applyColourToAllText(juce::Colour (0x96000000));
+    initialGainText.addListener(this);
+    addAndMakeVisible(initialGainText);
     
     //
-    // Left to Right Gain Knob
+    // Left to Right Gain Knob and Left to Right TextEditor
     //
     
-    l2RGainKnob.addListener(this);
     l2RGainKnob.setRange(-70.f, 38.f, 0.1f); // (min, max, interval)
     l2RGainKnob.setValue(0.f); // initial value
     l2RGainKnob.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     l2RGainKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 0, 0);
     l2RGainKnob.setLookAndFeel(&gainLNF);
+    l2RGainKnob.addListener(this);
     addAndMakeVisible(l2RGainKnob);
     
+    l2RGainText.setFont(juce::Font("Futura", 18.f, 1));
+    l2RGainText.setLookAndFeel(&textBoxLNF);
+    l2RGainText.setJustification(36);
+    l2RGainText.applyColourToAllText(juce::Colour (0x96000000));
+    l2RGainText.addListener(this);
+    addAndMakeVisible(l2RGainText);
+    
     //
-    // Right to Left Gain Knob
+    // Right to Left Gain Knob and Right to Left TextEditor
     //
     
-    r2LGainKnob.addListener(this);
     r2LGainKnob.setRange(-70.f, 38.f, 0.1f); // (min, max, interval)
     r2LGainKnob.setValue(-6.f); // initial value
     r2LGainKnob.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     r2LGainKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 0, 0);
     r2LGainKnob.setLookAndFeel(&gainLNF);
+    r2LGainKnob.addListener(this);
     addAndMakeVisible(r2LGainKnob);
-    
-    initialGainText.setBounds(369, 130, 61, 23);
-    initialGainText.setFont(juce::Font("Futura", 18.f, 1));
-    initialGainText.setLookAndFeel(&textBoxLNF);
-    initialGainText.applyColourToAllText(juce::Colour (0x96000000));
-    initialGainText.setJustification(36);
-    
-    l2RGainText.setFont(juce::Font("Futura", 18.f, 1));
-    l2RGainText.setLookAndFeel(&textBoxLNF);
-    l2RGainText.applyColourToAllText(juce::Colour (0x96000000));
-    l2RGainText.setJustification(36);
 
     r2LGainText.setFont(juce::Font("Futura", 18.f, 1));
     r2LGainText.setLookAndFeel(&textBoxLNF);
-    r2LGainText.applyColourToAllText(juce::Colour (0x96000000));
     r2LGainText.setJustification(36);
-    
-    
-    addAndMakeVisible(initialGainText);
-    addAndMakeVisible(l2RGainText);
-    addAndMakeVisible(r2LGainText);
-    initialGainText.addListener(this);
-    l2RGainText.addListener(this);
+    r2LGainText.applyColourToAllText(juce::Colour (0x96000000));
     r2LGainText.addListener(this);
+    addAndMakeVisible(r2LGainText);
     
     //
-    // Tempo Slider
+    // Tempo Slider, Tempo TextEditor, and Tempo Label
     //
     
-    tempoSelector.addListener(this);
     tempoSelector.setBounds(10,234,141,32);
     tempoSelector.setRange(40.f,240.f,0.1); // (min, max, interval)
     tempoSelector.setValue(40.82f); // initial value
     tempoSelector.setSliderStyle(juce::Slider::SliderStyle::LinearHorizontal);
     tempoSelector.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 0, 0);
     tempoSelector.setLookAndFeel(&tempoDialLNF);
+    tempoSelector.addListener(this);
     addAndMakeVisible(tempoSelector);
     
-    
-    
     tempoLabel.setBounds(80, 293, 50, 28);
-    tempoLabel.setFont(juce::Font("Futura", 15.f, 1));
     tempoLabel.setText("BPM", juce::NotificationType::dontSendNotification);
+    tempoLabel.setFont(juce::Font("Futura", 15.f, 1));
     tempoLabel.setJustificationType(33);
     addAndMakeVisible(tempoLabel);
-
     
     tempoText.setBounds(42, 292, 46, 26);
     tempoText.setFont(juce::Font("Futura", 15.f, 1));
     tempoText.setLookAndFeel(&textBoxLNF);
     tempoText.setJustification(34);
-    addAndMakeVisible(tempoText);
     tempoText.addListener(this);
-    
-    
-
-
+    addAndMakeVisible(tempoText);
     
     //
     // Mix Knob
     //
     
-    mixKnob.addListener(this);
     mixKnob.setBounds(682,194,76,104);
     mixKnob.setRange(0.f,100.f,0.1); // (min, max, interval)
     mixKnob.setValue(5.32f); // initial value
     mixKnob.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     mixKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
-    addAndMakeVisible(mixKnob);
     mixKnob.setAlpha(0.f);
+    mixKnob.addListener(this);
+    addAndMakeVisible(mixKnob);
     
-
     mixLabel.setBounds(728, 294, 40, 26);
+    mixLabel.setText("%", juce::NotificationType::dontSendNotification);
     mixLabel.setFont(juce::Font("Futura", 15.f, 1));
     mixLabel.setColour(juce::Label::ColourIds::textColourId, juce::Colour (0x96000000));
-    mixLabel.setText("%", juce::NotificationType::dontSendNotification);
     mixLabel.setJustificationType(33);
     addAndMakeVisible(mixLabel);
     
     mixText.setBounds(689, 292, 46, 26);
     mixText.setFont(juce::Font("Futura", 15.f, 1));
-    mixText.setLookAndFeel(&textBoxLNF);
     mixText.applyColourToAllText(juce::Colour (0x96000000));
+    mixText.setLookAndFeel(&textBoxLNF);
     mixText.setJustification(34);
-    addAndMakeVisible(mixText);
     mixText.addListener(this);
+    addAndMakeVisible(mixText);
     
     //
     // Smooth Knob
     //
     
-    smoothKnob.addListener(this);
     smoothKnob.setBounds(682,462,76,104);
     smoothKnob.setRange(0.f,500.f,0.1); // (min, max, interval)
     smoothKnob.setValue(0.23f); // initial value
     smoothKnob.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     smoothKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
-    addAndMakeVisible(smoothKnob);
     smoothKnob.setAlpha(0.f);
+    smoothKnob.addListener(this);
+    addAndMakeVisible(smoothKnob);
     
     smoothLabel.setBounds(724, 584, 40, 26);
-    smoothLabel.setFont(juce::Font("Futura", 15.f, 1));
     smoothLabel.setText("ms", juce::NotificationType::dontSendNotification);
+    smoothLabel.setFont(juce::Font("Futura", 15.f, 1));
     smoothLabel.setJustificationType(33);
     addAndMakeVisible(smoothLabel);
     
@@ -523,109 +516,113 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     smoothText.setFont(juce::Font("Futura", 15.f, 1));
     smoothText.setLookAndFeel(&textBoxLNF);
     smoothText.setJustification(34);
-    addAndMakeVisible(smoothText);
     smoothText.addListener(this);
+    addAndMakeVisible(smoothText);
 
-    
-    
     //
     // Bypass Toggle
     //
     
-    bypassButton.addListener(this);
     bypassButton.setBounds(20,37,116,52);
     bypassButton.setToggleState(false, juce::dontSendNotification);
-    addAndMakeVisible(bypassButton);
     bypassButton.setAlpha(0.f);
+    bypassButton.addListener(this);
+    addAndMakeVisible(bypassButton);
     
     //
     // Sync Toggle
     //
     
-    syncButton.addListener(this);
     syncButton.setBounds(20,157,116,43);
     syncButton.setToggleState(false, juce::dontSendNotification);
-    addAndMakeVisible(syncButton);
     syncButton.setAlpha(0.f);
+    syncButton.addListener(this);
+    addAndMakeVisible(syncButton);
     
     //
     // Note Selection Buttons
     //
     
-    wholeNoteButton.addListener(this);
     wholeNoteButton.setBounds(20,382,38,38);
-    wholeNoteButton.setToggleState(false, juce::dontSendNotification);
     wholeNoteButton.setRadioGroupId(2);
-    addAndMakeVisible(wholeNoteButton);
     wholeNoteButton.setAlpha(0.f);
+    wholeNoteButton.addListener(this);
+    addAndMakeVisible(wholeNoteButton);
     
-    halfNoteButton.addListener(this);
     halfNoteButton.setBounds(60,382,38,38);
-    halfNoteButton.setToggleState(false, juce::dontSendNotification);
     halfNoteButton.setRadioGroupId(2);
-    addAndMakeVisible(halfNoteButton);
     halfNoteButton.setAlpha(0.f);
+    halfNoteButton.addListener(this);
+    addAndMakeVisible(halfNoteButton);
     
-    quarterNoteButton.addListener(this);
     quarterNoteButton.setBounds(99,382,38,38);
     quarterNoteButton.setRadioGroupId(2);
-    addAndMakeVisible(quarterNoteButton);
     quarterNoteButton.setAlpha(0.f);
+    quarterNoteButton.addListener(this);
+    addAndMakeVisible(quarterNoteButton);
     
-    eighthNoteButton.addListener(this);
     eighthNoteButton.setBounds(20,421,38,38);
     eighthNoteButton.setRadioGroupId(2);
-    addAndMakeVisible(eighthNoteButton);
     eighthNoteButton.setAlpha(0.f);
+    eighthNoteButton.addListener(this);
+    addAndMakeVisible(eighthNoteButton);
     
-    sixteenthNoteButton.addListener(this);
     sixteenthNoteButton.setBounds(60,421,38,38);
-    sixteenthNoteButton.setToggleState(false, juce::dontSendNotification);
     sixteenthNoteButton.setRadioGroupId(2);
-    addAndMakeVisible(sixteenthNoteButton);
     sixteenthNoteButton.setAlpha(0.f);
+    sixteenthNoteButton.addListener(this);
+    addAndMakeVisible(sixteenthNoteButton);
     
-    thirtysecondNoteButton.addListener(this);
     thirtysecondNoteButton.setBounds(99,421,38,38);
-    thirtysecondNoteButton.setToggleState(false, juce::dontSendNotification);
     thirtysecondNoteButton.setRadioGroupId(2);
-    addAndMakeVisible(thirtysecondNoteButton);
     thirtysecondNoteButton.setAlpha(0.f);
+    thirtysecondNoteButton.addListener(this);
+    addAndMakeVisible(thirtysecondNoteButton);
     
     //
     // Triplet Toggle
     //
     
-    tripletButton.addListener(this);
     tripletButton.setBounds(20,490,116,43);
     tripletButton.setToggleState(false, juce::dontSendNotification);
-    addAndMakeVisible(tripletButton);
     tripletButton.setAlpha(0.f);
+    tripletButton.addListener(this);
+    addAndMakeVisible(tripletButton);
     
     //
     // Dotted Toggle
     //
     
-    dottedButton.addListener(this);
     dottedButton.setBounds(20,554,116,43);
     dottedButton.setToggleState(false, juce::dontSendNotification);
-    addAndMakeVisible(dottedButton);
     dottedButton.setAlpha(0.f);
+    dottedButton.addListener(this);
+    addAndMakeVisible(dottedButton);
     
     //
     // L/R Selection Buttons
     //
     
-    leftFirstButton.addListener(this);
     leftFirstButton.setBounds(662,37,52,52);
     leftFirstButton.setToggleState(true, juce::dontSendNotification);
     leftFirstButton.setRadioGroupId(1);
-    addAndMakeVisible(leftFirstButton);
     leftFirstButton.setAlpha(0.f);
+    leftFirstButton.addListener(this);
+    addAndMakeVisible(leftFirstButton);
+    
+    rightFirstButton.setBounds(728,37,52,52);
+    rightFirstButton.setToggleState(false, juce::dontSendNotification);
+    rightFirstButton.setRadioGroupId(1);
+    rightFirstButton.setAlpha(0.f);
+    rightFirstButton.addListener(this);
+    addAndMakeVisible(rightFirstButton);
+    
+    //
+    // Setting up a conditional check so the L2R and R2L gain sliders are placed correctly
+    // depending on the L/R first buttons.
+    //
     
     leftFirstUI = leftFirstButton.getToggleState();
-    
-    
     if(leftFirstUI) {
         l2RGainKnob.setBounds(302, 100, 35, 126);
         r2LGainKnob.setBounds(462, 244, 35, 126);
@@ -634,29 +631,27 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
         r2LGainKnob.setBounds(462, 244, 35, 126);
     }
     
-    rightFirstButton.addListener(this);
-    rightFirstButton.setBounds(728,37,52,52);
-    rightFirstButton.setToggleState(false, juce::dontSendNotification);
-    rightFirstButton.setRadioGroupId(1);
-    addAndMakeVisible(rightFirstButton);
-    rightFirstButton.setAlpha(0.f);
-    
     //
     // Smooth Toggle
     //
     
-    smoothButton.addListener(this);
     smoothButton.setBounds(662,382,116,43);
-    smoothButton.setToggleState(false, juce::dontSendNotification);
     smoothButton.setButtonText("Smooth MS");
-    addAndMakeVisible(smoothButton);
+    smoothButton.setToggleState(false, juce::dontSendNotification);
     smoothButton.setAlpha(0.f);
+    smoothButton.addListener(this);
+    addAndMakeVisible(smoothButton);
 
+    //
+    // Setting up a conditional check so the color fade effect for the tempo and smooth sections
+    // are set up correctly depending on the state of syncButton and smoothButton.
+    //
+    
     if(syncButton.getToggleState()) {
         tempoOverlayOpacity = 0.65f;
         tempoSelector.setAlpha(0.35f);
-        tempoText.applyColourToAllText(juce::Colour (0x24000000));
         tempoLabel.setColour(juce::Label::ColourIds::textColourId, juce::Colour (0x24000000));
+        tempoText.applyColourToAllText(juce::Colour (0x24000000));
     } else {
         tempoOverlayOpacity = 0.f;
         tempoSelector.setAlpha(1.f);
@@ -666,14 +661,17 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
     
     if(smoothButton.getToggleState()) {
         smoothOverlayOpacity = 0.f;
-        smoothText.applyColourToAllText(juce::Colour (0x96000000));
         smoothLabel.setColour(juce::Label::ColourIds::textColourId, juce::Colour (0x96000000));
+        smoothText.applyColourToAllText(juce::Colour (0x96000000));
     } else {
         smoothOverlayOpacity = 0.65f;
-        smoothText.applyColourToAllText(juce::Colour (0x24000000));
         smoothLabel.setColour(juce::Label::ColourIds::textColourId, juce::Colour (0x24000000));
+        smoothText.applyColourToAllText(juce::Colour (0x24000000));
     }
     
+    //
+    // Setting up a conditional check so fade effect
+    //
     
     if(((&initialGainKnob)->getValue()) > 24.f) {
         initialGainKnob.setValue(24.0);
@@ -694,6 +692,9 @@ Coleman_HW2AudioProcessorEditor::Coleman_HW2AudioProcessorEditor (Coleman_HW2Aud
         r2LGainKnob.setValue(-60.0);
     }
 
+    //
+    // All relevant information being sent to the ValueTreeState.
+    //
     
     sliderAttachment.emplace_back(new juce::AudioProcessorValueTreeState::SliderAttachment(audioProcessor.state, "initialDropValue", initialGainKnob));
     sliderAttachment.emplace_back(new juce::AudioProcessorValueTreeState::SliderAttachment(audioProcessor.state, "l2RDropValue", l2RGainKnob));
@@ -891,7 +892,6 @@ void Coleman_HW2AudioProcessorEditor::buttonClicked(juce::Button *button){
             tempoLabel.setColour(juce::Label::ColourIds::textColourId, juce::Colour (0x96000000));
             syncOutcome = syncOFFImage;
         }
-        
         repaint();
     }
     if (button == &wholeNoteButton) {
